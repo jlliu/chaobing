@@ -1,5 +1,6 @@
 class Button {
-  constructor(buttonDefaultImg, buttonHover, xPos, yPos) {
+  constructor(thisCanvas, buttonDefaultImg, buttonHover, xPos, yPos) {
+    this.thisCanvas = thisCanvas;
     this.x = xPos;
     this.y = yPos;
     this.buttonDefault = buttonDefaultImg;
@@ -10,7 +11,7 @@ class Button {
     this.interactive = true;
     this.intendingToClick = false;
     let _this = this;
-    canvasEl.addEventListener("mousedown", function (e) {
+    this.thisCanvas.addEventListener("mousedown", function (e) {
       if (_this.isMouseInBounds()) {
         console.log("hello");
         console.log(currentlyDragging);
@@ -22,7 +23,7 @@ class Button {
 
   addClickEvent(clickFunction) {
     let _this = this;
-    canvasEl.addEventListener("click", function (e) {
+    this.thisCanvas.addEventListener("click", function (e) {
       console.log("currently dragging");
       console.log(currentlyDragging);
       if (_this.isMouseInBounds() && _this.intendingToClick) {
@@ -34,7 +35,7 @@ class Button {
   }
   isMouseInBounds() {
     this.mouseInBounds =
-      !currentlyAnimating &&
+      // !currentlyAnimating &&
       this.interactive &&
       mouse_x > this.x * scaleRatio &&
       mouse_x < this.x * scaleRatio + this.width * scaleRatio &&

@@ -12,4 +12,9 @@ canvas {
   top: 50%;
   transform: translate(-50%, -50%);
   cursor: none !important;
+  transition: opacity 1s;
+}
+.gameCanvas{
+  z-index:-1;
+  display:none;
 }

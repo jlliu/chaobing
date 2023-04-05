@@ -17,15 +17,15 @@ function preload() {
   }
 
   //game 1 assets
-  g1_bg = loadImage("assets/img/game1/bg.png");
-  g1_blanket = loadImage("assets/img/game1/blanket.png");
-  g1_blanket2 = loadImage("assets/img/game1/blanket2.png");
-  g1_drawer = loadImage("assets/img/game1/drawer.png");
-  g1_drawer2 = loadImage("assets/img/game1/drawer2.png");
-  g1_panda = loadImage("assets/img/game1/panda.png");
-  g1_pillow = loadImage("assets/img/game1/pillow.png");
-  g1_poster = loadImage("assets/img/game1/poster.png");
-  g1_poster2 = loadImage("assets/img/game1/poster2.png");
-  g1_shirt = loadImage("assets/img/game1/shirt.png");
-  g1_skirt = loadImage("assets/img/game1/skirt.png");
+  bg = loadImage("assets/img/game1/bg.png");
+  blanket = loadImage("assets/img/game1/blanket.png");
+  blanket2 = loadImage("assets/img/game1/blanket2.png");
+  drawer = loadImage("assets/img/game1/drawer.png");
+  drawer2 = loadImage("assets/img/game1/drawer2.png");
+  panda = loadImage("assets/img/game1/panda.png");
+  pillow = loadImage("assets/img/game1/pillow.png");
+  poster = loadImage("assets/img/game1/poster.png");
+  poster2 = loadImage("assets/img/game1/poster2.png");
+  shirt = loadImage("assets/img/game1/shirt.png");
+  skirt = loadImage("assets/img/game1/skirt.png");
 }

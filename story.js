@@ -205,7 +205,7 @@ var sketch1 = function (p) {
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.y * scaleRatio &&
-        mouse_y < this.y * scaleRatio + this.width * scaleRatio;
+        mouse_y < this.y * scaleRatio + this.height * scaleRatio;
       return this.mouseInBounds;
     }
 

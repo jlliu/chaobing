@@ -34,17 +34,49 @@ var game1 = function (p) {
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
 
     //game 1 assets
-    g1_bg = p.loadImage("assets/img/game1/bg.png");
-    g1_blanket = p.loadImage("assets/img/game1/blanket.png");
-    g1_blanket2 = p.loadImage("assets/img/game1/blanket2.png");
-    g1_drawer = p.loadImage("assets/img/game1/drawer.png");
-    g1_drawer2 = p.loadImage("assets/img/game1/drawer2.png");
-    g1_panda = p.loadImage("assets/img/game1/panda.png");
-    g1_pillow = p.loadImage("assets/img/game1/pillow.png");
-    g1_poster = p.loadImage("assets/img/game1/poster.png");
-    g1_poster2 = p.loadImage("assets/img/game1/poster2.png");
-    g1_shirt = p.loadImage("assets/img/game1/shirt.png");
-    g1_skirt = p.loadImage("assets/img/game1/skirt.png");
+    bg = p.loadImage("assets/img/game1/bg.png");
+    blanket = p.loadImage("assets/img/game1/blanket.png");
+    blanket2 = p.loadImage("assets/img/game1/blanket2.png");
+    blanket_h = p.loadImage("assets/img/game1/blanket-h.png");
+    drawer = p.loadImage("assets/img/game1/drawer.png");
+    drawer2 = p.loadImage("assets/img/game1/drawer2.png");
+    drawer_h = p.loadImage("assets/img/game1/drawer-h.png");
+    pillow = p.loadImage("assets/img/game1/pillow.png");
+    pillow_h = p.loadImage("assets/img/game1/pillow-h.png");
+    poster = p.loadImage("assets/img/game1/poster.png");
+    poster2 = p.loadImage("assets/img/game1/poster2.png");
+    poster_h = p.loadImage("assets/img/game1/poster-h.png");
+    shirt = p.loadImage("assets/img/game1/shirt.png");
+    shirt_h = p.loadImage("assets/img/game1/shirt-h.png");
+    sock = p.loadImage("assets/img/game1/sock.png");
+    sock_h = p.loadImage("assets/img/game1/sock-h.png");
+    panda = p.loadImage("assets/img/game1/panda.png");
+    panda_h = p.loadImage("assets/img/game1/panda-h.png");
+
+    //animated assets
+    lamp_1 = p.loadImage("assets/img/game1/lamp1.png");
+    lamp_2 = p.loadImage("assets/img/game1/lamp2.png");
+    lamp_3 = p.loadImage("assets/img/game1/lamp3.png");
+    lamp_4 = p.loadImage("assets/img/game1/lamp4.png");
+    lamp_5 = p.loadImage("assets/img/game1/lamp5.png");
+
+    lantern = p.loadImage("assets/img/game1/lantern.png");
+    disco_1 = p.loadImage("assets/img/game1/disco1.png");
+    disco_2 = p.loadImage("assets/img/game1/disco2.png");
+    disco_3 = p.loadImage("assets/img/game1/disco3.png");
+    disco_4 = p.loadImage("assets/img/game1/disco4.png");
+    disco_5 = p.loadImage("assets/img/game1/disco5.png");
+    disco_6 = p.loadImage("assets/img/game1/disco6.png");
+    disco_7 = p.loadImage("assets/img/game1/disco7.png");
+    disco_8 = p.loadImage("assets/img/game1/disco8.png");
+    disco_9 = p.loadImage("assets/img/game1/disco9.png");
+    disco_10 = p.loadImage("assets/img/game1/disco10.png");
+    disco_11 = p.loadImage("assets/img/game1/disco11.png");
+    disco_12 = p.loadImage("assets/img/game1/disco12.png");
+    disco_13 = p.loadImage("assets/img/game1/disco13.png");
+    disco_14 = p.loadImage("assets/img/game1/disco14.png");
+    disco_15 = p.loadImage("assets/img/game1/disco15.png");
+    disco_16 = p.loadImage("assets/img/game1/disco16.png");
   };
 
   p.setup = function () {
@@ -75,57 +107,153 @@ var game1 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game 1 Sprites
-    g1_drawerSprite = new Button(g1_drawer, g1_drawer, 390, 50);
-    g1_drawerSprite.addClickEvent(function (e) {
-      g1_drawerSprite.buttonDefault = g1_drawer2;
-      g1_drawerSprite.buttonHover = g1_drawer2;
-      g1_drawerSprite.interactive = false;
+    drawerSprite = new Button(drawer, drawer_h, 438, 134);
+    drawerSprite.addClickEvent(function (e) {
+      drawerSprite.buttonDefault = drawer2;
+      drawerSprite.buttonHover = drawer2;
+      drawerSprite.interactive = false;
       pageFlipSound.play();
     });
-    g1_posterSprite = new Button(g1_poster, g1_poster, 30, 30);
-    g1_posterSprite.addClickEvent(function (e) {
-      g1_posterSprite.buttonDefault = g1_poster2;
-      g1_posterSprite.buttonHover = g1_poster2;
-      g1_posterSprite.interactive = false;
+    posterSprite = new Button(poster, poster_h, 66, 29);
+    posterSprite.addClickEvent(function (e) {
+      posterSprite.buttonDefault = poster2;
+      posterSprite.buttonHover = poster2;
+      posterSprite.interactive = false;
       pageFlipSound.play();
     });
-    g1_blanketSprite = new Button(g1_blanket, g1_blanket, 110, 120);
-    g1_blanketSprite.addClickEvent(function (e) {
-      g1_blanketSprite.buttonDefault = g1_blanket2;
-      g1_blanketSprite.buttonHover = g1_blanket2;
-      g1_blanketSprite.interactive = false;
+    blanketSprite = new Button(blanket, blanket_h, 169, 177);
+    blanketSprite.addClickEvent(function (e) {
+      blanketSprite.buttonDefault = blanket2;
+      blanketSprite.buttonHover = blanket2;
+      blanketSprite.interactive = false;
       pageFlipSound.play();
     });
-    g1_pillowSprite = new Draggable(
-      g1_pillow,
-      g1_pillow,
-      470,
-      300,
+    pillowSprite = new Draggable(
+      pillow,
+      pillow_h,
+      510,
       250,
-      100,
-      [138, 424],
-      [60, 340]
+      276,
+      148,
+      [169, 459],
+      [167, 394]
     );
-    g1_shirtSprite = new Draggable(
-      g1_shirt,
-      g1_shirt,
-      46,
-      294,
+    shirtSprite = new Draggable(
+      shirt,
+      shirt_h,
+      43,
+      300,
       null,
       null,
-      [34, 170],
-      [150, 263]
+      [46, 191],
+      [139, 271]
     );
-    g1_skirtSprite = new Draggable(
-      g1_skirt,
-      g1_skirt,
-      360,
-      392,
+    sockSprite = new Draggable(
+      sock,
+      sock_h,
+      13,
+      270,
       null,
       null,
-      [34, 170],
-      [150, 263]
+      [46, 191],
+      [139, 271]
     );
+    pandaSprite = new Draggable(
+      panda,
+      panda_h,
+      460,
+      351,
+      230,
+      156,
+      [169, 459],
+      [167, 394]
+    );
+
+    //Animated buttons
+    lampSprite = new Button(lamp_1, lamp_1, 457, 37);
+    lampAnimation = [
+      lamp_1, //1
+      lamp_2, //2
+      lamp_3, //3
+      lamp_1, //4
+      lamp_4, //5
+      lamp_5, //6
+      lamp_4, //7
+      lamp_1, //8
+      lamp_2, //9
+      lamp_3, //10
+      lamp_2, //11
+      lamp_1, //12
+    ];
+    lampSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        console.log("trigger animation");
+        intervalAnimation(lampSprite, lampAnimation, 100);
+        boingSound.play();
+        // lampSprite.buttonDefault = lamp_3;
+      }
+    });
+    lanternSprite = new Button(lantern, lantern, 269, 0);
+    discoSprite = new Button(disco_1, disco_1, 0, 0);
+    discoSprite.visible = false;
+    discoAnimation = [
+      disco_1, //1
+      disco_2, //2
+      disco_3, //3
+      disco_4, //4
+      disco_5, //5
+      disco_6, //6
+      disco_7, //7
+      disco_8, //8
+      disco_9, //9
+      disco_10, //10
+      disco_11, //11
+      disco_12, //12
+      disco_13, //13
+      disco_14, //14
+      disco_14, //14
+      disco_15, //15
+      disco_15, //15
+      disco_16, //16
+      disco_16, //16
+      disco_14, //14
+      disco_14, //14
+      disco_15, //15
+      disco_15, //15
+      disco_16, //16
+      disco_16, //16
+      disco_14, //14
+      disco_14, //14
+      disco_15, //15
+      disco_15, //15
+      disco_16, //16
+      disco_16, //16
+      disco_13, //1
+      disco_12, //2
+      disco_11, //3
+      disco_10, //4
+      disco_9, //5
+      disco_8, //6
+      disco_7, //7
+      disco_6, //8
+      disco_5, //9
+      disco_4, //10
+      disco_3, //11
+      disco_2, //12
+      disco_1, //13
+    ];
+    lanternSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        console.log("trigger animation");
+        lanternSprite.visible = false;
+        discoSprite.visible = true;
+        intervalAnimation(discoSprite, discoAnimation, 200, function () {
+          discoAnimation.visible = false;
+          lanternSprite.visible = true;
+        });
+        // lampSprite.buttonDefault = lamp_3;
+      }
+    });
   };
 
   p.draw = function () {
@@ -148,14 +276,18 @@ var game1 = function (p) {
 
   // Game 1
   function displayScene2() {
-    p.image(g1_bg, 0, 0, canvasWidth, canvasHeight);
-    // drawImageToScale(g1_drawer, 390, 50, g1_drawer.width, g1_drawer.height);
-    g1_drawerSprite.display();
-    g1_posterSprite.display();
-    g1_blanketSprite.display();
-    g1_pillowSprite.display();
-    g1_shirtSprite.display();
-    g1_skirtSprite.display();
+    p.image(bg, 0, 0, canvasWidth, canvasHeight);
+    // drawImageToScale(drawer, 390, 50, drawer.width, drawer.height);
+    drawerSprite.display();
+    posterSprite.display();
+    blanketSprite.display();
+    pillowSprite.display();
+    shirtSprite.display();
+    sockSprite.display();
+    pandaSprite.display();
+    lampSprite.display();
+    lanternSprite.display();
+    discoSprite.display();
 
     //detect if drawer clicked, then we swich the image.
     rightButton.display();
@@ -197,6 +329,7 @@ var game1 = function (p) {
       this.mouseInBounds = false;
       this.interactive = true;
       this.intendingToClick = false;
+      this.visible = true;
       let _this = this;
       game1canvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
@@ -223,17 +356,21 @@ var game1 = function (p) {
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.y * scaleRatio &&
-        mouse_y < this.y * scaleRatio + this.width * scaleRatio;
+        mouse_y < this.y * scaleRatio + this.height * scaleRatio;
       return this.mouseInBounds;
     }
 
     display() {
-      let imageToDraw = this.isMouseInBounds()
-        ? this.buttonHover
-        : this.buttonDefault;
+      let imageToDraw =
+        this.isMouseInBounds() && !currentlyDragging && !currentlyAnimating
+          ? this.buttonHover
+          : this.buttonDefault;
 
-      drawImageToScale(imageToDraw, this.x, this.y);
-      if (this.mouseInBounds && this.interactive) {
+      if (this.visible) {
+        drawImageToScale(imageToDraw, this.x, this.y);
+      }
+
+      if (this.mouseInBounds && this.interactive && !currentlyAnimating) {
         cursorState = "pointer";
       }
       // this.visible = true;
@@ -324,7 +461,7 @@ var game1 = function (p) {
         mouse_x > this.xCurrent * scaleRatio &&
         mouse_x < this.xCurrent * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.yCurrent * scaleRatio &&
-        mouse_y < this.yCurrent * scaleRatio + this.width * scaleRatio;
+        mouse_y < this.yCurrent * scaleRatio + this.height * scaleRatio;
       return this.mouseInBounds;
     }
 
@@ -338,8 +475,8 @@ var game1 = function (p) {
       }
       if (this.dragging) {
         cursorState = "hold";
-        this.xCurrent = Math.floor((mouse_x - 50) / scaleRatio);
-        this.yCurrent = Math.floor((mouse_y - 50) / scaleRatio);
+        this.xCurrent = Math.floor((mouse_x - this.width / 2) / scaleRatio);
+        this.yCurrent = Math.floor((mouse_y - this.height / 2) / scaleRatio);
       }
       if (this.visible) {
         drawImageToScale(imageToDraw, this.xCurrent, this.yCurrent);
@@ -357,16 +494,22 @@ var game1 = function (p) {
 
   // Make it so when we press next button, we go to the next scene
 
-  function timedAnimation(timeInfo) {
+  //This is a function that takes a sprite,
+  //takes a list of images as frames and animates that sprite
+  function intervalAnimation(sprite, frames, interval, callback) {
     // should trigger audio.. when i have it.
     currentlyAnimating = true;
-    timeInfo.forEach(function (value, index) {
+    frames.forEach(function (img, index) {
       setTimeout(function () {
-        timedAnimationIndex = (index + 1) % timeInfo.length;
-        timedAnimationIndex == 0
-          ? (currentlyAnimating = false)
-          : (currentlyAnimating = true);
-      }, value);
+        timedAnimationIndex = (index + 1) % frames.length;
+        sprite.buttonDefault = img;
+        if (timedAnimationIndex == 0) {
+          currentlyAnimating = false;
+          if (callback) {
+            callback();
+          }
+        }
+      }, interval * index);
     });
   }
 

@@ -6,7 +6,7 @@ body {
 
 canvas {
   margin: auto;
-  display:block;
+  visibility: visible;
   position:absolute;
   left: 50%;
   top: 50%;
@@ -16,5 +16,5 @@ canvas {
 }
 .gameCanvas{
   z-index:-1;
-  display:none;
+  visibility: hidden;
 }

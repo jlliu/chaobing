@@ -1,9 +1,9 @@
-// Game 1: Cleaning Room
+// Game 2: Kumon
 
-let game1canvas;
+let game2canvas;
 
-var game1 = function (p) {
-  let thisSceneNum = 1;
+var game2 = function (p) {
+  let thisSceneNum = 2;
   let canvasRatio = canvasWidth / canvasHeight;
   let mouse_x;
   let mouse_y;
@@ -11,6 +11,7 @@ var game1 = function (p) {
   let leftButton;
   let cursor;
   let cursorState = "default";
+  let sceneState = "story";
 
   let currentlyAnimating = false;
   let timedAnimationIndex = 0;
@@ -18,18 +19,34 @@ var game1 = function (p) {
 
   let clickedObjects = [];
 
-  let drawerSprite,
-    lampSprite,
-    posterSprite,
-    blanketSprite,
-    pandaSprite,
-    sockSprite,
-    shirtSprite,
-    discoSprite,
-    pillowSprite;
+  let currentQuestionNum = 0;
+
+  //Establish a questions or a corrections mode
+  let mode = "questions";
+
+  // We're going to have a list of questions and answers
+  // These will be image files! Make these the paths to the questions and answers
+  // Then we will turn them into sprites for buttons, and whatnot
+  let questions = [
+    //{ question: "path", correct: "path", answers: ["path", "path", "path"] },
+  ];
+
+  let corrections = [];
+
+  //Store correct answers as the letter codes
+  let answerKey = ["a", "c", "d", "a"];
+
+  let correctionAnswerKey = [];
+
+  let gameDone = false;
+
+  // Then we will display them in order (could be random later, doesn't matter)
+  // Wrong ones go to a pile at the end
+  // If left with one you just have to keep trying again until it's done
 
   p.preload = function () {
-    img = p.loadImage("assets/UI/storybook-bg-case.png");
+    g2_bg = p.loadImage("assets/img/game2/bg.png");
+
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
     holdCursor = p.loadImage("assets/UI/cursors/hold-cursor.png");
@@ -40,208 +57,105 @@ var game1 = function (p) {
     button_l_up = p.loadImage("assets/UI/buttons/button-l-up.png");
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
 
-    //game 1 assets
-    bg = p.loadImage("assets/img/game1/bg.png");
-    blanket = p.loadImage("assets/img/game1/blanket.png");
-    blanket2 = p.loadImage("assets/img/game1/blanket2.png");
-    blanket_h = p.loadImage("assets/img/game1/blanket-h.png");
-    drawer = p.loadImage("assets/img/game1/drawer.png");
-    drawer2 = p.loadImage("assets/img/game1/drawer2.png");
-    drawer_h = p.loadImage("assets/img/game1/drawer-h.png");
-    pillow = p.loadImage("assets/img/game1/pillow.png");
-    pillow_h = p.loadImage("assets/img/game1/pillow-h.png");
-    poster = p.loadImage("assets/img/game1/poster.png");
-    poster2 = p.loadImage("assets/img/game1/poster2.png");
-    poster_h = p.loadImage("assets/img/game1/poster-h.png");
-    shirt = p.loadImage("assets/img/game1/shirt.png");
-    shirt_h = p.loadImage("assets/img/game1/shirt-h.png");
-    sock = p.loadImage("assets/img/game1/sock.png");
-    sock_h = p.loadImage("assets/img/game1/sock-h.png");
-    panda = p.loadImage("assets/img/game1/panda.png");
-    panda_h = p.loadImage("assets/img/game1/panda-h.png");
+    g2_paper = p.loadImage("assets/img/game2/paper.png");
+    g2_paper_corrections = p.loadImage(
+      "assets/img/game2/paper_corrections.png"
+    );
 
-    //animated assets
-    lamp_1 = p.loadImage("assets/img/game1/lamp1.png");
-    lamp_2 = p.loadImage("assets/img/game1/lamp2.png");
-    lamp_3 = p.loadImage("assets/img/game1/lamp3.png");
-    lamp_4 = p.loadImage("assets/img/game1/lamp4.png");
-    lamp_5 = p.loadImage("assets/img/game1/lamp5.png");
+    g2_doneSticker = p.loadImage("assets/img/game2/done_sticker.png");
 
-    lantern = p.loadImage("assets/img/game1/lantern.png");
-    disco_1 = p.loadImage("assets/img/game1/disco1.png");
-    disco_2 = p.loadImage("assets/img/game1/disco2.png");
-    disco_3 = p.loadImage("assets/img/game1/disco3.png");
-    disco_4 = p.loadImage("assets/img/game1/disco4.png");
-    disco_5 = p.loadImage("assets/img/game1/disco5.png");
-    disco_6 = p.loadImage("assets/img/game1/disco6.png");
-    disco_7 = p.loadImage("assets/img/game1/disco7.png");
-    disco_8 = p.loadImage("assets/img/game1/disco8.png");
-    disco_9 = p.loadImage("assets/img/game1/disco9.png");
-    disco_10 = p.loadImage("assets/img/game1/disco10.png");
-    disco_11 = p.loadImage("assets/img/game1/disco11.png");
-    disco_12 = p.loadImage("assets/img/game1/disco12.png");
-    disco_13 = p.loadImage("assets/img/game1/disco13.png");
-    disco_14 = p.loadImage("assets/img/game1/disco14.png");
-    disco_15 = p.loadImage("assets/img/game1/disco15.png");
-    disco_16 = p.loadImage("assets/img/game1/disco16.png");
+    //Can we preload this and put into an array? We just wouldn't have a name
+    // How would we store the correct one programmatically???? That's the confusing part.
+    for (let i = 0; i < 4; i++) {
+      let questionToLoad = p.loadImage(`assets/img/game2/${i + 1}.png`);
+      let ans_a = p.loadImage(`assets/img/game2/${i + 1}a.png`);
+      let ans_b = p.loadImage(`assets/img/game2/${i + 1}b.png`);
+      let ans_c = p.loadImage(`assets/img/game2/${i + 1}c.png`);
+      let ans_d = p.loadImage(`assets/img/game2/${i + 1}d.png`);
+      let questionObj = {
+        question: questionToLoad,
+        answers: [ans_a, ans_b, ans_c, ans_d],
+      };
+      questions.push(questionObj);
+    }
   };
 
   p.setup = function () {
     // put setup code here
     p.pixelDensity(3);
     calculateCanvasDimensions(p);
-    game1canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
-    game1canvas.classList.add("gameCanvas");
-    game1canvas.id = "game1";
+    game2canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
+    game2canvas.classList.add("gameCanvas");
+    game2canvas.id = "game2";
     p.noSmooth();
 
     setupNavigation();
+
     cursor = new Cursor();
 
-    //Initialize Game 1 Sprites
-    drawerSprite = new Button(drawer, drawer_h, 438, 134);
-    drawerSprite.addClickEvent(function (e) {
-      drawerSprite.buttonDefault = drawer2;
-      drawerSprite.buttonHover = drawer2;
-      drawerSprite.interactive = false;
-      pageFlipSound.play();
-    });
-    posterSprite = new Button(poster, poster_h, 66, 29);
-    posterSprite.addClickEvent(function (e) {
-      posterSprite.buttonDefault = poster2;
-      posterSprite.buttonHover = poster2;
-      posterSprite.interactive = false;
-      pageFlipSound.play();
-    });
-    blanketSprite = new Button(blanket, blanket_h, 169, 177);
-    blanketSprite.addClickEvent(function (e) {
-      blanketSprite.buttonDefault = blanket2;
-      blanketSprite.buttonHover = blanket2;
-      blanketSprite.interactive = false;
-      pageFlipSound.play();
-    });
-    pillowSprite = new Draggable(
-      pillow,
-      pillow_h,
-      510,
-      250,
-      276,
-      148,
-      [169, 459],
-      [101, 394]
-    );
-    shirtSprite = new Draggable(
-      shirt,
-      shirt_h,
-      43,
-      300,
-      null,
-      null,
-      [46, 191],
-      [139, 271]
-    );
-    sockSprite = new Draggable(
-      sock,
-      sock_h,
-      13,
-      270,
-      null,
-      null,
-      [46, 191],
-      [139, 271]
-    );
-    pandaSprite = new Draggable(
-      panda,
-      panda_h,
-      460,
-      351,
-      230,
-      156,
-      [169, 459],
-      [101, 394]
-    );
-
-    //Animated buttons
-    lampSprite = new Button(lamp_1, lamp_1, 457, 37);
-    lampAnimation = [
-      lamp_1, //1
-      lamp_2, //2
-      lamp_3, //3
-      lamp_1, //4
-      lamp_4, //5
-      lamp_5, //6
-      lamp_4, //7
-      lamp_1, //8
-      lamp_2, //9
-      lamp_3, //10
-      lamp_2, //11
-      lamp_1, //12
+    //Initialize Game 2 Sprites
+    g2_paperToDraw = g2_paper;
+    currentQuestionImg = questions[currentQuestionNum].question;
+    let answers_images = questions[currentQuestionNum].answers;
+    ans_a_sprite = new Button(answers_images[0], answers_images[0], 170, 220);
+    ans_a_sprite.answer = "a";
+    ans_b_sprite = new Button(answers_images[1], answers_images[1], 330, 220);
+    ans_b_sprite.answer = "b";
+    ans_c_sprite = new Button(answers_images[2], answers_images[2], 170, 300);
+    ans_c_sprite.answer = "c";
+    ans_d_sprite = new Button(answers_images[3], answers_images[3], 330, 300);
+    ans_d_sprite.answer = "d";
+    let answer_sprites = [
+      ans_a_sprite,
+      ans_b_sprite,
+      ans_c_sprite,
+      ans_d_sprite,
     ];
-    lampSprite.addClickEvent(function (e) {
-      if (!currentlyAnimating) {
-        intervalAnimation(lampSprite, lampAnimation, 100);
-        boingSound.play();
-      }
-    });
-    lanternSprite = new Button(lantern, lantern, 269, 0);
-    discoSprite = new Button(disco_1, disco_1, 0, 0);
-    discoSprite.visible = false;
-    discoAnimation = [
-      disco_1, //1
-      disco_2, //2
-      disco_3, //3
-      disco_4, //4
-      disco_5, //5
-      disco_6, //6
-      disco_7, //7
-      disco_8, //8
-      disco_9, //9
-      disco_10, //10
-      disco_11, //11
-      disco_12, //12
-      disco_13, //13
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_13, //1
-      disco_12, //2
-      disco_11, //3
-      disco_10, //4
-      disco_9, //5
-      disco_8, //6
-      disco_7, //7
-      disco_6, //8
-      disco_5, //9
-      disco_4, //10
-      disco_3, //11
-      disco_2, //12
-      disco_1, //13
-    ];
-    lanternSprite.addClickEvent(function (e) {
-      if (!currentlyAnimating) {
-        console.log("trigger animation");
-        lanternSprite.visible = false;
-        discoSprite.visible = true;
-        intervalAnimation(discoSprite, discoAnimation, 200, function () {
-          discoSprite.visible = false;
-          lanternSprite.visible = true;
-        });
-      }
+    answer_sprites.forEach(function (sprite) {
+      let _this = sprite;
+      sprite.addClickEvent(function () {
+        if (!gameDone) {
+          if (mode == "questions") {
+            if (sprite.answer !== answerKey[currentQuestionNum]) {
+              corrections.push(questions[currentQuestionNum]);
+              correctionAnswerKey.push(answerKey[currentQuestionNum]);
+            } else {
+            }
+            if (currentQuestionNum < questions.length - 1) {
+              currentQuestionNum++;
+              changeQuestion(questions);
+            } else if (currentQuestionNum == questions.length - 1) {
+              if (corrections.length) {
+                currentQuestionNum = 0;
+                mode = "corrections";
+                changeQuestion(corrections);
+                g2_paperToDraw = g2_paper_corrections;
+              } else {
+                console.log("game done!");
+                gameDone = true;
+                gameFinished();
+              }
+            }
+          } else if (mode == "corrections") {
+            if (sprite.answer == correctionAnswerKey[currentQuestionNum]) {
+              corrections.splice(currentQuestionNum, 1);
+              correctionAnswerKey.splice(currentQuestionNum, 1);
+              if (corrections.length == 0) {
+                console.log("game done!");
+                gameDone = true;
+                gameFinished();
+              } else {
+                currentQuestionNum = currentQuestionNum % corrections.length;
+                changeQuestion(corrections);
+              }
+            } else {
+              currentQuestionNum =
+                (currentQuestionNum + 1) % corrections.length;
+              changeQuestion(corrections);
+            }
+          }
+        }
+      });
     });
   };
 
@@ -260,22 +174,52 @@ var game1 = function (p) {
 
   // Game 1
   function displayGame() {
-    p.image(bg, 0, 0, canvasWidth, canvasHeight);
+    p.image(g2_bg, 0, 0, canvasWidth, canvasHeight);
 
-    drawerSprite.display();
-    posterSprite.display();
-    blanketSprite.display();
-    pillowSprite.display();
-    shirtSprite.display();
-    sockSprite.display();
-    pandaSprite.display();
-    lampSprite.display();
-    lanternSprite.display();
-    discoSprite.display();
+    // Display Sprites
+    drawImageToScale(g2_paperToDraw, 157, 29);
+    //We should be displaying questions, and then the buttons
+
+    //Draw current question
+    // let currentQuestionImg = questions[currentQuestionNum].question;
+    drawImageToScale(currentQuestionImg, 170, 100);
+
+    ans_a_sprite.display();
+    ans_b_sprite.display();
+    ans_c_sprite.display();
+    ans_d_sprite.display();
+
+    //Display finished state
+    if (gameDone) {
+      drawImageToScale(g2_doneSticker, 270, 200);
+    }
 
     // Navigation
     rightButton.display();
     leftButton.display();
+  }
+
+  function changeQuestion(questionObj) {
+    // console.log(questionObj);
+    // console.log(currentQuestionNum);
+    // console.log(questionObj[currentQuestionNum]);
+    currentQuestionImg = questionObj[currentQuestionNum].question;
+    let answers_images = questionObj[currentQuestionNum].answers;
+    ans_a_sprite.buttonDefault = answers_images[0];
+    ans_a_sprite.buttonHover = answers_images[0];
+    ans_b_sprite.buttonDefault = answers_images[1];
+    ans_b_sprite.buttonHover = answers_images[1];
+    ans_c_sprite.buttonDefault = answers_images[2];
+    ans_c_sprite.buttonHover = answers_images[2];
+    ans_d_sprite.buttonDefault = answers_images[3];
+    ans_d_sprite.buttonHover = answers_images[3];
+  }
+
+  function gameFinished() {
+    ans_a_sprite.interactive = false;
+    ans_b_sprite.interactive = false;
+    ans_c_sprite.interactive = false;
+    ans_d_sprite.interactive = false;
   }
 
   // CLASSES
@@ -315,7 +259,7 @@ var game1 = function (p) {
       this.intendingToClick = false;
       this.visible = true;
       let _this = this;
-      game1canvas.addEventListener("mousedown", function (e) {
+      game2canvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
           _this.intendingToClick = true;
           clickedObjects.push(_this);
@@ -325,7 +269,7 @@ var game1 = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      game1canvas.addEventListener("click", function (e) {
+      game2canvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds() && _this.intendingToClick) {
           clickFunction();
           _this.intendingToClick = false;
@@ -394,7 +338,7 @@ var game1 = function (p) {
       let _this = this;
 
       //once the single mousedown event, this item drags everywhere until we drop it
-      game1canvas.addEventListener("mousedown", function (e) {
+      game2canvas.addEventListener("mousedown", function (e) {
         if (_this.mouseInBounds) {
           _this.dragging = true;
           currentlyDragging = true;
@@ -405,7 +349,7 @@ var game1 = function (p) {
         }
       });
 
-      game1canvas.addEventListener("mouseup", function (e) {
+      game2canvas.addEventListener("mouseup", function (e) {
         // If dropped in the target area, then it's done
         if (_this.mouseInBounds) {
           _this.dragging = false;
@@ -472,6 +416,7 @@ var game1 = function (p) {
   }
 
   // HELPERS
+
   function setupNavigation() {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
@@ -484,7 +429,6 @@ var game1 = function (p) {
         p.loop();
       }
     });
-
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
@@ -504,7 +448,6 @@ var game1 = function (p) {
           p.noLoop();
         }, 1000);
         storyMode = true;
-        console.log("entering story mode again");
       }
     });
     leftButton.addClickEvent(function (e) {
@@ -525,6 +468,7 @@ var game1 = function (p) {
       }
     });
   }
+
   p.windowResized = function () {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);
@@ -569,4 +513,4 @@ var game1 = function (p) {
   }
 };
 
-new p5(game1, "canvas2");
+new p5(game2, "canvas3");

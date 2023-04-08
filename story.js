@@ -1,12 +1,18 @@
 // save this file as sketch.js
 // Sketch One
 
-let canvas1;
+let storyCanvas;
 let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-let currentSceneNum = 1;
+// let currentSceneNum = 1;
+let currentSceneNum = 2;
+
+let storyMode = true;
+
+const navigateFwdEvent = new Event("navigateFwd");
+const navigateBackEvent = new Event("navigateBack");
 
 var sketch1 = function (p) {
   let canvasRatio = canvasWidth / canvasHeight;
@@ -29,7 +35,7 @@ var sketch1 = function (p) {
   let story_text = [];
 
   p.preload = function () {
-    img = p.loadImage("assets/UI/storybook-bg-case.png");
+    storyBg = p.loadImage("assets/UI/storybook-bg-case.png");
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
     holdCursor = p.loadImage("assets/UI/cursors/hold-cursor.png");
@@ -58,8 +64,8 @@ var sketch1 = function (p) {
     // put setup code here
     p.pixelDensity(3);
     calculateCanvasDimensions(p);
-    canvas1 = p.createCanvas(canvasWidth, canvasHeight).elt;
-    canvas1.id = "story";
+    storyCanvas = p.createCanvas(canvasWidth, canvasHeight).elt;
+    storyCanvas.id = "story";
     p.noSmooth();
 
     //Navigation stuff
@@ -68,24 +74,51 @@ var sketch1 = function (p) {
 
     //Navigate forward
     rightButton.addClickEvent(function (e) {
-      if (audioContext.state === "suspended") {
-        audioContext.resume();
-      }
-      harpTransitionInSound.play();
+      if (storyMode) {
+        console.log("currentscenenum: " + currentSceneNum);
+        document.dispatchEvent(navigateFwdEvent);
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+        harpTransitionInSound.play();
 
-      //Given the current scene #, fade in the game with the numer, fade out the current canvas
-      let canvasToShow = document.querySelector("#game" + currentSceneNum);
-      canvasToShow.style.display = "block";
-      canvas1.style.opacity = 0;
-      window.setTimeout(function () {
-        canvas1.style.display = "none";
-      }, 1000);
-      currentSceneNum++;
+        //Given the current scene #, fade in the game with the numer, fade out the current canvas
+        let canvasToShow = document.querySelector("#game" + currentSceneNum);
+        console.log(canvasToShow);
+        canvasToShow.style.visibility = "visible";
+        storyCanvas.style.opacity = 0;
+        window.setTimeout(function () {
+          storyCanvas.style.visibility = "hidden";
+          storyMode = false;
+        }, 1000);
+        // currentSceneNum++;
+      }
+    });
+
+    //Navigate back
+    leftButton.addClickEvent(function (e) {
+      if (storyMode && currentSceneNum !== 1) {
+        document.dispatchEvent(navigateBackEvent);
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+        harpTransitionInSound.play();
+        currentSceneNum--;
+        //Given the current scene #, fade in the game with the numer, fade out the current canvas
+        let canvasToShow = document.querySelector("#game" + currentSceneNum);
+        console.log(canvasToShow);
+        canvasToShow.style.visibility = "visible";
+        storyCanvas.style.opacity = 0;
+        window.setTimeout(function () {
+          storyCanvas.style.visibility = "hidden";
+          storyMode = false;
+        }, 1000);
+      }
     });
 
     cursor = new Cursor();
 
-    canvas1.addEventListener("mousemove", function (e) {
+    storyCanvas.addEventListener("mousemove", function (e) {
       mouse_x = e.offsetX;
       mouse_y = e.offsetY;
     });
@@ -99,12 +132,15 @@ var sketch1 = function (p) {
     //Cursor is default unless otherwise specified
     cursorState = "default";
     // p.background("green");
-    if (currentSceneNum == 1) {
+    if (currentSceneNum == 1 && storyMode) {
       displayScene1();
     }
-    if (currentSceneNum == 2) {
+
+    if (currentSceneNum == 2 && storyMode) {
       displayScene2();
     }
+
+    p.rect(50, 50, 50, 50);
     cursor.display();
   };
 
@@ -114,7 +150,7 @@ var sketch1 = function (p) {
 
   // Story 1
   function displayScene1() {
-    p.image(img, 0, 0, canvasWidth, canvasHeight);
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
     p.image(
       story_text[0][timedAnimationIndex],
@@ -128,9 +164,10 @@ var sketch1 = function (p) {
   }
 
   function displayScene2() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
     p.image(
-      story_text[1][timedAnimationIndex],
+      story_text[0][timedAnimationIndex],
       0,
       0,
       canvasWidth,
@@ -176,7 +213,7 @@ var sketch1 = function (p) {
       this.interactive = true;
       this.intendingToClick = false;
       let _this = this;
-      canvas1.addEventListener("mousedown", function (e) {
+      storyCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
           console.log("hello");
           console.log(currentlyDragging);
@@ -188,9 +225,7 @@ var sketch1 = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      canvas1.addEventListener("click", function (e) {
-        console.log("currently dragging");
-        console.log(currentlyDragging);
+      storyCanvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds() && _this.intendingToClick) {
           clickFunction();
           _this.intendingToClick = false;

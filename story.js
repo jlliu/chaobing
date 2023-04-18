@@ -6,8 +6,8 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-// let currentSceneNum = 1;
-let currentSceneNum = 2;
+let currentSceneNum = 1;
+// let currentSceneNum = 2;
 
 let storyMode = true;
 

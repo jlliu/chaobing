@@ -20,6 +20,14 @@ var game2 = function (p) {
   let clickedObjects = [];
 
   let currentQuestionNum = 0;
+  let correctionNoteNum = 0;
+
+  let timerInitialized = false;
+  let timerPaused = false;
+  let timer;
+  // length of timer, in ms
+  let timeCount = 0;
+  let timerDisplay = "00:00";
 
   //Establish a questions or a corrections mode
   let mode = "questions";
@@ -48,6 +56,14 @@ var game2 = function (p) {
 
   let eraseAnimation = [];
 
+  let paperAnimation = [];
+
+  let correctionNotes = [];
+
+  let answer_sprites;
+
+  let answer_bgs;
+
   // Then we will display them in order (could be random later, doesn't matter)
   // Wrong ones go to a pile at the end
   // If left with one you just have to keep trying again until it's done
@@ -65,10 +81,13 @@ var game2 = function (p) {
     button_l_up = p.loadImage("assets/UI/buttons/button-l-up.png");
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
 
-    g2_paper = p.loadImage("assets/img/game2/paper.png");
-    g2_paper_corrections = p.loadImage(
-      "assets/img/game2/paper_corrections.png"
-    );
+    for (let i = 0; i < 3; i++) {
+      paperAnimation.push(p.loadImage(`assets/img/game2/paper${i}.png`));
+    }
+
+    for (let i = 0; i < 5; i++) {
+      correctionNotes.push(p.loadImage(`assets/img/game2/correction${i}.png`));
+    }
 
     eraser = p.loadImage("assets/img/game2/eraser.png");
 
@@ -88,8 +107,33 @@ var game2 = function (p) {
     sticky = p.loadImage("assets/img/game2/sticky.png");
     g2_doneSticker = p.loadImage("assets/img/game2/done_sticker.png");
 
-    //Can we preload this and put into an array? We just wouldn't have a name
-    // How would we store the correct one programmatically???? That's the confusing part.
+    answer_bgs = {
+      a: {
+        default: p.loadImage(`assets/img/game2/buttonA.png`),
+        hover: p.loadImage(`assets/img/game2/buttonA-h.png`),
+        yes: p.loadImage(`assets/img/game2/buttonA-y.png`),
+        no: p.loadImage(`assets/img/game2/buttonA-n.png`),
+      },
+      b: {
+        default: p.loadImage(`assets/img/game2/buttonB.png`),
+        hover: p.loadImage(`assets/img/game2/buttonB-h.png`),
+        yes: p.loadImage(`assets/img/game2/buttonB-y.png`),
+        no: p.loadImage(`assets/img/game2/buttonB-n.png`),
+      },
+      c: {
+        default: p.loadImage(`assets/img/game2/buttonC.png`),
+        hover: p.loadImage(`assets/img/game2/buttonC-h.png`),
+        yes: p.loadImage(`assets/img/game2/buttonC-y.png`),
+        no: p.loadImage(`assets/img/game2/buttonC-n.png`),
+      },
+      d: {
+        default: p.loadImage(`assets/img/game2/buttonD.png`),
+        hover: p.loadImage(`assets/img/game2/buttonD-h.png`),
+        yes: p.loadImage(`assets/img/game2/buttonD-y.png`),
+        no: p.loadImage(`assets/img/game2/buttonD-n.png`),
+      },
+    };
+
     for (let i = 0; i < 4; i++) {
       let questionToLoad = p.loadImage(`assets/img/game2/${i + 1}.png`);
       let ans_a = p.loadImage(`assets/img/game2/${i + 1}a.png`);
@@ -118,6 +162,21 @@ var game2 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game 2 Sprites
+    paperAnimationSprite = new Button(
+      paperAnimation[0],
+      paperAnimation[0],
+      83,
+      0
+    );
+    paperAnimationSprite.interactive = false;
+    correctionSprite = new Button(
+      correctionNotes[0],
+      correctionNotes[0],
+      83,
+      0
+    );
+    correctionSprite.interactive = false;
+    correctionSprite.visible = false;
     eraserSprite = new Button(eraser, eraser, 40, 300);
     eraseAnimationSprite = new Button(
       eraseAnimation[0],
@@ -167,23 +226,60 @@ var game2 = function (p) {
     ojSprite = new Button(ojFrames[0], ojFrames[0], 0, 30);
     ojSprite.interactive = false;
     //Sprites related to questions
-    g2_paperToDraw = g2_paper;
+
     currentQuestionImg = questions[currentQuestionNum].question;
+    questionSprite = new Button(
+      currentQuestionImg,
+      currentQuestionImg,
+      170,
+      100
+    );
+    questionSprite.interactive = false;
+
     let answers_images = questions[currentQuestionNum].answers;
-    ans_a_sprite = new Button(answers_images[0], answers_images[0], 170, 220);
+    ans_a_sprite = new AnswerButton(answers_images[0], answer_bgs.a, 170, 220);
     ans_a_sprite.answer = "a";
-    ans_b_sprite = new Button(answers_images[1], answers_images[1], 330, 220);
+    ans_b_sprite = new AnswerButton(answers_images[1], answer_bgs.b, 330, 220);
     ans_b_sprite.answer = "b";
-    ans_c_sprite = new Button(answers_images[2], answers_images[2], 170, 300);
+    ans_c_sprite = new AnswerButton(answers_images[2], answer_bgs.c, 170, 300);
     ans_c_sprite.answer = "c";
-    ans_d_sprite = new Button(answers_images[3], answers_images[3], 330, 300);
+    ans_d_sprite = new AnswerButton(answers_images[3], answer_bgs.d, 330, 300);
     ans_d_sprite.answer = "d";
-    let answer_sprites = [
-      ans_a_sprite,
-      ans_b_sprite,
-      ans_c_sprite,
-      ans_d_sprite,
-    ];
+    answer_sprites = [ans_a_sprite, ans_b_sprite, ans_c_sprite, ans_d_sprite];
+
+    let progressQuestion = function () {
+      if (currentQuestionNum < questions.length - 1) {
+        currentQuestionNum++;
+        changeQuestion(questions);
+        flipAnimation();
+      } else if (currentQuestionNum == questions.length - 1) {
+        if (corrections.length) {
+          currentQuestionNum = 0;
+          mode = "corrections";
+          changeQuestion(corrections);
+          flipAnimation();
+        } else {
+          console.log("game done!");
+          gameFinished();
+        }
+      }
+    };
+
+    let progressCorrectionCorrect = function () {
+      if (corrections.length == 0) {
+        console.log("game done!");
+        gameFinished();
+      } else {
+        currentQuestionNum = currentQuestionNum % corrections.length;
+        changeQuestion(corrections);
+        flipAnimation();
+      }
+    };
+    let progressCorrectionIncorrect = function () {
+      currentQuestionNum = (currentQuestionNum + 1) % corrections.length;
+      changeQuestion(corrections);
+      flipAnimation();
+    };
     answer_sprites.forEach(function (sprite) {
       let _this = sprite;
       sprite.addClickEvent(function () {
@@ -192,39 +288,17 @@ var game2 = function (p) {
             if (sprite.answer !== answerKey[currentQuestionNum]) {
               corrections.push(questions[currentQuestionNum]);
               correctionAnswerKey.push(answerKey[currentQuestionNum]);
+              sprite.animate(false, progressQuestion);
             } else {
-            }
-            if (currentQuestionNum < questions.length - 1) {
-              currentQuestionNum++;
-              changeQuestion(questions);
-            } else if (currentQuestionNum == questions.length - 1) {
-              if (corrections.length) {
-                currentQuestionNum = 0;
-                mode = "corrections";
-                changeQuestion(corrections);
-                g2_paperToDraw = g2_paper_corrections;
-              } else {
-                console.log("game done!");
-                gameDone = true;
-                gameFinished();
-              }
+              sprite.animate(true, progressQuestion);
             }
           } else if (mode == "corrections") {
             if (sprite.answer == correctionAnswerKey[currentQuestionNum]) {
+              sprite.animate(true, progressCorrectionCorrect);
               corrections.splice(currentQuestionNum, 1);
               correctionAnswerKey.splice(currentQuestionNum, 1);
-              if (corrections.length == 0) {
-                console.log("game done!");
-                gameDone = true;
-                gameFinished();
-              } else {
-                currentQuestionNum = currentQuestionNum % corrections.length;
-                changeQuestion(corrections);
-              }
             } else {
-              currentQuestionNum =
-                (currentQuestionNum + 1) % corrections.length;
-              changeQuestion(corrections);
+              sprite.animate(false, progressCorrectionIncorrect);
             }
           }
         }
@@ -252,7 +326,9 @@ var game2 = function (p) {
     // Display Sprites
 
     drawImageToScale(sticky, 39, 151);
-    drawImageToScale(g2_paperToDraw, 157, 29);
+    ojSprite.display();
+
+    paperAnimationSprite.display();
 
     eraserSprite.display();
 
@@ -261,13 +337,13 @@ var game2 = function (p) {
     pencilAnimationSprite.display();
     pencilAnimationSprite.display();
 
-    ojSprite.display();
-
     //We should be displaying questions, and then the buttons
 
-    //Draw current question
-    // let currentQuestionImg = questions[currentQuestionNum].question;
-    drawImageToScale(currentQuestionImg, 170, 100);
+    questionSprite.display();
+    correctionSprite.display();
+    //timer
+    p.textSize(p.width / 25);
+    p.text(timerDisplay, p.width * 0.6, p.height * 0.15);
 
     ans_a_sprite.display();
     ans_b_sprite.display();
@@ -287,10 +363,16 @@ var game2 = function (p) {
   }
 
   function changeQuestion(questionObj) {
-    // console.log(questionObj);
-    // console.log(currentQuestionNum);
-    // console.log(questionObj[currentQuestionNum]);
     currentQuestionImg = questionObj[currentQuestionNum].question;
+    questionSprite.buttonDefault = currentQuestionImg;
+    questionSprite.buttonHover = currentQuestionImg;
+    if (mode == "corrections") {
+      if (correctionNoteNum !== 0) {
+        correctionSprite.buttonDefault =
+          correctionNotes[correctionNoteNum % correctionNotes.length];
+      }
+      correctionNoteNum++;
+    }
     let answers_images = questionObj[currentQuestionNum].answers;
     ans_a_sprite.buttonDefault = answers_images[0];
     ans_a_sprite.buttonHover = answers_images[0];
@@ -301,8 +383,29 @@ var game2 = function (p) {
     ans_d_sprite.buttonDefault = answers_images[3];
     ans_d_sprite.buttonHover = answers_images[3];
   }
+  function flipAnimation() {
+    questionSprite.visible = false;
+    correctionSprite.visible = false;
+    answer_sprites.forEach(function (sprite) {
+      sprite.visible = false;
+      sprite.interactive = false;
+    });
+    intervalAnimation(paperAnimationSprite, paperAnimation, 300, function () {
+      answer_sprites.forEach(function (sprite) {
+        sprite.visible = true;
+        sprite.interactive = true;
+        questionSprite.visible = true;
+        if (mode == "corrections") {
+          correctionSprite.visible = true;
+        }
+      });
+    });
+    pageFlipSound.play();
+  }
 
   function gameFinished() {
+    gameDone = true;
+    stopTimer();
     ans_a_sprite.interactive = false;
     ans_b_sprite.interactive = false;
     ans_c_sprite.interactive = false;
@@ -395,125 +498,148 @@ var game2 = function (p) {
     }
   }
 
-  class Draggable {
-    constructor(
-      defaultImg,
-      hoverImg,
-      xPos,
-      yPos,
-      xFinal,
-      yFinal,
-      xRange,
-      yRange
-    ) {
+  class AnswerButton {
+    constructor(questionImg, bgs, xPos, yPos) {
       this.x = xPos;
       this.y = yPos;
-      this.buttonDefault = defaultImg;
-      this.buttonHover = hoverImg;
-      this.width = this.buttonDefault.width;
-      this.height = this.buttonDefault.height;
+      this.buttonDefault = questionImg;
+      this.bgDefault = bgs.default;
+      this.bgHover = bgs.hover;
+      this.bgYes = bgs.yes;
+      this.bgNo = bgs.no;
+      this.bgToDraw = bgs.default;
+      this.width = questionImg.width;
+      this.height = questionImg.height;
       this.mouseInBounds = false;
       this.interactive = true;
+      this.intendingToClick = false;
       this.visible = true;
-      this.dragging = false;
-      this.xCurrent = this.x;
-      this.yCurrent = this.y;
-      this.xFinal = xFinal;
-      this.yFinal = yFinal;
-      this.xRange = xRange;
-      this.yRange = yRange;
       let _this = this;
-
-      //once the single mousedown event, this item drags everywhere until we drop it
       game2canvas.addEventListener("mousedown", function (e) {
-        if (_this.mouseInBounds) {
-          _this.dragging = true;
-          currentlyDragging = true;
-          clickedObjects.forEach(function (value) {
-            value.intendingToClick = false;
-            clickedObjects = [];
-          });
-        }
-      });
-
-      game2canvas.addEventListener("mouseup", function (e) {
-        // If dropped in the target area, then it's done
-        if (_this.mouseInBounds) {
-          _this.dragging = false;
-          currentlyDragging = false;
-          if (
-            mouse_x > xRange[0] * scaleRatio &&
-            mouse_x < xRange[1] * scaleRatio &&
-            mouse_y > yRange[0] * scaleRatio &&
-            mouse_y < yRange[1] * scaleRatio
-          ) {
-            _this.interactive = false;
-            pageFlipSound.play();
-            //Snap it into position if we don't make it disappear
-            if (_this.xFinal && _this.yFinal) {
-              _this.xCurrent = _this.xFinal;
-              _this.yCurrent = _this.yFinal;
-            } else {
-              _this.visible = false;
-            }
-          } else {
-            _this.xCurrent = _this.x;
-            _this.yCurrent = _this.y;
-          }
+        if (_this.isMouseInBounds()) {
+          _this.intendingToClick = true;
+          clickedObjects.push(_this);
         }
       });
     }
 
     addClickEvent(clickFunction) {
       let _this = this;
-      canvasEl.addEventListener("click", function (e) {
-        if (_this.isMouseInBounds(e.offsetX, e.offsetY)) {
+      game2canvas.addEventListener("click", function (e) {
+        if (
+          _this.isMouseInBounds() &&
+          _this.intendingToClick &&
+          !currentlyAnimating
+        ) {
           clickFunction();
+          _this.intendingToClick = false;
+          clickedObjects = [];
         }
       });
     }
     isMouseInBounds() {
       this.mouseInBounds =
-        !currentlyAnimating &&
         this.interactive &&
-        mouse_x > this.xCurrent * scaleRatio &&
-        mouse_x < this.xCurrent * scaleRatio + this.width * scaleRatio &&
-        mouse_y > this.yCurrent * scaleRatio &&
-        mouse_y < this.yCurrent * scaleRatio + this.height * scaleRatio;
+        mouse_x > this.x * scaleRatio &&
+        mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
+        mouse_y > this.y * scaleRatio &&
+        mouse_y < this.y * scaleRatio + this.height * scaleRatio;
       return this.mouseInBounds;
     }
-
+    animate(correct, callback) {
+      let _this = this;
+      if (correct) {
+        this.interactive = false;
+        intervalAnimationAnswer(
+          this,
+          [this.bgYes, this.bgDefault, this.bgYes, this.bgDefault],
+          300,
+          function () {
+            _this.interactive = true;
+            _this.bgToDraw = _this.bgDefault;
+            callback();
+          }
+        );
+      } else {
+        this.interactive = false;
+        intervalAnimationAnswer(
+          this,
+          [this.bgNo, this.bgDefault, this.bgNo, this.bgDefault],
+          300,
+          function () {
+            _this.interactive = true;
+            _this.bgToDraw = _this.bgDefault;
+            callback();
+          }
+        );
+      }
+    }
     display() {
-      let imageToDraw = this.isMouseInBounds()
-        ? this.buttonHover
-        : this.buttonDefault;
+      if (!currentlyAnimating) {
+        this.bgToDraw =
+          this.isMouseInBounds() && !currentlyDragging
+            ? this.bgHover
+            : this.bgDefault;
+      }
 
-      if (this.mouseInBounds && this.interactive) {
-        cursorState = "grab";
-      }
-      if (this.dragging) {
-        cursorState = "hold";
-        this.xCurrent = Math.floor((mouse_x - this.width / 2) / scaleRatio);
-        this.yCurrent = Math.floor((mouse_y - this.height / 2) / scaleRatio);
-      }
       if (this.visible) {
-        drawImageToScale(imageToDraw, this.xCurrent, this.yCurrent);
+        drawImageToScale(this.bgToDraw, this.x, this.y);
+        drawImageToScale(this.buttonDefault, this.x, this.y);
+      }
+
+      if (
+        this.mouseInBounds &&
+        this.interactive &&
+        this.visible &&
+        !currentlyAnimating
+      ) {
+        cursorState = "pointer";
       }
     }
   }
 
   // HELPERS
-
+  function initializeTimer() {
+    if (!timerInitialized && !gameDone) {
+      timer = setInterval(function () {
+        if (!timerPaused) {
+          timeCount += 1;
+          let seconds = Math.floor(timeCount) % 60;
+          let minutes = Math.floor(timeCount / 60) % 60;
+          let sec_display, min_display;
+          if (seconds < 10) {
+            sec_display = `0${seconds}`;
+          } else {
+            sec_display = `${seconds}`;
+          }
+          if (minutes < 10) {
+            min_display = `0${minutes}`;
+          } else {
+            min_display = `${minutes}`;
+          }
+          timerDisplay = `${min_display}:${sec_display}`;
+        }
+      }, 1000);
+      timerInitialized = true;
+      timerPaused = false;
+    }
+  }
+  function stopTimer() {
+    clearInterval(timer);
+    timerInitialized = false;
+  }
   function setupNavigation() {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
         p.loop();
+        initializeTimer();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
         p.loop();
+        initializeTimer();
       }
     });
     //Navigation stuff
@@ -533,6 +659,7 @@ var game2 = function (p) {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          stopTimer();
         }, 1000);
         storyMode = true;
       }
@@ -550,6 +677,7 @@ var game2 = function (p) {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          stopTimer();
         }, 1000);
         storyMode = true;
       }
@@ -574,6 +702,25 @@ var game2 = function (p) {
     setTimeout(function () {
       currentlyAnimating = false;
       sprite.buttonDefault = frames[0];
+      if (callback) {
+        callback();
+      }
+    }, interval * frames.length);
+  }
+
+  // Animates a sprite given the images as frames, based on a certain interval, with optional callback
+  function intervalAnimationAnswer(sprite, frames, interval, callback) {
+    currentlyAnimating = true;
+    frames.forEach(function (img, index) {
+      setTimeout(function () {
+        timedAnimationIndex = (index + 1) % frames.length;
+        sprite.bgToDraw = img;
+      }, interval * index);
+    });
+    // Another for the last frame
+    setTimeout(function () {
+      currentlyAnimating = false;
+      sprite.bgToDraw = frames[0];
       if (callback) {
         callback();
       }

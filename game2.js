@@ -40,6 +40,14 @@ var game2 = function (p) {
 
   let gameDone = false;
 
+  let appleAnimation = [];
+
+  let pencilAnimation = [];
+
+  let ojFrames = [];
+
+  let eraseAnimation = [];
+
   // Then we will display them in order (could be random later, doesn't matter)
   // Wrong ones go to a pile at the end
   // If left with one you just have to keep trying again until it's done
@@ -62,6 +70,22 @@ var game2 = function (p) {
       "assets/img/game2/paper_corrections.png"
     );
 
+    eraser = p.loadImage("assets/img/game2/eraser.png");
+
+    for (let i = 0; i < 8; i++) {
+      eraseAnimation.push(p.loadImage(`assets/img/game2/erase${i}.png`));
+    }
+    for (let i = 0; i < 4; i++) {
+      appleAnimation.push(p.loadImage(`assets/img/game2/apple${i}.png`));
+    }
+    for (let i = 0; i < 16; i++) {
+      pencilAnimation.push(p.loadImage(`assets/img/game2/pencil${i}.png`));
+    }
+
+    for (let i = 0; i < 4; i++) {
+      ojFrames.push(p.loadImage(`assets/img/game2/oj${i}.png`));
+    }
+    sticky = p.loadImage("assets/img/game2/sticky.png");
     g2_doneSticker = p.loadImage("assets/img/game2/done_sticker.png");
 
     //Can we preload this and put into an array? We just wouldn't have a name
@@ -94,6 +118,55 @@ var game2 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game 2 Sprites
+    eraserSprite = new Button(eraser, eraser, 40, 300);
+    eraseAnimationSprite = new Button(
+      eraseAnimation[0],
+      eraseAnimation[0],
+      0,
+      0
+    );
+    eraseAnimationSprite.visible = false;
+    eraserSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        eraseAnimationSprite.visible = true;
+        intervalAnimation(
+          eraseAnimationSprite,
+          eraseAnimation,
+          200,
+          function () {
+            eraseAnimationSprite.visible = false;
+          }
+        );
+        boingSound.play();
+      }
+    });
+    appleAnimationSprite = new Button(
+      appleAnimation[0],
+      appleAnimation[0],
+      512,
+      277
+    );
+    appleAnimationSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        intervalAnimation(appleAnimationSprite, appleAnimation, 500);
+        boingSound.play();
+      }
+    });
+    pencilAnimationSprite = new Button(
+      pencilAnimation[0],
+      pencilAnimation[0],
+      474,
+      0
+    );
+    pencilAnimationSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        intervalAnimation(pencilAnimationSprite, pencilAnimation, 190);
+        runningSound.play();
+      }
+    });
+    ojSprite = new Button(ojFrames[0], ojFrames[0], 0, 30);
+    ojSprite.interactive = false;
+    //Sprites related to questions
     g2_paperToDraw = g2_paper;
     currentQuestionImg = questions[currentQuestionNum].question;
     let answers_images = questions[currentQuestionNum].answers;
@@ -177,7 +250,19 @@ var game2 = function (p) {
     p.image(g2_bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
+
+    drawImageToScale(sticky, 39, 151);
     drawImageToScale(g2_paperToDraw, 157, 29);
+
+    eraserSprite.display();
+
+    appleAnimationSprite.display();
+
+    pencilAnimationSprite.display();
+    pencilAnimationSprite.display();
+
+    ojSprite.display();
+
     //We should be displaying questions, and then the buttons
 
     //Draw current question
@@ -197,6 +282,8 @@ var game2 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
+
+    eraseAnimationSprite.display();
   }
 
   function changeQuestion(questionObj) {
@@ -481,14 +568,16 @@ var game2 = function (p) {
       setTimeout(function () {
         timedAnimationIndex = (index + 1) % frames.length;
         sprite.buttonDefault = img;
-        if (timedAnimationIndex == 0) {
-          currentlyAnimating = false;
-          if (callback) {
-            callback();
-          }
-        }
       }, interval * index);
     });
+    // Another for the last frame
+    setTimeout(function () {
+      currentlyAnimating = false;
+      sprite.buttonDefault = frames[0];
+      if (callback) {
+        callback();
+      }
+    }, interval * frames.length);
   }
 
   function drawImageToScale(img, x, y) {

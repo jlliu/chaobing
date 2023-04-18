@@ -128,7 +128,8 @@ var game1 = function (p) {
       276,
       148,
       [169, 459],
-      [101, 394]
+      [101, 394],
+      toySqueakSound
     );
     shirtSprite = new Draggable(
       shirt,
@@ -138,7 +139,8 @@ var game1 = function (p) {
       null,
       null,
       [46, 191],
-      [139, 271]
+      [139, 271],
+      burnSound
     );
     sockSprite = new Draggable(
       sock,
@@ -148,7 +150,8 @@ var game1 = function (p) {
       null,
       null,
       [46, 191],
-      [139, 271]
+      [139, 271],
+      burnSound
     );
     pandaSprite = new Draggable(
       panda,
@@ -158,7 +161,8 @@ var game1 = function (p) {
       230,
       156,
       [169, 459],
-      [101, 394]
+      [101, 394],
+      toySqueakSound
     );
 
     //Animated buttons
@@ -373,7 +377,8 @@ var game1 = function (p) {
       xFinal,
       yFinal,
       xRange,
-      yRange
+      yRange,
+      soundEffect
     ) {
       this.x = xPos;
       this.y = yPos;
@@ -417,7 +422,8 @@ var game1 = function (p) {
             mouse_y < yRange[1] * scaleRatio
           ) {
             _this.interactive = false;
-            pageFlipSound.play();
+            console.log(soundEffect);
+            soundEffect.play();
             //Snap it into position if we don't make it disappear
             if (_this.xFinal && _this.yFinal) {
               _this.xCurrent = _this.xFinal;
@@ -537,14 +543,16 @@ var game1 = function (p) {
       setTimeout(function () {
         timedAnimationIndex = (index + 1) % frames.length;
         sprite.buttonDefault = img;
-        if (timedAnimationIndex == 0) {
-          currentlyAnimating = false;
-          if (callback) {
-            callback();
-          }
-        }
       }, interval * index);
     });
+    // Another for the last frame
+    setTimeout(function () {
+      currentlyAnimating = false;
+      sprite.buttonDefault = frames[0];
+      if (callback) {
+        callback();
+      }
+    }, interval * frames.length);
   }
 
   function drawImageToScale(img, x, y) {

@@ -140,7 +140,6 @@ var sketch1 = function (p) {
       displayScene2();
     }
 
-    p.rect(50, 50, 50, 50);
     cursor.display();
   };
 
@@ -235,7 +234,7 @@ var sketch1 = function (p) {
     }
     isMouseInBounds() {
       this.mouseInBounds =
-        // !currentlyAnimating &&
+        !currentlyAnimating &&
         this.interactive &&
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
@@ -256,6 +255,13 @@ var sketch1 = function (p) {
       // this.visible = true;
     }
   }
+
+  p.keyPressed = function () {
+    if (p.keyCode === 32) {
+      console.log("press space");
+      timedAnimation(scene1.timings);
+    }
+  };
 
   // HELPERS
   p.windowResized = function () {

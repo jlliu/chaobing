@@ -7,6 +7,8 @@
   <title>CHAO BING TEST</title>
   <link rel="stylesheet" type="text/css" href="style.css" />
   <script src="../p5.min.js"></script>
+  <script src="lib/tone.js"></script>
+
   <!-- <script src="../addons/p5.sound.js"></script> -->
   <script src="scenesInfo.js"></script>
   <!-- <script src="helpers.js"></script> -->
@@ -20,15 +22,17 @@
   <script src="story.js" defer></script>
   <script src="game1.js" defer></script>
   <script src="game2.js" defer></script>
+  <script src="game3.js" defer></script>
   <!-- <script src="sketch2.js" defer></script> -->
   <!-- <script src="game1.js"></script> -->
 </head>
 
 <body>
   <main>
-    <div id="canvas1"></div>
-    <div id="canvas2"></div>
-    <div id="canvas3"></div>
+    <div id="canvas-story"></div>
+    <div id="canvas-game1"></div>
+    <div id="canvas-game2"></div>
+    <div id="canvas-game3"></div>
   </main>
   <audio id="harpTransitionIn" src="assets/sound/harpTransitionIn.wav"></audio>
   <audio id="harpTransitionOut" src="assets/sound/harpTransitionOut.wav"></audio>

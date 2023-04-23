@@ -7,7 +7,7 @@ let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
 let currentSceneNum = 1;
-// let currentSceneNum = 2;
+// let currentSceneNum = 3;
 
 let storyMode = true;
 
@@ -77,10 +77,10 @@ var sketch1 = function (p) {
       if (storyMode) {
         console.log("currentscenenum: " + currentSceneNum);
         document.dispatchEvent(navigateFwdEvent);
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionInSound.play();
+        // if (audioContext.state === "suspended") {
+        //   audioContext.resume();
+        // }
+        harpTransitionInSound.start();
 
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
         let canvasToShow = document.querySelector("#game" + currentSceneNum);
@@ -99,10 +99,10 @@ var sketch1 = function (p) {
     leftButton.addClickEvent(function (e) {
       if (storyMode && currentSceneNum !== 1) {
         document.dispatchEvent(navigateBackEvent);
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionInSound.play();
+        // if (audioContext.state === "suspended") {
+        //   audioContext.resume();
+        // }
+        harpTransitionInSound.start();
         currentSceneNum--;
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
         let canvasToShow = document.querySelector("#game" + currentSceneNum);
@@ -139,7 +139,9 @@ var sketch1 = function (p) {
     if (currentSceneNum == 2 && storyMode) {
       displayScene2();
     }
-
+    if (currentSceneNum == 3 && storyMode) {
+      displayScene2();
+    }
     cursor.display();
   };
 
@@ -163,6 +165,20 @@ var sketch1 = function (p) {
   }
 
   function displayScene2() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
+    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
+    p.image(
+      story_text[0][timedAnimationIndex],
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+    rightButton.display(p);
+    leftButton.display(p);
+  }
+
+  function displayScene3() {
     p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
     p.image(
@@ -306,4 +322,4 @@ var sketch1 = function (p) {
   }
 };
 
-new p5(sketch1, "canvas1");
+new p5(sketch1, "canvas-story");

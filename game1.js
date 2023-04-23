@@ -41,7 +41,7 @@ var game1 = function (p) {
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
 
     //game 1 assets
-    bg = p.loadImage("assets/img/game1/bg.png");
+    g1_bg = p.loadImage("assets/img/game1/bg.png");
     blanket = p.loadImage("assets/img/game1/blanket.png");
     blanket2 = p.loadImage("assets/img/game1/blanket2.png");
     blanket_h = p.loadImage("assets/img/game1/blanket-h.png");
@@ -104,21 +104,21 @@ var game1 = function (p) {
       drawerSprite.buttonDefault = drawer2;
       drawerSprite.buttonHover = drawer2;
       drawerSprite.interactive = false;
-      pageFlipSound.play();
+      pageFlipSound.start();
     });
     posterSprite = new Button(poster, poster_h, 66, 29);
     posterSprite.addClickEvent(function (e) {
       posterSprite.buttonDefault = poster2;
       posterSprite.buttonHover = poster2;
       posterSprite.interactive = false;
-      pageFlipSound.play();
+      pageFlipSound.start();
     });
     blanketSprite = new Button(blanket, blanket_h, 169, 177);
     blanketSprite.addClickEvent(function (e) {
       blanketSprite.buttonDefault = blanket2;
       blanketSprite.buttonHover = blanket2;
       blanketSprite.interactive = false;
-      pageFlipSound.play();
+      pageFlipSound.start();
     });
     pillowSprite = new Draggable(
       pillow,
@@ -184,7 +184,7 @@ var game1 = function (p) {
     lampSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
         intervalAnimation(lampSprite, lampAnimation, 100);
-        boingSound.play();
+        boingSound.start();
       }
     });
     lanternSprite = new Button(lantern, lantern, 269, 0);
@@ -264,7 +264,7 @@ var game1 = function (p) {
 
   // Game 1
   function displayGame() {
-    p.image(bg, 0, 0, canvasWidth, canvasHeight);
+    p.image(g1_bg, 0, 0, canvasWidth, canvasHeight);
 
     drawerSprite.display();
     posterSprite.display();
@@ -340,6 +340,7 @@ var game1 = function (p) {
     isMouseInBounds() {
       this.mouseInBounds =
         this.interactive &&
+        !currentlyAnimating &&
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.y * scaleRatio &&
@@ -423,7 +424,7 @@ var game1 = function (p) {
           ) {
             _this.interactive = false;
             console.log(soundEffect);
-            soundEffect.play();
+            soundEffect.start();
             //Snap it into position if we don't make it disappear
             if (_this.xFinal && _this.yFinal) {
               _this.xCurrent = _this.xFinal;
@@ -441,7 +442,7 @@ var game1 = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      canvasEl.addEventListener("click", function (e) {
+      thisCanvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds(e.offsetX, e.offsetY)) {
           clickFunction();
         }
@@ -497,10 +498,7 @@ var game1 = function (p) {
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         currentSceneNum++;
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
@@ -515,10 +513,7 @@ var game1 = function (p) {
     });
     leftButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
@@ -539,6 +534,7 @@ var game1 = function (p) {
   // Animates a sprite given the images as frames, based on a certain interval, with optional callback
   function intervalAnimation(sprite, frames, interval, callback) {
     currentlyAnimating = true;
+    let original = sprite.buttonDefault;
     frames.forEach(function (img, index) {
       setTimeout(function () {
         timedAnimationIndex = (index + 1) % frames.length;
@@ -548,7 +544,7 @@ var game1 = function (p) {
     // Another for the last frame
     setTimeout(function () {
       currentlyAnimating = false;
-      sprite.buttonDefault = frames[0];
+      sprite.buttonDefault = original;
       if (callback) {
         callback();
       }
@@ -577,4 +573,4 @@ var game1 = function (p) {
   }
 };
 
-new p5(game1, "canvas2");
+new p5(game1, "canvas-game1");

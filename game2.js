@@ -3,6 +3,7 @@
 let game2canvas;
 
 var game2 = function (p) {
+  let thisCanvas;
   let thisSceneNum = 2;
   let canvasRatio = canvasWidth / canvasHeight;
   let mouse_x;
@@ -19,6 +20,8 @@ var game2 = function (p) {
 
   let clickedObjects = [];
 
+  let correctQuestionsNum = 0;
+  let totalQuestions = 12;
   let currentQuestionNum = 0;
   let correctionNoteNum = 0;
 
@@ -42,7 +45,7 @@ var game2 = function (p) {
   let corrections = [];
 
   //Store correct answers as the letter codes
-  let answerKey = ["a", "c", "d", "a"];
+  let answerKey = ["a", "d", "c", "b", "a", "b", "d", "d", "d", "c", "c", "b"];
 
   let correctionAnswerKey = [];
 
@@ -134,7 +137,7 @@ var game2 = function (p) {
       },
     };
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < totalQuestions; i++) {
       let questionToLoad = p.loadImage(`assets/img/game2/${i + 1}.png`);
       let ans_a = p.loadImage(`assets/img/game2/${i + 1}a.png`);
       let ans_b = p.loadImage(`assets/img/game2/${i + 1}b.png`);
@@ -155,6 +158,7 @@ var game2 = function (p) {
     game2canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     game2canvas.classList.add("gameCanvas");
     game2canvas.id = "game2";
+    thisCanvas = game2canvas;
     p.noSmooth();
 
     setupNavigation();
@@ -196,7 +200,7 @@ var game2 = function (p) {
             eraseAnimationSprite.visible = false;
           }
         );
-        boingSound.play();
+        boingSound.start();
       }
     });
     appleAnimationSprite = new Button(
@@ -208,7 +212,7 @@ var game2 = function (p) {
     appleAnimationSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
         intervalAnimation(appleAnimationSprite, appleAnimation, 500);
-        boingSound.play();
+        boingSound.start();
       }
     });
     pencilAnimationSprite = new Button(
@@ -220,7 +224,7 @@ var game2 = function (p) {
     pencilAnimationSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
         intervalAnimation(pencilAnimationSprite, pencilAnimation, 190);
-        runningSound.play();
+        runningSound.start();
       }
     });
     ojSprite = new Button(ojFrames[0], ojFrames[0], 0, 30);
@@ -237,13 +241,13 @@ var game2 = function (p) {
     questionSprite.interactive = false;
 
     let answers_images = questions[currentQuestionNum].answers;
-    ans_a_sprite = new AnswerButton(answers_images[0], answer_bgs.a, 170, 220);
+    ans_a_sprite = new AnswerButton(answers_images[0], answer_bgs.a, 184, 231);
     ans_a_sprite.answer = "a";
-    ans_b_sprite = new AnswerButton(answers_images[1], answer_bgs.b, 330, 220);
+    ans_b_sprite = new AnswerButton(answers_images[1], answer_bgs.b, 321, 225);
     ans_b_sprite.answer = "b";
-    ans_c_sprite = new AnswerButton(answers_images[2], answer_bgs.c, 170, 300);
+    ans_c_sprite = new AnswerButton(answers_images[2], answer_bgs.c, 185, 316);
     ans_c_sprite.answer = "c";
-    ans_d_sprite = new AnswerButton(answers_images[3], answer_bgs.d, 330, 300);
+    ans_d_sprite = new AnswerButton(answers_images[3], answer_bgs.d, 322, 313);
     ans_d_sprite.answer = "d";
     answer_sprites = [ans_a_sprite, ans_b_sprite, ans_c_sprite, ans_d_sprite];
 
@@ -280,6 +284,14 @@ var game2 = function (p) {
       changeQuestion(corrections);
       flipAnimation();
     };
+
+    let correctQuestion = function () {
+      correctQuestionsNum++;
+      ojSprite.buttonDefault = ojFrames[Math.floor(correctQuestionsNum / 4)];
+      if (correctQuestionsNum % 4 == 0) {
+        boingSound.start();
+      }
+    };
     answer_sprites.forEach(function (sprite) {
       let _this = sprite;
       sprite.addClickEvent(function () {
@@ -290,10 +302,12 @@ var game2 = function (p) {
               correctionAnswerKey.push(answerKey[currentQuestionNum]);
               sprite.animate(false, progressQuestion);
             } else {
+              correctQuestion();
               sprite.animate(true, progressQuestion);
             }
           } else if (mode == "corrections") {
             if (sprite.answer == correctionAnswerKey[currentQuestionNum]) {
+              correctQuestion();
               sprite.animate(true, progressCorrectionCorrect);
               corrections.splice(currentQuestionNum, 1);
               correctionAnswerKey.splice(currentQuestionNum, 1);
@@ -328,9 +342,10 @@ var game2 = function (p) {
     drawImageToScale(sticky, 39, 151);
     ojSprite.display();
 
-    paperAnimationSprite.display();
+    //Decide which OJ to draw
 
     eraserSprite.display();
+    paperAnimationSprite.display();
 
     appleAnimationSprite.display();
 
@@ -340,7 +355,7 @@ var game2 = function (p) {
     //We should be displaying questions, and then the buttons
 
     questionSprite.display();
-    correctionSprite.display();
+
     //timer
     p.textSize(p.width / 25);
     p.text(timerDisplay, p.width * 0.6, p.height * 0.15);
@@ -349,6 +364,8 @@ var game2 = function (p) {
     ans_b_sprite.display();
     ans_c_sprite.display();
     ans_d_sprite.display();
+
+    correctionSprite.display();
 
     //Display finished state
     if (gameDone) {
@@ -400,7 +417,7 @@ var game2 = function (p) {
         }
       });
     });
-    pageFlipSound.play();
+    pageFlipSound.start();
   }
 
   function gameFinished() {
@@ -449,7 +466,7 @@ var game2 = function (p) {
       this.intendingToClick = false;
       this.visible = true;
       let _this = this;
-      game2canvas.addEventListener("mousedown", function (e) {
+      thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
           _this.intendingToClick = true;
           clickedObjects.push(_this);
@@ -459,7 +476,7 @@ var game2 = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      game2canvas.addEventListener("click", function (e) {
+      thisCanvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds() && _this.intendingToClick) {
           clickFunction();
           _this.intendingToClick = false;
@@ -515,7 +532,7 @@ var game2 = function (p) {
       this.intendingToClick = false;
       this.visible = true;
       let _this = this;
-      game2canvas.addEventListener("mousedown", function (e) {
+      thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
           _this.intendingToClick = true;
           clickedObjects.push(_this);
@@ -525,7 +542,7 @@ var game2 = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      game2canvas.addEventListener("click", function (e) {
+      thisCanvas.addEventListener("click", function (e) {
         if (
           _this.isMouseInBounds() &&
           _this.intendingToClick &&
@@ -540,6 +557,7 @@ var game2 = function (p) {
     isMouseInBounds() {
       this.mouseInBounds =
         this.interactive &&
+        !currentlyAnimating &&
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.y * scaleRatio &&
@@ -648,15 +666,12 @@ var game2 = function (p) {
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         currentSceneNum++;
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         window.setTimeout(function () {
-          game1canvas.style.visibility = "hidden";
+          thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
           stopTimer();
@@ -666,15 +681,12 @@ var game2 = function (p) {
     });
     leftButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         window.setTimeout(function () {
-          game1canvas.style.visibility = "hidden";
+          thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
           stopTimer();
@@ -692,6 +704,7 @@ var game2 = function (p) {
   // Animates a sprite given the images as frames, based on a certain interval, with optional callback
   function intervalAnimation(sprite, frames, interval, callback) {
     currentlyAnimating = true;
+    let original = sprite.buttonDefault;
     frames.forEach(function (img, index) {
       setTimeout(function () {
         timedAnimationIndex = (index + 1) % frames.length;
@@ -701,7 +714,7 @@ var game2 = function (p) {
     // Another for the last frame
     setTimeout(function () {
       currentlyAnimating = false;
-      sprite.buttonDefault = frames[0];
+      sprite.buttonDefault = original;
       if (callback) {
         callback();
       }
@@ -749,4 +762,4 @@ var game2 = function (p) {
   }
 };
 
-new p5(game2, "canvas3");
+new p5(game2, "canvas-game2");

@@ -3,6 +3,7 @@
 let gameNcanvas;
 
 var gameN = function (p) {
+  let thisCanvas;
   let thisSceneNum = N;
   let canvasRatio = canvasWidth / canvasHeight;
   let mouse_x;
@@ -43,6 +44,7 @@ var gameN = function (p) {
     gameNcanvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     gameNcanvas.classList.add("gameCanvas");
     gameNcanvas.id = "game2";
+    thisCanvas = gameNcanvas;
     p.noSmooth();
 
     setupNavigation();
@@ -113,7 +115,7 @@ var gameN = function (p) {
       this.intendingToClick = false;
       this.visible = true;
       let _this = this;
-      game2canvas.addEventListener("mousedown", function (e) {
+      thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
           _this.intendingToClick = true;
           clickedObjects.push(_this);
@@ -123,7 +125,7 @@ var gameN = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      game2canvas.addEventListener("click", function (e) {
+      thisCanvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds() && _this.intendingToClick) {
           clickFunction();
           _this.intendingToClick = false;
@@ -134,6 +136,7 @@ var gameN = function (p) {
     isMouseInBounds() {
       this.mouseInBounds =
         this.interactive &&
+        !currentlyAnimating &&
         mouse_x > this.x * scaleRatio &&
         mouse_x < this.x * scaleRatio + this.width * scaleRatio &&
         mouse_y > this.y * scaleRatio &&
@@ -192,7 +195,7 @@ var gameN = function (p) {
       let _this = this;
 
       //once the single mousedown event, this item drags everywhere until we drop it
-      game2canvas.addEventListener("mousedown", function (e) {
+      thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.mouseInBounds) {
           _this.dragging = true;
           currentlyDragging = true;
@@ -203,7 +206,7 @@ var gameN = function (p) {
         }
       });
 
-      game2canvas.addEventListener("mouseup", function (e) {
+      thisCanvas.addEventListener("mouseup", function (e) {
         // If dropped in the target area, then it's done
         if (_this.mouseInBounds) {
           _this.dragging = false;
@@ -215,7 +218,7 @@ var gameN = function (p) {
             mouse_y < yRange[1] * scaleRatio
           ) {
             _this.interactive = false;
-            pageFlipSound.play();
+            pageFlipSound.start();
             //Snap it into position if we don't make it disappear
             if (_this.xFinal && _this.yFinal) {
               _this.xCurrent = _this.xFinal;
@@ -233,7 +236,7 @@ var gameN = function (p) {
 
     addClickEvent(clickFunction) {
       let _this = this;
-      canvasEl.addEventListener("click", function (e) {
+      thisCanvas.addEventListener("click", function (e) {
         if (_this.isMouseInBounds(e.offsetX, e.offsetY)) {
           clickFunction();
         }
@@ -289,10 +292,7 @@ var gameN = function (p) {
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         currentSceneNum++;
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
@@ -306,10 +306,7 @@ var gameN = function (p) {
     });
     leftButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
-        }
-        harpTransitionOutSound.play();
+        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
@@ -331,18 +328,21 @@ var gameN = function (p) {
   // Animates a sprite given the images as frames, based on a certain interval, with optional callback
   function intervalAnimation(sprite, frames, interval, callback) {
     currentlyAnimating = true;
+    let original = sprite.buttonDefault;
     frames.forEach(function (img, index) {
       setTimeout(function () {
         timedAnimationIndex = (index + 1) % frames.length;
         sprite.buttonDefault = img;
-        if (timedAnimationIndex == 0) {
-          currentlyAnimating = false;
-          if (callback) {
-            callback();
-          }
-        }
       }, interval * index);
     });
+    // Another for the last frame
+    setTimeout(function () {
+      currentlyAnimating = false;
+      sprite.buttonDefault = original;
+      if (callback) {
+        callback();
+      }
+    }, interval * frames.length);
   }
 
   function drawImageToScale(img, x, y) {

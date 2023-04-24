@@ -31,6 +31,56 @@ var game3 = function (p) {
 
   let clickedSprites = [];
 
+  let currentSequence = 0;
+  let sequenceIndex = 0;
+  let sequences = [
+    [
+      { note: "Bb4", duration: 1000 },
+      { note: "G5", duration: 4000 },
+    ],
+    [
+      { note: "Bb4", duration: 1000 },
+      { note: "G5", duration: 4000 },
+      { note: "F5", duration: 1000 },
+      { note: "G5", duration: 1000 },
+      { note: "F5", duration: 3000 },
+      { note: "Eb5", duration: 2000 },
+    ],
+    [
+      { note: "Bb4", duration: 1000 },
+      { note: "G5", duration: 2000 },
+      { note: "C5", duration: 200 },
+      { note: "Db5", duration: 200 },
+      { note: "C5", duration: 200 },
+      { note: "B4", duration: 200 },
+      { note: "C5", duration: 200 },
+      { note: "C6", duration: 2000 },
+      { note: "G5", duration: 1000 },
+      { note: "Bb5", duration: 3000 },
+      { note: "Ab5", duration: 2000 },
+    ],
+    [
+      { note: "G5", duration: 1000 },
+      { note: "F5", duration: 3000 },
+      { note: "G5", duration: 2000 },
+      { note: "D5", duration: 1000 },
+      { note: "Eb5", duration: 3000 },
+      { note: "C5", duration: 3000 },
+    ],
+    [
+      { note: "Bb4", duration: 1000 },
+      { note: "D6", duration: 1000 },
+      { note: "C6", duration: 1000 },
+      { note: "Bb5", duration: 500 },
+      { note: "Ab5", duration: 500 },
+      { note: "G5", duration: 500 },
+      { note: "Ab5", duration: 500 },
+      { note: "C5", duration: 500 },
+      { note: "D5", duration: 500 },
+      { note: "Eb5", duration: 3000 },
+    ],
+  ];
+
   p.preload = function () {
     //Preload a background here
     g3_bg = p.loadImage("assets/img/game3/bg.png");
@@ -41,6 +91,8 @@ var game3 = function (p) {
     blackKey_h = p.loadImage("assets/img/game3/blackkey-hover.png");
     whiteKey_p = p.loadImage("assets/img/game3/whitekey-pressed.png");
     blackKey_p = p.loadImage("assets/img/game3/blackkey-pressed.png");
+    whiteKey_w = p.loadImage("assets/img/game3/whitekey-wrong.png");
+    blackKey_w = p.loadImage("assets/img/game3/blackkey-wrong.png");
 
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
@@ -73,25 +125,26 @@ var game3 = function (p) {
     let whiteKey;
     // setupKeys();
 
-    setupKey("A4", "white", -42, 120, false);
-    setupKey("Bb4", "black", 0, 91, true);
-    setupKey("B4", "white", 21, 120, true);
-    setupKey("C5", "white", 83, 120, true);
-    setupKey("Db5", "black", 125, 91, true);
-    setupKey("D5", "white", 145, 120, true);
-    setupKey("Eb5", "black", 186, 91, true);
-    setupKey("E5", "white", 207, 120, true);
-    setupKey("F5", "white", 269, 120, true);
-    setupKey("Gb5", "black", 306, 91, true);
-    setupKey("G5", "white", 331, 120, true);
-    setupKey("Ab5", "black", 367, 91, true);
-    setupKey("A5", "white", 393, 120, true);
-    setupKey("Bb5", "black", 434, 91, true);
-    setupKey("B5", "white", 455, 120, true);
-    setupKey("C6", "white", 517, 120, true);
-    setupKey("Db6", "black", 548, 91, true);
-    setupKey("D6", "white", 579, 120, true);
-    setupKey("Eb6", "black", 615, 91, false);
+    setupKey("Ab4", "black", -28, 91, false);
+    setupKey("A4", "white", 0, 120, true);
+    setupKey("Bb4", "black", 34, 91, true);
+    setupKey("B4", "white", 58, 120, true);
+    setupKey("C5", "white", 117, 120, true);
+    setupKey("Db5", "black", 153, 91, true);
+    setupKey("D5", "white", 175, 120, true);
+    setupKey("Eb5", "black", 214, 91, true);
+    setupKey("E5", "white", 233, 120, true);
+    setupKey("F5", "white", 291, 120, true);
+    setupKey("Gb5", "black", 315, 91, true);
+    setupKey("G5", "white", 349, 120, true);
+    setupKey("Ab5", "black", 376, 91, true);
+    setupKey("A5", "white", 407, 120, true);
+    setupKey("Bb5", "black", 443, 91, true);
+    setupKey("B5", "white", 465, 120, true);
+    setupKey("C6", "white", 524, 120, true);
+    setupKey("Db6", "black", 553, 91, true);
+    setupKey("D6", "white", 582, 120, true);
+    setupKey("Eb6", "black", 621, 91, false);
   };
 
   p.draw = function () {
@@ -114,11 +167,9 @@ var game3 = function (p) {
     // Display Sprites
     // DISPLAY THE BLACK KEYS ON TOP OF THE WHITE KEYS
     Object.keys(whiteKeys).forEach(function (key) {
-      // whiteKeys[key].display();
       whiteKeys[key].detectMouse();
     });
     Object.keys(blackKeys).forEach(function (key) {
-      // blackKeys[key].display();
       blackKeys[key].detectMouse();
     });
     //Once we have list of detected objects, find the one we truly want to hover over
@@ -133,11 +184,9 @@ var game3 = function (p) {
     }
 
     Object.keys(whiteKeys).forEach(function (key) {
-      // whiteKeys[key].display();
       whiteKeys[key].display();
     });
     Object.keys(blackKeys).forEach(function (key) {
-      // blackKeys[key].display();
       blackKeys[key].display();
     });
 
@@ -151,13 +200,6 @@ var game3 = function (p) {
     leftButton.display();
   }
 
-  // Make it so that we detect overlaps, in terms of hover states and click interactions
-  // To do this, create a running list of sprites we are hovered over
-  // If we're hovered over a white one while hovered over the black one, only the black one
-  // is interactive.
-  // how to do this? we need to decide whether they are interactive and they have the hover image
-  // AFTER we calculate the mouse in bounds for all objects
-
   //creates a key sprite
   function setupKey(note, color, x, y, playable) {
     let imgToDraw, hoverImg, pressedImg;
@@ -165,18 +207,23 @@ var game3 = function (p) {
       imgToDraw = blackKey;
       hoverImg = blackKey_h;
       pressedImg = blackKey_p;
+      wrongImg = blackKey_w;
     } else {
       imgToDraw = whiteKey;
       hoverImg = whiteKey_h;
       pressedImg = whiteKey_p;
+      wrongImg = whiteKey_w;
     }
-    let thisKey = new ButtonKey(imgToDraw, hoverImg, pressedImg, x, y);
+    let thisKey = new ButtonKey(
+      imgToDraw,
+      hoverImg,
+      pressedImg,
+      wrongImg,
+      x,
+      y
+    );
     thisKey.note = note;
     thisKey.interactive = playable;
-    // how to make this not click at the same time? hover should link to click
-    // thisKey.addClickEvent(function () {
-    //   pianoSampler.triggerAttackRelease([note], Tone.now());
-    // });
     if (color == "black") {
       blackKeys[note] = thisKey;
     } else {
@@ -273,12 +320,20 @@ var game3 = function (p) {
   }
 
   class ButtonKey {
-    constructor(buttonDefaultImg, buttonHover, pressedImg, xPos, yPos) {
+    constructor(
+      buttonDefaultImg,
+      buttonHover,
+      pressedImg,
+      wrongImg,
+      xPos,
+      yPos
+    ) {
       this.x = xPos;
       this.y = yPos;
       this.buttonDefault = buttonDefaultImg;
       this.buttonHover = buttonHover;
       this.buttonPressed = pressedImg;
+      this.buttonWrong = wrongImg;
       this.width = buttonDefaultImg.width;
       this.height = buttonDefaultImg.height;
       this.mouseInBounds = false;
@@ -286,6 +341,8 @@ var game3 = function (p) {
       this.intendingToClick = false;
       this.visible = true;
       this.hovering = false;
+      this.pressed = false;
+      this.wrong = false;
       let _this = this;
       thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
@@ -305,9 +362,52 @@ var game3 = function (p) {
         }
       });
     }
-    playNote() {
-      intervalAnimation(this, [this.buttonPressed], 300);
+    playNote(delay) {
+      let animationDelay = 300;
+      if (delay) {
+        animationDelay = delay;
+      }
       pianoSampler.triggerAttackRelease([this.note], Tone.now());
+      this.pressed = true;
+      currentlyAnimating = true;
+      let _this = this;
+
+      //Check if this was the correct key for the current sequence
+      let correctNote = sequences[currentSequence][sequenceIndex].note;
+      if (correctNote == this.note) {
+        console.log("CORRECT");
+        //Progress sequence, if applicable
+        if (sequenceIndex == sequences[currentSequence].length - 1) {
+          currentSequence++;
+          sequenceIndex = 0;
+          setTimeout(function () {
+            playSequence(sequences[currentSequence]);
+          }, 2000);
+          setTimeout(function () {
+            _this.pressed = false;
+          }, animationDelay);
+        } else {
+          sequenceIndex++;
+          setTimeout(function () {
+            _this.pressed = false;
+            currentlyAnimating = false;
+          }, animationDelay);
+        }
+      } else {
+        console.log("INCORRECT");
+        currentlyAnimating = true;
+        this.wrong = true;
+        setTimeout(function () {
+          _this.pressed = false;
+          _this.wrong = false;
+        }, animationDelay);
+        setTimeout(function () {
+          playSequence(sequences[currentSequence]);
+        }, 2000);
+
+        //Play sequence and Have to repeat!
+        sequenceIndex = 0;
+      }
     }
     isMouseInBounds() {
       this.mouseInBounds =
@@ -336,6 +436,12 @@ var game3 = function (p) {
 
       if (this.hovering && !currentlyAnimating) {
         imageToDraw = this.buttonHover;
+      } else if (this.pressed) {
+        if (this.wrong) {
+          imageToDraw = this.buttonWrong;
+        } else {
+          imageToDraw = this.buttonPressed;
+        }
       } else {
         imageToDraw = this.buttonDefault;
       }
@@ -407,6 +513,59 @@ var game3 = function (p) {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);
   };
+
+  p.keyPressed = function () {
+    if (!currentlyAnimating) {
+      if (p.keyCode === p.LEFT_ARROW) {
+        // value = 255;
+        playSequence(sequences[0]);
+      } else if (p.keyCode === p.RIGHT_ARROW) {
+        // value = 0;
+        playSequence(sequences[1]);
+      }
+    }
+  };
+
+  // takes in a list of object of notes names and duration
+  function playSequence(musicInfo, callback) {
+    let timeCount = 0;
+    let gain = 0.6;
+    let pauseBefore = 0;
+    // let currentlyAnimating = true;
+
+    musicInfo.forEach(function (noteInfo, index) {
+      let noteToPlay = noteInfo.note;
+      let duration = noteInfo.duration;
+      let delay = 0;
+      if (index !== 0) {
+        delay = musicInfo[index - 1].duration;
+      }
+      timeCount = timeCount + delay;
+      //actually need the time count of the previous note
+      let keySprite;
+      if (blackKeys[noteToPlay]) {
+        keySprite = blackKeys[noteToPlay];
+      } else if (whiteKeys[noteToPlay]) {
+        keySprite = whiteKeys[noteToPlay];
+      }
+      setTimeout(function () {
+        pianoSampler.triggerAttackRelease([noteToPlay], Tone.now());
+        keySprite.pressed = true;
+        currentlyAnimating = true;
+      }, timeCount * gain);
+      setTimeout(function () {
+        keySprite.pressed = false;
+      }, (timeCount + duration) * gain);
+    });
+    setTimeout(function () {
+      currentlyAnimating = false;
+      if (callback) {
+        callback();
+      }
+    }, (timeCount + musicInfo[musicInfo.length - 1].duration) * gain);
+  }
+
+  // the problem is multiple animations on top of each other
 
   // Animates a sprite given the images as frames, based on a certain interval, with optional callback
   function intervalAnimation(sprite, frames, interval, callback) {

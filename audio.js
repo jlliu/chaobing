@@ -41,6 +41,5 @@ const runningSound = new Tone.Player(
   "assets/sound/running.wav"
 ).toDestination();
 
-// Tone.loaded().then(() => {
-//   harpTransitionInSound.start();
-// });
+const metronome = new Tone.Player("assets/sound/woodblock.wav").toDestination();
+metronome.volume.value = -8;

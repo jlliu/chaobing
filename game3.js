@@ -81,6 +81,12 @@ var game3 = function (p) {
     ],
   ];
 
+  let metronomeFaces = [];
+  let metronomeInterval;
+  let metronomeCount = 0;
+  let metronomeSpeed = 700;
+  let metronomeOn = false;
+  let numberWrong = 0;
   p.preload = function () {
     //Preload a background here
     g3_bg = p.loadImage("assets/img/game3/bg.png");
@@ -94,6 +100,30 @@ var game3 = function (p) {
     whiteKey_w = p.loadImage("assets/img/game3/whitekey-wrong.png");
     blackKey_w = p.loadImage("assets/img/game3/blackkey-wrong.png");
 
+    hover_white = p.loadImage("assets/img/game3/outline-white.png");
+    hover_black = p.loadImage("assets/img/game3/outline-black.png");
+
+    sheet_music = p.loadImage("assets/img/game3/sheet-music.png");
+    metronome_base = p.loadImage("assets/img/game3/metronome-base.png");
+    metronome_button = p.loadImage("assets/img/game3/metronome-button.png");
+    metronome_button_h = p.loadImage("assets/img/game3/metronome-button-h.png");
+    metronome_button_up = p.loadImage(
+      "assets/img/game3/metronome-button-up.png"
+    );
+    metronome_button_up_h = p.loadImage(
+      "assets/img/game3/metronome-button-up-h.png"
+    );
+    metronome_button_down = p.loadImage(
+      "assets/img/game3/metronome-button-down.png"
+    );
+    metronome_button_down_h = p.loadImage(
+      "assets/img/game3/metronome-button-down-h.png"
+    );
+    for (let i = 0; i < 4; i++) {
+      metronomeFaces.push(
+        p.loadImage(`assets/img/game3/metronome-face${i}.png`)
+      );
+    }
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
     holdCursor = p.loadImage("assets/UI/cursors/hold-cursor.png");
@@ -125,26 +155,70 @@ var game3 = function (p) {
     let whiteKey;
     // setupKeys();
 
-    setupKey("Ab4", "black", -28, 91, false);
-    setupKey("A4", "white", 0, 120, true);
-    setupKey("Bb4", "black", 34, 91, true);
-    setupKey("B4", "white", 58, 120, true);
-    setupKey("C5", "white", 117, 120, true);
-    setupKey("Db5", "black", 153, 91, true);
-    setupKey("D5", "white", 175, 120, true);
-    setupKey("Eb5", "black", 214, 91, true);
-    setupKey("E5", "white", 233, 120, true);
-    setupKey("F5", "white", 291, 120, true);
-    setupKey("Gb5", "black", 315, 91, true);
-    setupKey("G5", "white", 349, 120, true);
-    setupKey("Ab5", "black", 376, 91, true);
-    setupKey("A5", "white", 407, 120, true);
-    setupKey("Bb5", "black", 443, 91, true);
-    setupKey("B5", "white", 465, 120, true);
-    setupKey("C6", "white", 524, 120, true);
-    setupKey("Db6", "black", 553, 91, true);
-    setupKey("D6", "white", 582, 120, true);
-    setupKey("Eb6", "black", 621, 91, false);
+    setupKey("Ab4", "black", -25, 172, false);
+    setupKey("A4", "white", 0, 194, true);
+    setupKey("Bb4", "black", 33, 172, true);
+    setupKey("B4", "white", 58, 194, true);
+    setupKey("C5", "white", 116, 194, true);
+    setupKey("Db5", "black", 149, 172, true);
+    setupKey("D5", "white", 174, 194, true);
+    setupKey("Eb5", "black", 207, 172, true);
+    setupKey("E5", "white", 232, 194, true);
+    setupKey("F5", "white", 290, 194, true);
+    setupKey("Gb5", "black", 323, 172, true);
+    setupKey("G5", "white", 348, 194, true);
+    setupKey("Ab5", "black", 381, 172, true);
+    setupKey("A5", "white", 406, 194, true);
+    setupKey("Bb5", "black", 439, 172, true);
+    setupKey("B5", "white", 464, 194, true);
+    setupKey("C6", "white", 522, 194, true);
+    setupKey("Db6", "black", 552, 172, true);
+    setupKey("D6", "white", 580, 194, true);
+    setupKey("Eb6", "black", 610, 172, false);
+
+    metronomeFace = new Button(metronomeFaces[0], metronomeFaces[0], 107, 17);
+    metronomeFace.interactive = false;
+
+    metronomeButton = new Button(metronome_button, metronome_button_h, 169, 19);
+    metronomeButton.addClickEvent(function () {
+      if (!metronomeOn) {
+        metronomeOn = true;
+        metronomeInterval = setInterval(function () {
+          if (metronomeCount % metronomeSpeed == 0) {
+            metronome.start();
+          }
+          metronomeCount += 100;
+        }, 100);
+      } else {
+        metronomeOn = false;
+        clearInterval(metronomeInterval);
+      }
+    });
+    metronomeButtonUp = new Button(
+      metronome_button_up,
+      metronome_button_up_h,
+      167,
+      -3
+    );
+    metronomeButtonUp.addClickEvent(function () {
+      if (metronomeSpeed >= 300) {
+        metronomeSpeed -= 100;
+        metronomeCount = 0;
+      }
+    });
+
+    metronomeButtonDown = new Button(
+      metronome_button_down,
+      metronome_button_down_h,
+      166,
+      39
+    );
+    metronomeButtonDown.addClickEvent(function () {
+      if (metronomeSpeed <= 1400) {
+        metronomeSpeed += 100;
+        metronomeCount = 0;
+      }
+    });
   };
 
   p.draw = function () {
@@ -164,7 +238,30 @@ var game3 = function (p) {
   function displayGame() {
     p.image(g3_bg, 0, 0, canvasWidth, canvasHeight);
 
+    drawImageToScale(sheet_music, 106, 0);
+    drawImageToScale(metronome_base, 85, 0);
+    metronomeButton.display();
+    metronomeButtonUp.display();
+    metronomeButtonDown.display();
+
     // Display Sprites
+    if (metronomeOn) {
+      switch (numberWrong) {
+        case 0:
+          metronomeFace.buttonDefault = metronomeFaces[0];
+          break;
+        case 1:
+          metronomeFace.buttonDefault = metronomeFaces[1];
+          break;
+        case 2:
+          metronomeFace.buttonDefault = metronomeFaces[2];
+          break;
+        default:
+          metronomeFace.buttonDefault = metronomeFaces[3];
+      }
+      metronomeFace.display();
+    }
+
     // DISPLAY THE BLACK KEYS ON TOP OF THE WHITE KEYS
     Object.keys(whiteKeys).forEach(function (key) {
       whiteKeys[key].detectMouse();
@@ -186,9 +283,17 @@ var game3 = function (p) {
     Object.keys(whiteKeys).forEach(function (key) {
       whiteKeys[key].display();
     });
+
+    if (mousedOverSprites.length && lastItem.color == "white") {
+      drawImageToScale(hover_white, lastItem.x - 4, lastItem.y - 3);
+    }
     Object.keys(blackKeys).forEach(function (key) {
       blackKeys[key].display();
     });
+
+    if (mousedOverSprites.length && lastItem.color == "black") {
+      drawImageToScale(hover_black, lastItem.x - 4, lastItem.y - 5);
+    }
 
     mousedOverSprites = [];
     clickedSprites = [];
@@ -202,25 +307,27 @@ var game3 = function (p) {
 
   //creates a key sprite
   function setupKey(note, color, x, y, playable) {
-    let imgToDraw, hoverImg, pressedImg;
+    let imgToDraw, pressedImg;
     if (color == "black") {
       imgToDraw = blackKey;
-      hoverImg = blackKey_h;
+      // hoverImg = blackKey_h;
       pressedImg = blackKey_p;
       wrongImg = blackKey_w;
     } else {
       imgToDraw = whiteKey;
-      hoverImg = whiteKey_h;
+      // hoverImg = whiteKey_h;
       pressedImg = whiteKey_p;
       wrongImg = whiteKey_w;
     }
     let thisKey = new ButtonKey(
       imgToDraw,
-      hoverImg,
+      // hoverImg,
+      imgToDraw,
       pressedImg,
       wrongImg,
       x,
-      y
+      y,
+      color
     );
     thisKey.note = note;
     thisKey.interactive = playable;
@@ -326,7 +433,8 @@ var game3 = function (p) {
       pressedImg,
       wrongImg,
       xPos,
-      yPos
+      yPos,
+      color
     ) {
       this.x = xPos;
       this.y = yPos;
@@ -343,6 +451,7 @@ var game3 = function (p) {
       this.hovering = false;
       this.pressed = false;
       this.wrong = false;
+      this.color = color;
       let _this = this;
       thisCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
@@ -395,6 +504,7 @@ var game3 = function (p) {
         }
       } else {
         console.log("INCORRECT");
+        numberWrong++;
         currentlyAnimating = true;
         this.wrong = true;
         setTimeout(function () {
@@ -434,9 +544,10 @@ var game3 = function (p) {
     display() {
       let imageToDraw;
 
-      if (this.hovering && !currentlyAnimating) {
-        imageToDraw = this.buttonHover;
-      } else if (this.pressed) {
+      // if (this.hovering && !currentlyAnimating) {
+      //   imageToDraw = this.buttonHover;
+      // }
+      if (this.pressed) {
         if (this.wrong) {
           imageToDraw = this.buttonWrong;
         } else {
@@ -489,6 +600,7 @@ var game3 = function (p) {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          hideCanvas();
         }, 1000);
         storyMode = true;
       }
@@ -503,12 +615,16 @@ var game3 = function (p) {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          hideCanvas();
         }, 1000);
         storyMode = true;
       }
     });
   }
-
+  function hideCanvas() {
+    //Add things we want to do when we leave this scene
+    clearInterval(metronomeInterval);
+  }
   p.windowResized = function () {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);

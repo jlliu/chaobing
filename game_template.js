@@ -300,6 +300,7 @@ var gameN = function (p) {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          hideCanvas();
         }, 1000);
         storyMode = true;
       }
@@ -314,10 +315,15 @@ var gameN = function (p) {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
+          hideCanvas();
         }, 1000);
         storyMode = true;
       }
     });
+  }
+
+  function hideCanvas() {
+    //Add things we want to do when we leave this scene
   }
 
   p.windowResized = function () {

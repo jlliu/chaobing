@@ -14,6 +14,13 @@ let storyMode = true;
 const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
 
+window.onload = function () {
+  window.setInterval(function () {
+    // window.frames.Displayframe.location.reload();
+    window.location.assign(window.location.href);
+  }, 10000);
+};
+
 var sketch1 = function (p) {
   let canvasRatio = canvasWidth / canvasHeight;
   let mouse_x;

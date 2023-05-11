@@ -22,7 +22,7 @@ var gameN = function (p) {
 
   p.preload = function () {
     //Preload a background here
-    g2_bg = p.loadImage("assets/img/game2/bg.png");
+    g2_bg = p.loadImage("assets/img/gameN/bg.png");
 
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
@@ -43,7 +43,8 @@ var gameN = function (p) {
     calculateCanvasDimensions(p);
     gameNcanvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     gameNcanvas.classList.add("gameCanvas");
-    gameNcanvas.id = "game2";
+    gameNcanvas.classList.add("gameN");
+    gameNcanvas.id = "gameN";
     thisCanvas = gameNcanvas;
     p.noSmooth();
 
@@ -297,7 +298,7 @@ var gameN = function (p) {
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         window.setTimeout(function () {
-          game1canvas.style.visibility = "hidden";
+          thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
           hideCanvas();
@@ -312,7 +313,7 @@ var gameN = function (p) {
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         window.setTimeout(function () {
-          game1canvas.style.visibility = "hidden";
+          thisCanvas.style.visibility = "hidden";
           storyMode = true;
           p.noLoop();
           hideCanvas();
@@ -373,4 +374,4 @@ var gameN = function (p) {
   }
 };
 
-new p5(gameN, "canvasN+1");
+new p5(gameN, "canvas-gameN");

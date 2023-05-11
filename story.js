@@ -7,7 +7,7 @@ let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
 let currentSceneNum = 1;
-// let currentSceneNum = 3;
+// let currentSceneNum = 5;
 
 let storyMode = true;
 
@@ -77,15 +77,17 @@ var sketch1 = function (p) {
       if (storyMode) {
         console.log("currentscenenum: " + currentSceneNum);
         document.dispatchEvent(navigateFwdEvent);
-        // if (audioContext.state === "suspended") {
-        //   audioContext.resume();
-        // }
         harpTransitionInSound.start();
 
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
-        let canvasToShow = document.querySelector("#game" + currentSceneNum);
-        console.log(canvasToShow);
-        canvasToShow.style.visibility = "visible";
+        // let canvasToShow = document.querySelector("#game" + currentSceneNum);
+
+        let canvasToShow = document.querySelectorAll(".game" + currentSceneNum);
+        canvasToShow.forEach(function (canvas) {
+          // console.log("showing canvas");
+          canvas.style.visibility = "visible";
+        });
+        // canvasToShow.style.visibility = "visible";
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
           storyCanvas.style.visibility = "hidden";
@@ -105,9 +107,14 @@ var sketch1 = function (p) {
         harpTransitionInSound.start();
         currentSceneNum--;
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
-        let canvasToShow = document.querySelector("#game" + currentSceneNum);
-        console.log(canvasToShow);
-        canvasToShow.style.visibility = "visible";
+
+        // let canvasToShow = document.querySelector("#game" + currentSceneNum);
+
+        let canvasToShow = document.querySelectorAll(".game" + currentSceneNum);
+        canvasToShow.forEach(function (canvas) {
+          canvas.style.visibility = "visible";
+        });
+        // canvasToShow.style.visibility = "visible";
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
           storyCanvas.style.visibility = "hidden";
@@ -140,7 +147,14 @@ var sketch1 = function (p) {
       displayScene2();
     }
     if (currentSceneNum == 3 && storyMode) {
-      displayScene2();
+      displayScene3();
+    }
+    if (currentSceneNum == 4 && storyMode) {
+      displayScene4();
+    }
+
+    if (currentSceneNum == 5 && storyMode) {
+      displayScene5();
     }
     cursor.display();
   };
@@ -179,6 +193,34 @@ var sketch1 = function (p) {
   }
 
   function displayScene3() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
+    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
+    p.image(
+      story_text[0][timedAnimationIndex],
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+    rightButton.display(p);
+    leftButton.display(p);
+  }
+
+  function displayScene4() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
+    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
+    p.image(
+      story_text[0][timedAnimationIndex],
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+    rightButton.display(p);
+    leftButton.display(p);
+  }
+
+  function displayScene5() {
     p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
     p.image(

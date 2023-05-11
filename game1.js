@@ -92,6 +92,7 @@ var game1 = function (p) {
     calculateCanvasDimensions(p);
     game1canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     game1canvas.classList.add("gameCanvas");
+    game1canvas.classList.add("game1");
     game1canvas.id = "game1";
     p.noSmooth();
 

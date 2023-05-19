@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAO BING TEST</title>
+  <link rel="stylesheet" type="text/css" href="endingStyle.css" />
+  <script src="lib/p5.min.js"></script>
+  <script src="lib/tone.js"></script>
+  <script src="audio.js" defer></script>
+  <script src="ending.js" defer></script>
+  <script src="ending_game1.js" defer></script>
+  <script src="ending_game2.js" defer></script>
+</head>
+
+<body>
+  <main>
+    <div class="window txt-window focus" id="INFO" data-zindex="2">
+      <div class="window-bar"><span>Ending script draft</span></div>
+      <div class="window-body">
+        <span id="date"></span>
+        <pre contenteditable="true" spellcheck="false" autofocus>
+<h3>Ending Script draft</h3>
+Nai Nai only lived with us maybe 2 or 3 years before she left for China. (note: how to mention her passing here? as the source of a lot of my unprocessed grief)
+
+when I was a kid Nai Nai would used to make chao bing with leftover scallion pancakes from earlier in the week.
+It was a special treat that only happened under certain conditions of having leftover cong you bing from the day earlier.
+
+If her cong you bing was good, the chao bing was so much better. stir frying made the dough all the extra glutinous and absorb the umami of all the extra ingredients- i forget what exactly, sliced onions? soy sauce? some type of meat?
+
+i barely can find recipes online, they all look not quite correct.
+
+I just need to learn how to make it my own way.
+
+(Cue chao bing cooking game~~)
+
+FIN.
+        </pre>
+      </div>
+    </div>
+
+    <div class="window txt-window browser" id="CHOP" data-zindex="3">
+      <div class="window-bar"><span>CHOP.html</span></div>
+      <div class="window-body">
+        <div id="canvas-game1"></div>
+
+
+        <form id="chopForm">
+          <b>Ingredient to chop:</b>
+          <div class="option">
+            <input type="radio" id="bing" name="chopForm" value="scallion-test.png"
+                   checked>
+            <label for="bing">bing.png</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" id="me" name="chopForm" value="me-kid.png">
+            <label for="me">me.png</label>
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="window txt-window browser" id="INTEGRATE" data-zindex="4">
+      <div class="window-bar"><span>INTEGRATE.html</span></div>
+      <div class="window-body">
+        <div id="canvas-game2"></div>
+        <form id="integrateForm">
+          <b>Things to combine:</b>
+          <div class="option">
+            <input type="checkbox" id="bing" name="integrateForm" value="bing"
+                   checked>
+            <label for="bing">bing</label>
+          </div>
+
+          <div class="option">
+            <input type="checkbox" id="onions" name="integrateForm" value="onion" checked>
+            <label for="me">onion</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="cabbage" name="integrateForm" value="cabbage" checked>
+            <label for="me">cabbage</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="carrots" name="integrateForm" value="carrot" checked>
+            <label for="me">carrot</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="sausage" name="integrateForm" value="sausage" checked>
+            <label for="me">sausage</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="shame" name="integrateForm" value="shame">
+            <label for="me">shame</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="longings" name="integrateForm" value="longing">
+            <label for="me">longing</label>
+          </div>
+          <div class="option">
+            <input type="checkbox" id="safety" name="integrateForm" value="safety">
+            <label for="me">safety</label>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="window txt-window browser" id="TRANSFORM" data-zindex="1">
+      <div class="window-bar"><span>TRANSFORM.html</span></div>
+      <div class="window-body">body</div>
+    </div>
+  </main>
+</body>
+
+</html>

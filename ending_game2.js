@@ -22,6 +22,8 @@ var game2 = function (p) {
 
   let currentKnifeImg;
 
+  let sizzleAnimationImgs = [];
+
   //should be a list of up to 5 items, with objects
   let ingredients = {
     bing: {},
@@ -31,20 +33,19 @@ var game2 = function (p) {
     sausage: {},
     shame: {},
     longing: {},
-    safety: {},
+    anger: {},
   };
 
   let bowlLocations = [
-    { x: -58, y: 373 },
-    { x: -58, y: 207 },
-    { x: -47, y: 52 },
-    { x: 80, y: -59 },
-    { x: 134, y: 103 },
-    { x: 280, y: -59 },
-    { x: 330, y: 103 },
-    { x: 480, y: -50 },
-    { x: 520, y: 178 },
-    { x: 520, y: 339 },
+    { x: -34, y: 240 }, // bing
+    { x: 351, y: -47 }, //onion
+    { x: 416, y: 128 }, //cabbage
+    { x: 541, y: 8 }, // carrot
+    { x: 125, y: -56 }, // sausage
+
+    { x: -36, y: 58 }, //shame
+    { x: 190, y: 91 }, //longing
+    { x: 533, y: 291 }, //anger
   ];
 
   p.preload = function () {
@@ -63,17 +64,22 @@ var game2 = function (p) {
 
     //Preload whatever needs to be preloaded
 
-    bing = p.loadImage("assets/img/ending/scallion-test.png");
     bowl = p.loadImage("assets/img/ending/bowl.png");
+    integrate_pan = p.loadImage("assets/img/ending/integrate-pan.png");
 
     for (const ingredient in ingredients) {
       ingredients[ingredient].img = p.loadImage(
         `assets/img/ending/ingredient-${ingredient}.png`
       );
-      ingredients[ingredient].titleImg = p.loadImage(
-        `assets/img/ending/title-${ingredient}.png`
-      );
+      // ingredients[ingredient].titleImg = p.loadImage(
+      //   `assets/img/ending/title-${ingredient}.png`
+      // );
     }
+    sizzleAnimationImgs = [
+      p.loadImage("assets/img/ending/sizzle1.png"),
+      p.loadImage("assets/img/ending/sizzle2.png"),
+      p.loadImage("assets/img/ending/sizzle3.png"),
+    ];
   };
 
   p.setup = function () {
@@ -103,8 +109,8 @@ var game2 = function (p) {
         img,
         bowlLocations[bowlNum].x,
         bowlLocations[bowlNum].y,
-        320 + (Math.random() - 0.5) * 80 - img.width / 2,
-        400 + (Math.random() - 0.5) * 80 - img.height / 2,
+        320 + (Math.random() - 0.5) * 160 - img.width / 2,
+        420 + (Math.random() - 0.5) * 160 - img.height / 2,
         [201, 468],
         [290, 480]
       );
@@ -139,6 +145,14 @@ var game2 = function (p) {
         sprite.yCurrent = sprite.y;
       }
     });
+    sizzleAnimationSprite = new Button(
+      sizzleAnimationImgs[0],
+      sizzleAnimationImgs[0],
+      131,
+      249
+    );
+    sizzleAnimationSprite.interactive = false;
+    infiniteIntervalAnimation(sizzleAnimationSprite, sizzleAnimationImgs, 200);
   };
 
   p.draw = function () {
@@ -160,6 +174,8 @@ var game2 = function (p) {
 
     // Display Sprites
     // console.log(Object.keys(ingredients));
+    drawImageToScale(integrate_pan, 131, 249);
+    sizzleAnimationSprite.display();
 
     for (const ingredient in ingredients) {
       let sprite = ingredients[ingredient].sprite;
@@ -454,6 +470,19 @@ var game2 = function (p) {
     }, interval * frames.length);
   }
 
+  function infiniteIntervalAnimation(sprite, frames, interval, callback) {
+    // currentlyAnimating = true;
+    let original = sprite.buttonDefault;
+    // frames.forEach(function (img, index) {
+    let index = 0;
+    setInterval(function () {
+      index++;
+      let currentImg = frames[index % frames.length];
+      // timedAnimationIndex = index % frames.length;
+      sprite.buttonDefault = currentImg;
+    }, interval);
+    // });
+  }
   function drawImageToScale(img, x, y) {
     p.image(
       img,

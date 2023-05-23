@@ -23,7 +23,7 @@ var game1 = function (p) {
   let currentImage;
   let sliceNum = 0;
   let gap = 10;
-  let sliceWidth = 20;
+  let sliceWidth = 15;
   let totalWidth;
   let slicingDone = false;
 
@@ -45,7 +45,13 @@ var game1 = function (p) {
 
     //Preload whatever needs to be preloaded
 
-    bing = p.loadImage("assets/img/ending/scallion-test.png");
+    bing = p.loadImage("assets/img/ending/chop-bing.png");
+    cabbage = p.loadImage("assets/img/ending/chop-cabbage.png");
+    farrot = p.loadImage("assets/img/ending/chop-carrot.png");
+    cd = p.loadImage("assets/img/ending/chop-cd.png");
+    onion = p.loadImage("assets/img/ending/chop-onion.png");
+    pepper = p.loadImage("assets/img/ending/chop-pepper.png");
+    sausage = p.loadImage("assets/img/ending/chop-sausage.png");
 
     // me = p.loadImage("assets/img/ending/me-kid.png");
 

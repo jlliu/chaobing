@@ -35,7 +35,7 @@ var game4 = function (p) {
 
   p.preload = function () {
     //Preload a background here
-    bg = p.loadImage("assets/img/game4/bg.png");
+    g4_bg = p.loadImage("assets/img/game4/bg.png");
     case_frame = p.loadImage("assets/img/game4/case-frame.png");
 
     paint_pan = p.loadImage("assets/img/game4/paint-pan.png");
@@ -283,7 +283,7 @@ var game4 = function (p) {
 
   // Game 1
   function displayGame() {
-    p.image(bg, 0, 0, canvasWidth, canvasHeight);
+    p.image(g4_bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
     srirachaSprite.display();

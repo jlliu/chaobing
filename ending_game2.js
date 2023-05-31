@@ -65,6 +65,7 @@ var game2 = function (p) {
     //Preload whatever needs to be preloaded
 
     bowl = p.loadImage("assets/img/ending/bowl.png");
+    bowl_h = p.loadImage("assets/img/ending/bowl-h.png");
     integrate_pan = p.loadImage("assets/img/ending/integrate-pan.png");
 
     for (const ingredient in ingredients) {
@@ -173,7 +174,7 @@ var game2 = function (p) {
     p.image(bg_integrate, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
-    // console.log(Object.keys(ingredients));
+
     drawImageToScale(integrate_pan, 131, 249);
     sizzleAnimationSprite.display();
 
@@ -371,6 +372,8 @@ var game2 = function (p) {
         ? this.buttonHover
         : this.buttonDefault;
 
+      let bowlToDraw = this.isMouseInBounds() ? bowl_h : bowl;
+
       if (this.mouseInBounds && this.interactive) {
         cursorState = "grab";
       }
@@ -383,7 +386,7 @@ var game2 = function (p) {
         if (this.dropped) {
           drawImageToScale(bowl, this.x, this.y);
         } else {
-          drawImageToScale(bowl, this.xCurrent, this.yCurrent);
+          drawImageToScale(bowlToDraw, this.xCurrent, this.yCurrent);
         }
 
         drawImageToScale(imageToDraw, this.xCurrent, this.yCurrent);

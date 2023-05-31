@@ -78,7 +78,7 @@ var game3 = function (p) {
       actionObj.img = p.loadImage(`assets/img/ending/action-${action}.png`);
       actionObj.img_h = p.loadImage(`assets/img/ending/action-${action}-h.png`);
     }
-    // console.log(actions);
+
     knob = p.loadImage(`assets/img/ending/knob.png`);
     knob_h = p.loadImage(`assets/img/ending/knob-h.png`);
     line = p.loadImage(`assets/img/ending/line.png`);
@@ -217,7 +217,6 @@ var game3 = function (p) {
         );
         actionButtonSprite.addClickEvent(function () {
           actionDone = true;
-          console.log("ACTION IS DONE");
           if (action == "stir") {
             actionButtonSprite.visible = false;
             intervalAnimation(

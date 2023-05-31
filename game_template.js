@@ -20,6 +20,9 @@ var gameN = function (p) {
 
   let clickedObjects = [];
 
+  let gameEntered = false;
+  let gameStarted = false;
+
   p.preload = function () {
     //Preload a background here
     g2_bg = p.loadImage("assets/img/gameN/bg.png");
@@ -70,6 +73,11 @@ var gameN = function (p) {
 
   // Game 1
   function displayGame() {
+    //Do things we need to do when entered minigame
+    if (gameEntered && !gameStarted) {
+      console.log("GAME ENTERED!");
+      gameStarted = true;
+    }
     p.image(bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
@@ -279,11 +287,13 @@ var gameN = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });
@@ -325,6 +335,8 @@ var gameN = function (p) {
 
   function hideCanvas() {
     //Add things we want to do when we leave this scene
+    gameEntered = false;
+    gameStarted = false;
   }
 
   p.windowResized = function () {

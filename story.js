@@ -6,8 +6,8 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-let currentSceneNum = 1;
-// let currentSceneNum = 5;
+// let currentSceneNum = 1;
+let currentSceneNum = 7;
 
 let storyMode = true;
 
@@ -159,9 +159,14 @@ var sketch1 = function (p) {
     if (currentSceneNum == 4 && storyMode) {
       displayScene4();
     }
-
     if (currentSceneNum == 5 && storyMode) {
       displayScene5();
+    }
+    if (currentSceneNum == 6 && storyMode) {
+      displayScene6();
+    }
+    if (currentSceneNum == 7 && storyMode) {
+      displayScene6();
     }
     cursor.display();
   };
@@ -228,6 +233,34 @@ var sketch1 = function (p) {
   }
 
   function displayScene5() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
+    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
+    p.image(
+      story_text[0][timedAnimationIndex],
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+    rightButton.display(p);
+    leftButton.display(p);
+  }
+
+  function displayScene6() {
+    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
+    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
+    p.image(
+      story_text[0][timedAnimationIndex],
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
+    rightButton.display(p);
+    leftButton.display(p);
+  }
+
+  function displayScene7() {
     p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
     p.image(

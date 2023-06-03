@@ -23,6 +23,9 @@ var game5 = function (p) {
 
   let numCorrect = 0;
 
+  let gameStarted = false;
+  let gameEntered = false;
+
   // list of list
   // let phraseImages = new Array(3);
 
@@ -99,7 +102,6 @@ var game5 = function (p) {
         p.loadImage(`assets/img/game5/animation2-${i}.png`)
       );
     }
-    console.log(phrases);
   };
 
   let locations = [
@@ -203,6 +205,11 @@ var game5 = function (p) {
 
   // Game 1
   function displayGame() {
+    if (gameEntered && !gameStarted) {
+      gameStarted = true;
+      playGameVoiceover(game5_voiceover, 15);
+    }
+
     let thisBg = phrases[currentPhraseNum].bgImg;
     p.image(thisBg, 0, 0, canvasWidth, canvasHeight);
 
@@ -363,9 +370,12 @@ var game5 = function (p) {
             //Figure out if we completed the puzzle
             numCorrect++;
             if (numCorrect == phrases[currentPhraseNum].piecesSprites.length) {
-              console.log("THIS PHRASE IS DONE!");
-
               if (!currentlyAnimating) {
+                playDefinitionVoiceover(
+                  game5_definitions[currentPhraseNum].sound,
+                  game5_definitions[currentPhraseNum].duration.false,
+                  1
+                );
                 let animationSprite = phrases[currentPhraseNum].animationSprite;
                 animationSprite.visible = true;
                 intervalAnimation(
@@ -376,7 +386,6 @@ var game5 = function (p) {
                     animationSprite.visible = false;
                     currentPhraseNum = (currentPhraseNum + 1) % 3;
                     if (currentPhraseNum == 0) {
-                      console.log("reset phrases");
                       resetPhrases();
                     }
                   }
@@ -445,11 +454,13 @@ var game5 = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });
@@ -458,11 +469,11 @@ var game5 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
@@ -491,6 +502,11 @@ var game5 = function (p) {
 
   function hideCanvas() {
     //Add things we want to do when we leave this scene
+    gameStarted = false;
+    gameEntered = false;
+    currentPhraseNum = 0;
+    numCorrect = 0;
+    resetPhrases();
   }
 
   p.windowResized = function () {
@@ -537,6 +553,32 @@ var game5 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
+  }
+
+  function playDefinitionVoiceover(sound, time, delay, callback) {
+    setTimeout(function () {
+      sound.start();
+    }, delay * 1000);
+    setTimeout(function () {
+      if (callback) {
+        callback();
+      }
+    }, (time + delay) * 1000);
   }
 };
 

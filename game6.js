@@ -219,7 +219,6 @@ var game6 = function (p) {
         let correctButton = correctSequence[sequenceIndex];
         if (sprite.keyNum == "*") {
           symbolsOpen = !symbolsOpen;
-          console.log(symbolsOpen);
           // check if the button's code is the correct one... or it's the correct one +  -s in the case of the panel open
         } else if (
           (!symbolsOpen && sprite.keyNum == correctButton) ||
@@ -231,7 +230,6 @@ var game6 = function (p) {
             if (currentConvoIndex + 1 >= convoInfo[currentPart].length) {
               if (currentPart + 1 >= convoInfo.length) {
                 //Actually just continue to make the screen darker
-                console.log("game done");
                 numTimesFinished++;
               } else {
                 currentPart++;
@@ -255,11 +253,8 @@ var game6 = function (p) {
             //get the next letter in the sequence
             sequenceIndex++;
           }
-          console.log("correct! moving on");
           symbolsOpen = false;
         } else {
-          console.log("incorrect! do an animation");
-
           animateError(screenSprite);
           symbolsOpen = false;
         }
@@ -304,13 +299,16 @@ var game6 = function (p) {
   function displayGame() {
     if (gameEntered && !gameStarted) {
       console.log("GAME ENTERED!");
+      playGameVoiceover(game6_voiceover, 11, function () {
+        animateScreen(
+          screenSprite,
+          convoInfo[currentPart][currentConvoIndex].in,
+          convoInfo[currentPart][currentConvoIndex].out,
+          false
+        );
+      });
       // start initial animation: in production we trigger this when voiceover ends
-      animateScreen(
-        screenSprite,
-        convoInfo[currentPart][currentConvoIndex].in,
-        convoInfo[currentPart][currentConvoIndex].out,
-        false
-      );
+
       gameStarted = true;
     }
     p.image(g6_bgs[currentPart], 0, 0, canvasWidth, canvasHeight);
@@ -591,11 +589,11 @@ var game6 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
@@ -626,6 +624,21 @@ var game6 = function (p) {
     //Add things we want to do when we leave this scene
     gameEntered = false;
     gameStarted = false;
+    currentPart = 0;
+    currentConvoIndex = 0;
+    currentPhrase = "";
+    correctSequence = [];
+    attemptedSequence = [];
+    sequenceIndex = 0;
+    displayInText = false;
+    displayOutText = false;
+    symbolsOpen = false;
+    outTextShown = "";
+    numTimesFinished = 0;
+    currentPhrase = convoInfo[currentPart][currentConvoIndex].out;
+    outTextShown = currentPhrase;
+    screenSprite.buttonDefault = screen_new;
+    calculateCorrectSequence();
   }
 
   p.windowResized = function () {
@@ -718,6 +731,22 @@ var game6 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
   }
 };
 

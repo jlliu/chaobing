@@ -22,6 +22,11 @@ var game3 = function (p) {
 
   let mousedOverSprites = [];
 
+  let gameEntered = false;
+  let gameStarted = false;
+
+  let gameDone = false;
+
   // create an object of key sprites
   // keyed by their musical note
   let blackKeys = {};
@@ -237,6 +242,13 @@ var game3 = function (p) {
 
   // Game 1
   function displayGame() {
+    if (gameEntered && !gameStarted) {
+      console.log("GAME ENTERED!");
+      gameStarted = true;
+      playGameVoiceover(game3_voiceover, 15, function () {
+        playSequence(sequences[0]);
+      });
+    }
     p.image(g3_bg, 0, 0, canvasWidth, canvasHeight);
 
     drawImageToScale(sheet_music, 106, 0);
@@ -484,18 +496,29 @@ var game3 = function (p) {
 
       //Check if this was the correct key for the current sequence
       let correctNote = sequences[currentSequence][sequenceIndex].note;
-      if (correctNote == this.note) {
+      if (correctNote == this.note || gameDone) {
         console.log("CORRECT");
         //Progress sequence, if applicable
         if (sequenceIndex == sequences[currentSequence].length - 1) {
-          currentSequence++;
-          sequenceIndex = 0;
-          setTimeout(function () {
-            playSequence(sequences[currentSequence]);
-          }, 2000);
-          setTimeout(function () {
-            _this.pressed = false;
-          }, animationDelay);
+          if (currentSequence == sequences.length - 1) {
+            console.log("game done!");
+            // _this.pressed = false;
+            // currentlyAnimating = false;
+            setTimeout(function () {
+              gameDone = true;
+              _this.pressed = false;
+              currentlyAnimating = false;
+            }, animationDelay);
+          } else {
+            currentSequence++;
+            sequenceIndex = 0;
+            setTimeout(function () {
+              playSequence(sequences[currentSequence]);
+            }, 2000);
+            setTimeout(function () {
+              _this.pressed = false;
+            }, animationDelay);
+          }
         } else {
           sequenceIndex++;
           setTimeout(function () {
@@ -579,11 +602,13 @@ var game3 = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });
@@ -592,14 +617,15 @@ var game3 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
+          gameEntered = false;
           p.noLoop();
           hideCanvas();
         }, 1000);
@@ -609,12 +635,14 @@ var game3 = function (p) {
     leftButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         harpTransitionOutSound.start();
+        document.dispatchEvent(resetNarrativeButtonsEvent);
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
+          gameEntered = false;
           p.noLoop();
           hideCanvas();
         }, 1000);
@@ -625,23 +653,30 @@ var game3 = function (p) {
   function hideCanvas() {
     //Add things we want to do when we leave this scene
     clearInterval(metronomeInterval);
+    gameEntered = false;
+    gameStarted = false;
+    gameDone = false;
+    currentSequence = 0;
+    sequenceIndex = 0;
+    metronomeOn = false;
+    numberWrong = 0;
   }
   p.windowResized = function () {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);
   };
 
-  p.keyPressed = function () {
-    if (!currentlyAnimating) {
-      if (p.keyCode === p.LEFT_ARROW) {
-        // value = 255;
-        playSequence(sequences[0]);
-      } else if (p.keyCode === p.RIGHT_ARROW) {
-        // value = 0;
-        playSequence(sequences[1]);
-      }
-    }
-  };
+  // p.keyPressed = function () {
+  //   if (!currentlyAnimating) {
+  //     if (p.keyCode === p.LEFT_ARROW) {
+  //       // value = 255;
+  //       playSequence(sequences[0]);
+  //     } else if (p.keyCode === p.RIGHT_ARROW) {
+  //       // value = 0;
+  //       playSequence(sequences[1]);
+  //     }
+  //   }
+  // };
 
   // takes in a list of object of notes names and duration
   function playSequence(musicInfo, callback) {
@@ -723,6 +758,22 @@ var game3 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
   }
 };
 

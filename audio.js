@@ -6,6 +6,7 @@ const pianoSampler = new Tone.Sampler({
     A4: "A4.mp3",
   },
   baseUrl: "https://tonejs.github.io/audio/salamander/",
+  release: 0.9,
 }).toDestination();
 
 // Tone.loaded().then(() => {
@@ -43,3 +44,58 @@ const runningSound = new Tone.Player(
 
 const metronome = new Tone.Player("assets/sound/woodblock.wav").toDestination();
 metronome.volume.value = -8;
+
+// Game scene sounds
+
+const voiceoverDelay = 3;
+
+const game1_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game1.wav"
+).toDestination();
+
+const game2_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game2.wav"
+).toDestination();
+
+const game3_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game3.wav"
+).toDestination();
+
+const game4_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game4.wav"
+).toDestination();
+
+const game5_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game5.wav"
+).toDestination();
+
+const game6_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game6.wav"
+).toDestination();
+
+const game7_voiceover = new Tone.Player(
+  "assets/sound/game_voiceover/game7.wav"
+).toDestination();
+
+const game5_definitions = [
+  {
+    sound: new Tone.Player(
+      "assets/sound/game_voiceover/definition0.wav"
+    ).toDestination(),
+    duration: 4,
+  },
+  {
+    sound: new Tone.Player(
+      "assets/sound/game_voiceover/definition1.wav"
+    ).toDestination(),
+    duration: 4,
+  },
+  {
+    sound: new Tone.Player(
+      "assets/sound/game_voiceover/definition2.wav"
+    ).toDestination(),
+    duration: 8,
+  },
+];
+
+//narrative scenes

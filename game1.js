@@ -12,6 +12,9 @@ var game1 = function (p) {
   let cursor;
   let cursorState = "default";
 
+  let gameEntered = false;
+  let gameStarted = false;
+
   let currentlyAnimating = false;
   let timedAnimationIndex = 0;
   let currentlyDragging = false;
@@ -239,7 +242,6 @@ var game1 = function (p) {
     ];
     lanternSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
-        console.log("trigger animation");
         lanternSprite.visible = false;
         discoSprite.visible = true;
         intervalAnimation(discoSprite, discoAnimation, 200, function () {
@@ -265,6 +267,14 @@ var game1 = function (p) {
 
   // Game 1
   function displayGame() {
+    if (gameEntered && !gameStarted) {
+      console.log("GAME ENTERED!");
+      gameStarted = true;
+      playGameVoiceover(game1_voiceover, 16);
+    }
+    if (gameStarted) {
+    }
+
     p.image(g1_bg, 0, 0, canvasWidth, canvasHeight);
 
     drawerSprite.display();
@@ -281,6 +291,16 @@ var game1 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
+  }
+
+  function resetPositions() {
+    pandaSprite.reset();
+    sockSprite.reset();
+    shirtSprite.reset();
+    pillowSprite.reset();
+    blanketSprite.reset();
+    posterSprite.reset();
+    drawerSprite.reset();
   }
 
   // CLASSES
@@ -309,6 +329,7 @@ var game1 = function (p) {
 
   class Button {
     constructor(buttonDefaultImg, buttonHover, xPos, yPos) {
+      this.originalImg = buttonDefaultImg;
       this.x = xPos;
       this.y = yPos;
       this.buttonDefault = buttonDefaultImg;
@@ -347,6 +368,11 @@ var game1 = function (p) {
         mouse_y > this.y * scaleRatio &&
         mouse_y < this.y * scaleRatio + this.height * scaleRatio;
       return this.mouseInBounds;
+    }
+
+    reset() {
+      this.interactive = true;
+      this.buttonDefault = this.originalImg;
     }
 
     display() {
@@ -424,7 +450,6 @@ var game1 = function (p) {
             mouse_y < yRange[1] * scaleRatio
           ) {
             _this.interactive = false;
-            console.log(soundEffect);
             soundEffect.start();
             //Snap it into position if we don't make it disappear
             if (_this.xFinal && _this.yFinal) {
@@ -439,6 +464,13 @@ var game1 = function (p) {
           }
         }
       });
+    }
+
+    reset() {
+      this.xCurrent = this.x;
+      this.yCurrent = this.y;
+      this.visible = true;
+      this.interactive = true;
     }
 
     addClickEvent(clickFunction) {
@@ -484,11 +516,13 @@ var game1 = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });
@@ -498,18 +532,19 @@ var game1 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
+        // currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
+          hideCanvas();
           p.noLoop();
         }, 1000);
         storyMode = true;
-        console.log("entering story mode again");
       }
     });
     leftButton.addClickEvent(function (e) {
@@ -518,15 +553,25 @@ var game1 = function (p) {
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(resetNarrativeButtonsEvent);
         window.setTimeout(function () {
           game1canvas.style.visibility = "hidden";
           storyMode = true;
+          hideCanvas();
           p.noLoop();
         }, 1000);
         storyMode = true;
       }
     });
   }
+
+  function hideCanvas() {
+    //Add things we want to do when we leave this scene
+    gameEntered = false;
+    gameStarted = false;
+    resetPositions();
+  }
+
   p.windowResized = function () {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);
@@ -571,6 +616,23 @@ var game1 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+
+  // Play voiceover and disable interactions for time # of seconds
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
   }
 };
 

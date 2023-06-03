@@ -132,7 +132,7 @@ var game3 = function (p) {
       `assets/img/ending/actionbutton-high2-h.png`
     );
     actions["high2"].actionButtonPos = { x: 30, y: 30 };
-
+    console.log(actions["high2"]);
     for (let i = 0; i < 4; i++) {
       chaobingAnimationImgs.push(
         p.loadImage(`assets/img/ending/chaobing-animation${i}.png`)

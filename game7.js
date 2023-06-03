@@ -26,7 +26,9 @@ var game7 = function (p) {
   let currentPromptIndex = 0;
   let clickNum = 0;
 
+  let startTicks = false;
   let ticks = 0;
+  let displayActualGame = false;
   // let currentString = "";
 
   let prompts = [
@@ -153,106 +155,114 @@ var game7 = function (p) {
     //Do things we need to do when entered minigame
     let displacement = 0;
     if (gameEntered && !gameStarted) {
-      console.log("GAME ENTERED!");
+      p.clear();
       gameStarted = true;
+      playGameVoiceover(game7_voiceover, 17, function () {
+        startTicks = true;
+      });
+      setTimeout(function () {
+        displayActualGame = true;
+      }, 10900);
     }
-    if (gameStarted) {
+    if (startTicks) {
       ticks++;
       displacement = Math.floor(ticks / 3);
     }
-    p.image(g7_bg, 0, 0, canvasWidth, canvasHeight);
+    if (displayActualGame) {
+      p.image(g7_bg, 0, 0, canvasWidth, canvasHeight);
 
-    //display the prompts and ongoing responses
-    p.textWrap(p.WORD);
+      //display the prompts and ongoing responses
+      p.textWrap(p.WORD);
 
-    p.fill("black");
+      p.fill("black");
 
-    //Prompt one
-    p.textSize(16 * scaleRatio);
-    p.text(
-      prompts[0].question,
-      186 * scaleRatio,
-      (80 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      //Prompt one
+      p.textSize(16 * scaleRatio);
+      p.text(
+        prompts[0].question,
+        186 * scaleRatio,
+        (110 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.textSize(14 * scaleRatio);
-    p.text(
-      prompts[0].currentString,
-      186 * scaleRatio,
-      (120 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
-    //Prompt 2
+      p.textSize(14 * scaleRatio);
+      p.text(
+        prompts[0].currentString,
+        186 * scaleRatio,
+        (150 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
+      //Prompt 2
 
-    p.textSize(16 * scaleRatio);
-    p.text(
-      prompts[1].question,
-      186 * scaleRatio,
-      (220 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      p.textSize(16 * scaleRatio);
+      p.text(
+        prompts[1].question,
+        186 * scaleRatio,
+        (250 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.textSize(14 * scaleRatio);
-    p.text(
-      prompts[1].currentString,
-      186 * scaleRatio,
-      (280 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
-    //Prompt 3
-    p.textSize(16 * scaleRatio);
-    p.text(
-      prompts[2].question,
-      186 * scaleRatio,
-      (460 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      p.textSize(14 * scaleRatio);
+      p.text(
+        prompts[1].currentString,
+        186 * scaleRatio,
+        (300 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
+      //Prompt 3
+      p.textSize(16 * scaleRatio);
+      p.text(
+        prompts[2].question,
+        186 * scaleRatio,
+        (490 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.textSize(14 * scaleRatio);
-    p.text(
-      prompts[2].currentString,
-      186 * scaleRatio,
-      (520 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
-    //Prompt 4
-    p.textSize(16 * scaleRatio);
-    p.text(
-      prompts[3].question,
-      186 * scaleRatio,
-      (680 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      p.textSize(14 * scaleRatio);
+      p.text(
+        prompts[2].currentString,
+        186 * scaleRatio,
+        (550 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
+      //Prompt 4
+      p.textSize(16 * scaleRatio);
+      p.text(
+        prompts[3].question,
+        186 * scaleRatio,
+        (710 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.textSize(14 * scaleRatio);
-    p.text(
-      prompts[3].currentString,
-      186 * scaleRatio,
-      (730 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
-    // Prompt 5
-    p.textSize(16 * scaleRatio);
-    p.text(
-      prompts[4].question,
-      186 * scaleRatio,
-      (830 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      p.textSize(14 * scaleRatio);
+      p.text(
+        prompts[3].currentString,
+        186 * scaleRatio,
+        (760 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
+      // Prompt 5
+      p.textSize(16 * scaleRatio);
+      p.text(
+        prompts[4].question,
+        186 * scaleRatio,
+        (860 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.textSize(14 * scaleRatio);
-    p.text(
-      prompts[4].currentString,
-      186 * scaleRatio,
-      (870 - displacement) * scaleRatio,
-      270 * scaleRatio
-    );
+      p.textSize(14 * scaleRatio);
+      p.text(
+        prompts[4].currentString,
+        186 * scaleRatio,
+        (900 - displacement) * scaleRatio,
+        270 * scaleRatio
+      );
 
-    p.image(g7_bg_upper, 0, 0, canvasWidth, canvasHeight);
-    // Display Sprites
-    keyboardSprite.display();
-    keysSprite.display();
+      p.image(g7_bg_upper, 0, 0, canvasWidth, canvasHeight);
+      // Display Sprites
+      keyboardSprite.display();
+      keysSprite.display();
+    }
 
     // Navigation
     rightButton.display();
@@ -474,11 +484,11 @@ var game7 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
@@ -509,6 +519,13 @@ var game7 = function (p) {
     //Add things we want to do when we leave this scene
     gameEntered = false;
     gameStarted = false;
+    ticks = 0;
+    startTicks = false;
+    displacement = 0;
+    displayActualGame = false;
+    prompts.forEach(function (prompt) {
+      prompt.currentString = "";
+    });
   }
 
   p.windowResized = function () {
@@ -555,6 +572,22 @@ var game7 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
   }
 };
 

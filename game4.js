@@ -33,6 +33,9 @@ var game4 = function (p) {
 
   let paintCursor = "none";
 
+  let gameEntered = false;
+  let gameStarted = false;
+
   p.preload = function () {
     //Preload a background here
     g4_bg = p.loadImage("assets/img/game4/bg.png");
@@ -283,6 +286,11 @@ var game4 = function (p) {
 
   // Game 1
   function displayGame() {
+    if (gameEntered && !gameStarted) {
+      console.log("GAME ENTERED!");
+      gameStarted = true;
+      playGameVoiceover(game4_voiceover, 11);
+    }
     p.image(g4_bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
@@ -589,11 +597,13 @@ var game4 = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });
@@ -602,11 +612,11 @@ var game4 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           game4acanvas.style.visibility = "hidden";
@@ -636,6 +646,10 @@ var game4 = function (p) {
   }
 
   function hideCanvas() {
+    gameStarted = false;
+    gameEntered = false;
+    paintCursor = "none";
+    game4_paintColor = "none";
     //Add things we want to do when we leave this scene
   }
 
@@ -684,6 +698,22 @@ var game4 = function (p) {
     }
     scaleRatio = canvasWidth / 640;
   }
+
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
+  }
 };
 
 new p5(game4, "canvas-game4");
@@ -706,6 +736,8 @@ var game4a = function (p) {
   let currentColorImg;
 
   let density = 1;
+
+  let gameEntered = false;
 
   p.preload = function () {
     //Preload whatever needs to be preloaded
@@ -817,11 +849,13 @@ var game4a = function (p) {
     p.noLoop();
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
+        gameEntered = true;
         p.loop();
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
+        gameEntered = true;
         p.loop();
       }
     });

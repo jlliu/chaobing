@@ -32,6 +32,9 @@ var game2 = function (p) {
   let timeCount = 0;
   let timerDisplay = "00:00";
 
+  let gameEntered = false;
+  let gameStarted = false;
+
   //Establish a questions or a corrections mode
   let mode = "questions";
 
@@ -151,87 +154,7 @@ var game2 = function (p) {
     }
   };
 
-  p.setup = function () {
-    // put setup code here
-    p.pixelDensity(3);
-    calculateCanvasDimensions(p);
-    game2canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
-    game2canvas.classList.add("gameCanvas");
-    game2canvas.classList.add("game2");
-    game2canvas.id = "game2";
-    thisCanvas = game2canvas;
-    p.noSmooth();
-
-    setupNavigation();
-
-    cursor = new Cursor();
-
-    //Initialize Game 2 Sprites
-    paperAnimationSprite = new Button(
-      paperAnimation[0],
-      paperAnimation[0],
-      83,
-      0
-    );
-    paperAnimationSprite.interactive = false;
-    correctionSprite = new Button(
-      correctionNotes[0],
-      correctionNotes[0],
-      83,
-      0
-    );
-    correctionSprite.interactive = false;
-    correctionSprite.visible = false;
-    eraserSprite = new Button(eraser, eraser, 40, 300);
-    eraseAnimationSprite = new Button(
-      eraseAnimation[0],
-      eraseAnimation[0],
-      0,
-      0
-    );
-    eraseAnimationSprite.visible = false;
-    eraserSprite.addClickEvent(function (e) {
-      if (!currentlyAnimating) {
-        eraseAnimationSprite.visible = true;
-        intervalAnimation(
-          eraseAnimationSprite,
-          eraseAnimation,
-          200,
-          function () {
-            eraseAnimationSprite.visible = false;
-          }
-        );
-        boingSound.start();
-      }
-    });
-    appleAnimationSprite = new Button(
-      appleAnimation[0],
-      appleAnimation[0],
-      512,
-      277
-    );
-    appleAnimationSprite.addClickEvent(function (e) {
-      if (!currentlyAnimating) {
-        intervalAnimation(appleAnimationSprite, appleAnimation, 500);
-        boingSound.start();
-      }
-    });
-    pencilAnimationSprite = new Button(
-      pencilAnimation[0],
-      pencilAnimation[0],
-      474,
-      0
-    );
-    pencilAnimationSprite.addClickEvent(function (e) {
-      if (!currentlyAnimating) {
-        intervalAnimation(pencilAnimationSprite, pencilAnimation, 190);
-        runningSound.start();
-      }
-    });
-    ojSprite = new Button(ojFrames[0], ojFrames[0], 0, 30);
-    ojSprite.interactive = false;
-    //Sprites related to questions
-
+  let resetValues = function () {
     currentQuestionImg = questions[currentQuestionNum].question;
     questionSprite = new Button(
       currentQuestionImg,
@@ -320,6 +243,89 @@ var game2 = function (p) {
       });
     });
   };
+  p.setup = function () {
+    // put setup code here
+    p.pixelDensity(3);
+    calculateCanvasDimensions(p);
+    game2canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
+    game2canvas.classList.add("gameCanvas");
+    game2canvas.classList.add("game2");
+    game2canvas.id = "game2";
+    thisCanvas = game2canvas;
+    p.noSmooth();
+
+    setupNavigation();
+
+    cursor = new Cursor();
+
+    //Initialize Game 2 Sprites
+    paperAnimationSprite = new Button(
+      paperAnimation[0],
+      paperAnimation[0],
+      83,
+      0
+    );
+    paperAnimationSprite.interactive = false;
+    correctionSprite = new Button(
+      correctionNotes[0],
+      correctionNotes[0],
+      83,
+      0
+    );
+    correctionSprite.interactive = false;
+    correctionSprite.visible = false;
+    eraserSprite = new Button(eraser, eraser, 40, 300);
+    eraseAnimationSprite = new Button(
+      eraseAnimation[0],
+      eraseAnimation[0],
+      0,
+      0
+    );
+    eraseAnimationSprite.visible = false;
+    eraserSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        eraseAnimationSprite.visible = true;
+        intervalAnimation(
+          eraseAnimationSprite,
+          eraseAnimation,
+          200,
+          function () {
+            eraseAnimationSprite.visible = false;
+          }
+        );
+        boingSound.start();
+      }
+    });
+    appleAnimationSprite = new Button(
+      appleAnimation[0],
+      appleAnimation[0],
+      512,
+      277
+    );
+    appleAnimationSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        intervalAnimation(appleAnimationSprite, appleAnimation, 500);
+        boingSound.start();
+      }
+    });
+    pencilAnimationSprite = new Button(
+      pencilAnimation[0],
+      pencilAnimation[0],
+      474,
+      0
+    );
+    pencilAnimationSprite.addClickEvent(function (e) {
+      if (!currentlyAnimating) {
+        intervalAnimation(pencilAnimationSprite, pencilAnimation, 190);
+        runningSound.start();
+      }
+    });
+    ojSprite = new Button(ojFrames[0], ojFrames[0], 0, 30);
+    ojSprite.interactive = false;
+    //Sprites related to questions
+
+    resetValues();
+  };
 
   p.draw = function () {
     mouse_x = p.mouseX;
@@ -336,6 +342,16 @@ var game2 = function (p) {
 
   // Game 1
   function displayGame() {
+    if (gameEntered && !gameStarted) {
+      console.log("GAME ENTERED!");
+      gameStarted = true;
+      playGameVoiceover(game2_voiceover, 13, function () {
+        initializeTimer();
+      });
+    }
+    if (gameStarted) {
+      // console.log(currentQuestionNum);
+    }
     p.image(g2_bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
@@ -652,13 +668,13 @@ var game2 = function (p) {
     document.addEventListener("navigateFwd", (e) => {
       if (currentSceneNum == thisSceneNum) {
         p.loop();
-        initializeTimer();
+        gameEntered = true;
       }
     });
     document.addEventListener("navigateBack", (e) => {
       if (currentSceneNum == thisSceneNum + 1) {
         p.loop();
-        initializeTimer();
+        gameEntered = true;
       }
     });
     //Navigation stuff
@@ -666,14 +682,15 @@ var game2 = function (p) {
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        currentSceneNum++;
         harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateFwdStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
+          hideCanvas();
           p.noLoop();
           stopTimer();
         }, 1000);
@@ -686,15 +703,37 @@ var game2 = function (p) {
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(resetNarrativeButtonsEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;
+          hideCanvas();
           p.noLoop();
           stopTimer();
         }, 1000);
         storyMode = true;
       }
     });
+  }
+
+  function hideCanvas() {
+    //Add things we want to do when we leave this scene
+    gameEntered = false;
+    gameStarted = false;
+    timerInitialized = false;
+    timerPaused = false;
+    timeCount = 0;
+    timerDisplay = "00:00";
+    mode = "questions";
+    correctQuestionsNum = 0;
+    currentQuestionNum = 0;
+    correctionNoteNum = 0;
+    gameDone = false;
+    ans_a_sprite.interactive = true;
+    ans_b_sprite.interactive = true;
+    ans_c_sprite.interactive = true;
+    ans_d_sprite.interactive = true;
+    resetValues();
   }
 
   p.windowResized = function () {
@@ -760,6 +799,22 @@ var game2 = function (p) {
       canvasHeight = p.windowWidth / canvasRatio;
     }
     scaleRatio = canvasWidth / 640;
+  }
+
+  function playGameVoiceover(sound, time, callback) {
+    if (gameVoiceoverOn) {
+      currentlyAnimating = true;
+      setTimeout(function () {
+        sound.start();
+      }, voiceoverDelay * 1000);
+
+      setTimeout(function () {
+        currentlyAnimating = false;
+        if (callback) {
+          callback();
+        }
+      }, (time + voiceoverDelay) * 1000);
+    }
   }
 };
 

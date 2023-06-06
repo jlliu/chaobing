@@ -22,15 +22,15 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 8777,
       phrases: [
-        { time: 0, x: 74, y: 139, img: null, img_h: null }, //0: My grandma used
-        { time: 880, x: 74, y: 161, img: null, img_h: null }, //1: to view cleaning
-        { time: 1763, x: 74, y: 187, img: null, img_h: null }, //2: as a meditative
-        { time: 2806, x: 74, y: 209, img: null, img_h: null }, //3: activity
-        { time: 4486, x: 353, y: 107, img: null, img_h: null }, //4: Nai nai
-        { time: 5303, x: 427, y: 112, img: null, img_h: null }, //5: Would say that
-        { time: 5932, x: 353, y: 139, img: null, img_h: null }, //6: if my space was cluttered
-        { time: 7341, x: 353, y: 161, img: null, img_h: null }, //7: then my mind
-        { time: 7639, x: 353, y: 187, img: null, img_h: null }, //8: would be too
+        { time: 0, x: 73, y: 144, img: null, img_h: null }, //0: My grandma used
+        { time: 880, x: 73, y: 171, img: null, img_h: null }, //1: to view cleaning
+        { time: 1763, x: 73, y: 199, img: null, img_h: null }, //2: as a meditative
+        { time: 2806, x: 73, y: 228, img: null, img_h: null }, //3: activity
+        { time: 4486, x: 350, y: 108, img: null, img_h: null }, //4: Nai nai
+        { time: 5303, x: 436, y: 111, img: null, img_h: null }, //5: Would say that
+        { time: 5932, x: 350, y: 140, img: null, img_h: null }, //6: if my space was cluttered
+        { time: 7341, x: 350, y: 167, img: null, img_h: null }, //7: then my mind would be
+        { time: 7939, x: 350, y: 196, img: null, img_h: null }, //8: culttered too
       ],
       flipAnimation: [],
     },
@@ -45,12 +45,12 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6329,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: Unfortunately
-        { time: 967, x: 67, y: 152, img: null, img_h: null }, //1: I can get pretty
-        { time: 1836, x: 67, y: 179, img: null, img_h: null }, //2: messy these days
-        { time: 3414, x: 342, y: 107, img: null, img_h: null }, //3: I get too busy
-        { time: 4300, x: 342, y: 134, img: null, img_h: null }, //4: to even think
-        { time: 5258, x: 342, y: 161, img: null, img_h: null }, //0: let alone clean
+        { time: 0, x: 50, y: 112, img: null, img_h: null }, //0: Unfortunately
+        { time: 967, x: 50, y: 140, img: null, img_h: null }, //1: I can get pretty
+        { time: 1836, x: 50, y: 168, img: null, img_h: null }, //2: messy these days
+        { time: 3414, x: 456, y: 147, img: null, img_h: null }, //3: I get too busy
+        { time: 4300, x: 458, y: 176, img: null, img_h: null }, //4: to even think
+        { time: 5258, x: 449, y: 205, img: null, img_h: null }, //0: let alone clean
       ],
       flipAnimation: [],
     },
@@ -68,12 +68,12 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 5892,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: I find myself frazzled
-        { time: 1294, x: 67, y: 152, img: null, img_h: null }, //1: by constantly
-        { time: 1826, x: 67, y: 179, img: null, img_h: null }, //2: hustling
-        { time: 3352, x: 342, y: 107, img: null, img_h: null }, //3: But it's sometimes
-        { time: 4191, x: 342, y: 134, img: null, img_h: null }, //4: Like I don't know
-        { time: 4954, x: 342, y: 161, img: null, img_h: null }, //0: how else to be
+        { time: 0, x: 45, y: 201, img: null, img_h: null }, //0: I find myself frazzled
+        { time: 1294, x: 45, y: 228, img: null, img_h: null }, //1: by constantly
+        { time: 1826, x: 45, y: 256, img: null, img_h: null }, //2: hustling
+        { time: 3352, x: 480, y: 272, img: null, img_h: null }, //3: it's sometimes
+        { time: 4191, x: 459, y: 298, img: null, img_h: null }, //4: Like I don't know
+        { time: 4954, x: 468, y: 326, img: null, img_h: null }, //0: how else to be
       ],
       flipAnimation: [],
     },
@@ -89,12 +89,12 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 4731,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: In my twenty
-        { time: 647, x: 67, y: 152, img: null, img_h: null }, //1: something years
-        { time: 1321, x: 67, y: 179, img: null, img_h: null }, //2: of being alive
-        { time: 2315, x: 342, y: 107, img: null, img_h: null }, //3: I got pretty good
-        { time: 3290, x: 342, y: 134, img: null, img_h: null }, //4: at doing what
-        { time: 3690, x: 342, y: 161, img: null, img_h: null }, //5: i'm supposed to
+        { time: 0, x: 47, y: 98, img: null, img_h: null }, //0: In my twenty
+        { time: 647, x: 47, y: 125, img: null, img_h: null }, //1: something years
+        { time: 1321, x: 47, y: 153, img: null, img_h: null }, //2: of being alive
+        { time: 2315, x: 392, y: 180, img: null, img_h: null }, //3: I got pretty good
+        { time: 3290, x: 392, y: 207, img: null, img_h: null }, //4: at doing what
+        { time: 3690, x: 415, y: 236, img: null, img_h: null }, //5: i'm supposed to
       ],
       flipAnimation: [],
     },
@@ -107,11 +107,11 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6530,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: I follow the rules
-        { time: 1540, x: 67, y: 152, img: null, img_h: null }, //1: I stick to the script
-        { time: 3160, x: 67, y: 179, img: null, img_h: null }, //2: I try
-        { time: 4066, x: 342, y: 107, img: null, img_h: null }, //3:over and over
-        { time: 5523, x: 342, y: 134, img: null, img_h: null }, //4: until i get it right
+        { time: 0, x: 56, y: 104, img: null, img_h: null }, //0: I follow the rules
+        { time: 1540, x: 131, y: 329, img: null, img_h: null }, //1: I stick to the script
+        { time: 3160, x: 345, y: 94, img: null, img_h: null }, //2: I try
+        { time: 4066, x: 395, y: 94, img: null, img_h: null }, //3:over and over
+        { time: 5523, x: 441, y: 325, img: null, img_h: null }, //4: until i get it right
       ],
       flipAnimation: [],
     },
@@ -128,12 +128,12 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 5721,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: But these days
-        { time: 1115, x: 67, y: 152, img: null, img_h: null }, //1: I feel like i'm on
-        { time: 1893, x: 67, y: 179, img: null, img_h: null }, //2: a treadmill that
-        { time: 2615, x: 342, y: 107, img: null, img_h: null }, //3: never stops
-        { time: 4140, x: 342, y: 115, img: null, img_h: null }, //4: theres always something
-        { time: 4991, x: 342, y: 152, img: null, img_h: null }, //5: to chase next
+        { time: 0, x: 73, y: 146, img: null, img_h: null }, //0: But these days
+        { time: 1115, x: 73, y: 174, img: null, img_h: null }, //1: I feel like i'm on
+        { time: 1893, x: 73, y: 201, img: null, img_h: null }, //2: a treadmill that
+        { time: 2615, x: 73, y: 230, img: null, img_h: null }, //3: never stops
+        { time: 4140, x: 375, y: 100, img: null, img_h: null }, //4: theres always something
+        { time: 4991, x: 464, y: 128, img: null, img_h: null }, //5: to chase next
       ],
       flipAnimation: [],
     },
@@ -178,10 +178,10 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6530,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: something i need to achieve
-        { time: 1620, x: 67, y: 152, img: null, img_h: null }, //1: to acquire
-        { time: 2711, x: 67, y: 179, img: null, img_h: null }, //2: to make
-        { time: 4372, x: 342, y: 107, img: null, img_h: null }, //3:  i need to apply to a new job..
+        { time: 0, x: 48, y: 97, img: null, img_h: null }, //0: something i need to achieve
+        { time: 1620, x: 132, y: 127, img: null, img_h: null }, //1: to acquire
+        { time: 2711, x: 213, y: 154, img: null, img_h: null }, //2: to make
+        { time: 4372, x: 341, y: 99, img: null, img_h: null }, //3:  i need to apply to a new job..
       ],
       flipAnimation: [],
     },

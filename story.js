@@ -6,15 +6,16 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-let currentSceneNum = 1;
-// let currentSceneNum = 7;
+// let currentSceneNum = 1;
+let currentSceneNum = 4;
 let currentPartNum = 0;
 
 let storyMode = true;
 
 let currentFlipImage = null;
 
-let pageFlipTime = 1500;
+let pageFlipTime = 900;
+// pageFlipTime = 3000;
 
 const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
@@ -47,6 +48,8 @@ var sketch1 = function (p) {
   let timedAnimationIndex = 0;
   let currentlyDragging = false;
 
+  let animatingFlip = false;
+
   let clickedObjects = [];
 
   // Story text is a list of lists. The entries are image assets for the story things
@@ -56,8 +59,11 @@ var sketch1 = function (p) {
 
   let scene1_options = [];
 
+  let scene4_options = [];
+
   p.preload = function () {
     storyBg = p.loadImage("assets/UI/storybook-bg-case.png");
+    base_outline = p.loadImage("assets/UI/base-outline.png");
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
     grabCursor = p.loadImage("assets/UI/cursors/grab-cursor.png");
     holdCursor = p.loadImage("assets/UI/cursors/hold-cursor.png");
@@ -102,26 +108,44 @@ var sketch1 = function (p) {
               partIndex + 1
             }/flip1.png`
           ),
+          p.loadImage(
+            `assets/img/scenes/scene${sceneIndex + 1}/part${
+              partIndex + 1
+            }/flip2.png`
+          ),
+          p.loadImage(
+            `assets/img/scenes/scene${sceneIndex + 1}/part${
+              partIndex + 1
+            }/flip3.png`
+          ),
         ];
       });
     });
 
     scene1_options.push({
       sound: scenes[0][0].voiceover_options[0],
-      img: p.loadImage(`assets/img/scenes/scene1/part1/option0.png`),
-      img_h: p.loadImage(`assets/img/scenes/scene1/part1/option0_h.png`),
+      img: p.loadImage(`assets/img/scenes/scene1/part1/phrase4.png`),
+      img_h: p.loadImage(`assets/img/scenes/scene1/part1/phrase4-h.png`),
     });
 
     scene1_options.push({
       sound: scenes[0][0].voiceover_options[1],
       img: p.loadImage(`assets/img/scenes/scene1/part1/option1.png`),
-      img_h: p.loadImage(`assets/img/scenes/scene1/part1/option1_h.png`),
+      img_h: p.loadImage(`assets/img/scenes/scene1/part1/option1-h.png`),
     });
     scene1_options.push({
       sound: scenes[0][0].voiceover_options[2],
       img: p.loadImage(`assets/img/scenes/scene1/part1/option2.png`),
-      img_h: p.loadImage(`assets/img/scenes/scene1/part1/option2_h.png`),
+      img_h: p.loadImage(`assets/img/scenes/scene1/part1/option2-h.png`),
     });
+
+    for (let i = 0; i < 9; i++) {
+      scene4_options.push({
+        sound: scenes[3][1].voiceover_options[i],
+        img: p.loadImage(`assets/img/scenes/scene4/part2/option${i}.png`),
+        img_h: p.loadImage(`assets/img/scenes/scene4/part2/option${i}-h.png`),
+      });
+    }
 
     console.log(scene1_options);
   };
@@ -179,35 +203,52 @@ var sketch1 = function (p) {
 
   function displayScene(currentSceneNum, currentPartNum) {
     p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
-    p.image(
-      scenes[currentSceneNum - 1][currentPartNum].base_illustration,
-      0,
-      0,
-      canvasWidth,
-      canvasHeight
-    );
-    let phrases = scenes[currentSceneNum - 1][currentPartNum].phrases;
-    phrases.forEach(function (phrase) {
-      if (phrase.current) {
-        if (phrase.button) {
-          phrase.button.buttonDefault = phrase.button.buttonHover;
-          phrase.button.display();
+    if (!animatingFlip) {
+      drawImageToScale(
+        scenes[currentSceneNum - 1][currentPartNum].base_illustration,
+        20,
+        70
+      );
+      let phrases = scenes[currentSceneNum - 1][currentPartNum].phrases;
+      phrases.forEach(function (phrase) {
+        if (phrase.current) {
+          if (phrase.button) {
+            phrase.button.buttonDefault = phrase.button.buttonHover;
+            phrase.button.display();
+          } else {
+            drawImageToScale(phrase.img_h, phrase.x, phrase.y);
+          }
         } else {
-          drawImageToScale(phrase.img_h, phrase.x, phrase.y);
+          if (phrase.button) {
+            phrase.button.buttonDefault = phrase.button.originalButtonDefault;
+            phrase.button.display();
+            if (!phrase.button.dontInteract) {
+              phrase.button.interactive = true;
+            } else {
+              phrase.button.interactive = false;
+            }
+          } else {
+            drawImageToScale(phrase.img, phrase.x, phrase.y);
+          }
         }
-      } else {
-        if (phrase.button) {
-          phrase.button.buttonDefault = phrase.button.buttonDefault;
-          phrase.button.display();
-          phrase.button.interactive = true;
-        } else {
-          drawImageToScale(phrase.img, phrase.x, phrase.y);
-        }
-      }
-    });
+      });
+    }
+
+    drawImageToScale(base_outline, 20, 70);
     if (currentFlipImage) {
       p.image(currentFlipImage, 0, 0, canvasWidth, canvasHeight);
     }
+    displayScenes();
+  }
+
+  // extra display functions for scenes
+  function displayScenes() {
+    // Extras
+    scene4_options.forEach(function (option) {
+      if (option.button.visible) {
+        option.button.display();
+      }
+    });
   }
 
   function setupScenes() {
@@ -249,16 +290,92 @@ var sketch1 = function (p) {
       // todo: add popup
     });
     narrativeButtons.push(scene2_phrase.button);
+
+    let scene3_phrase = scenes[2][1].phrases[3];
+    scene3_phrase.button = new Button(
+      scene3_phrase.img,
+      scene3_phrase.img_h,
+      scene3_phrase.x,
+      scene3_phrase.y
+    );
+    scene3_phrase.button.addClickEvent(function () {
+      console.log("RESET GAME");
+      currentSceneNum = 1;
+      currentPartNum = 0;
+      resetScenes();
+    });
+    narrativeButtons.push(scene3_phrase.button);
+
+    // scene 4: when main button clicked, progressively show other buttons
+    // create a list of buttons for scene 4... when one is clicked, show the next one
+
+    let scene4_phrase = scenes[3][1].phrases[3];
+    scene4_phrase.button = new Button(
+      scene4_phrase.img,
+      scene4_phrase.img_h,
+      scene4_phrase.x,
+      scene4_phrase.y
+    );
+    // scene4_options.push(scene4_phrase.button);
+    // create buttons for all the rest
+    // for (var i = 0 ; i < 9; i ++){
+    //   let button =
+    // }
+    let optionPlacements = [
+      { x: 341, y: 128 },
+      { x: 341, y: 184 },
+      { x: 341, y: 212 },
+      { x: 341, y: 268 },
+      { x: 341, y: 296 },
+      { x: 341, y: 325 },
+      { x: 341, y: 353 },
+      { x: 341, y: 381 },
+      { x: 341, y: 437 },
+    ];
+    scene4_options.forEach(function (option, index) {
+      option.button = new Button(
+        option.img,
+        option.img_h,
+        optionPlacements[index].x,
+        optionPlacements[index].y
+      );
+      option.button.visible = false;
+      option.button.interactive = false;
+      // make this one play next sound and display next button, then this one is disabled
+      option.button.addClickEvent(function () {
+        if (index + 1 == 9) {
+          scenes[3][1].voiceover_options[9].start();
+        } else {
+          scene4_options[index + 1].sound.start();
+          scene4_options[index + 1].button.visible = true;
+          scene4_options[index + 1].button.interactive = true;
+        }
+
+        option.button.interactive = false;
+      });
+    });
+    scene4_phrase.button.addClickEvent(function () {
+      scene4_options[0].sound.start();
+      scene4_options[0].button.visible = true;
+      scene4_options[0].button.interactive = true;
+      scene4_phrase.button.dontInteract = true;
+    });
+
+    narrativeButtons.push(scene4_phrase.button);
+    resetNarrativeButtons();
   }
 
   function resetScenes() {
+    //reset scene 1 stuff
     scenes[0][0].phrases[4].button.buttonDefault = scene1_options[0].img;
     scenes[0][0].phrases[4].button.buttonHover = scene1_options[0].img_h;
 
-    // make all buttons non interactive
-    // narrativeButtons.forEach(function (button) {
-    //   button.interactive = false;
-    // });
+    //reset scene 4 stuff
+    scenes[3][1].phrases[3].button.dontInteract = false;
+    scene4_options.forEach(function (option) {
+      option.button.interactive = false;
+      option.button.visible = false;
+    });
   }
 
   function setupScene2() {}
@@ -272,6 +389,7 @@ var sketch1 = function (p) {
       let cumulativeTime = 0;
       console.log(currentSceneNum);
       console.log(parts);
+      let delay = 1000;
       parts.forEach(function (part, partIndex) {
         let phrases = part.phrases;
         let prevPhrase = null;
@@ -299,28 +417,47 @@ var sketch1 = function (p) {
             currentlyAnimating = false;
           } else {
             //Animate flip to next scene
-            setTimeout(function () {
-              //Animate flip 0
-              pageFlipSound.start();
-              currentFlipImage = part.flipAnimation[0];
-            }, pageFlipTime / 3);
-            setTimeout(function () {
-              //Animate flip 1
-              currentFlipImage = part.flipAnimation[1];
-            }, (pageFlipTime * 2) / 3);
-            setTimeout(function () {
-              //Rest to null
+            animateFlip(part, 0, function () {
               currentPartNum++;
-              currentFlipImage = null;
-            }, pageFlipTime);
+            });
           }
         }, cumulativeTime + part.length);
 
-        cumulativeTime += part.length + pageFlipTime;
+        cumulativeTime += part.length + pageFlipTime + delay;
       });
     }
   }
 
+  function animateFlip(part, delay, callback) {
+    setTimeout(function () {
+      //Animate flip 0
+      pageFlipSound.start();
+      animatingFlip = true;
+
+      currentFlipImage = part.flipAnimation[0];
+    }, pageFlipTime * 0.2 + delay);
+    setTimeout(function () {
+      //Animate flip 1
+      currentFlipImage = part.flipAnimation[1];
+    }, pageFlipTime * 0.4 + delay);
+    setTimeout(function () {
+      //Animate flip 2
+      currentFlipImage = part.flipAnimation[2];
+    }, pageFlipTime * 0.6 + delay);
+    setTimeout(function () {
+      //Animate flip 3
+      currentFlipImage = part.flipAnimation[3];
+    }, pageFlipTime * 0.8 + delay);
+    setTimeout(function () {
+      //Rest to null
+
+      currentFlipImage = null;
+      if (callback) {
+        animatingFlip = false;
+        callback();
+      }
+    }, pageFlipTime + delay);
+  }
   function setupNavigation() {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
@@ -374,25 +511,18 @@ var sketch1 = function (p) {
       let delay = 1000;
       let part = scenes[currentSceneNum - 1][currentPartNum];
       //Animate the previous one into the new one and then incremetnt to current scene
-      setTimeout(function () {
-        //Animate flip 0
-        pageFlipSound.start();
-        currentFlipImage = part.flipAnimation[0];
-      }, pageFlipTime / 3 + delay);
-      setTimeout(function () {
-        //Animate flip 1
-        currentFlipImage = part.flipAnimation[1];
-      }, (pageFlipTime * 2) / 3 + delay);
-      setTimeout(function () {
+      animateFlip(part, delay, function () {
         //Rest to null
         currentSceneNum++;
         currentPartNum = 0;
         currentFlipImage = null;
-        currentlyAnimating = false;
         //make all buttons non interactive
         resetNarrativeButtons();
-        animateScene();
-      }, pageFlipTime + delay);
+        setTimeout(function () {
+          currentlyAnimating = false;
+          animateScene();
+        }, 1000);
+      });
     });
     document.addEventListener("resetNarrativeButtons", (e) => {
       resetNarrativeButtons();
@@ -403,20 +533,10 @@ var sketch1 = function (p) {
     //make all buttons non interactive
     narrativeButtons.forEach(function (button) {
       button.interactive = false;
+      button.dontInteract = false;
     });
-  }
-  function displayScene2() {
-    p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
-    p.image(story1_illustration, 0, 0, canvasWidth, canvasHeight);
-    p.image(
-      story_text[0][timedAnimationIndex],
-      0,
-      0,
-      canvasWidth,
-      canvasHeight
-    );
-    rightButton.display(p);
-    leftButton.display(p);
+    //reset scenes while we are at it
+    resetScenes();
   }
 
   // CLASSES
@@ -447,6 +567,7 @@ var sketch1 = function (p) {
     constructor(buttonDefaultImg, buttonHover, xPos, yPos) {
       this.x = xPos;
       this.y = yPos;
+      this.originalButtonDefault = buttonDefaultImg;
       this.buttonDefault = buttonDefaultImg;
       this.buttonHover = buttonHover;
       this.width = buttonDefaultImg.width;
@@ -454,6 +575,7 @@ var sketch1 = function (p) {
       this.mouseInBounds = false;
       this.interactive = true;
       this.intendingToClick = false;
+      this.visible = true;
       let _this = this;
       storyCanvas.addEventListener("mousedown", function (e) {
         if (_this.isMouseInBounds()) {
@@ -489,16 +611,16 @@ var sketch1 = function (p) {
     }
 
     display() {
-      let imageToDraw = this.isMouseInBounds()
-        ? this.buttonHover
-        : this.buttonDefault;
+      if (this.visible) {
+        let imageToDraw = this.isMouseInBounds()
+          ? this.buttonHover
+          : this.buttonDefault;
 
-      drawImageToScale(imageToDraw, this.x, this.y);
-      if (this.mouseInBounds && this.interactive) {
-        cursorState = "pointer";
+        drawImageToScale(imageToDraw, this.x, this.y);
+        if (this.mouseInBounds && this.interactive) {
+          cursorState = "pointer";
+        }
       }
-
-      // this.visible = true;
     }
   }
 

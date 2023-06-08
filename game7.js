@@ -157,12 +157,17 @@ var game7 = function (p) {
     if (gameEntered && !gameStarted) {
       p.clear();
       gameStarted = true;
-      playGameVoiceover(game7_voiceover, 17, function () {
-        startTicks = true;
-      });
-      setTimeout(function () {
+      if (gameVoiceoverOn) {
+        playGameVoiceover(game7_voiceover, 17, function () {
+          startTicks = true;
+        });
+        setTimeout(function () {
+          displayActualGame = true;
+        }, 10900);
+      } else {
         displayActualGame = true;
-      }, 10900);
+        startTicks = true;
+      }
     }
     if (startTicks) {
       ticks++;

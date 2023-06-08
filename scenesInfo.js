@@ -198,14 +198,14 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6934,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: Maybe im always
-        { time: 797, x: 67, y: 152, img: null, img_h: null }, //1: doing so much
-        { time: 1624, x: 67, y: 179, img: null, img_h: null }, //2: to find something
-        { time: 2353, x: 342, y: 107, img: null, img_h: null }, //3: to hold onto
-        { time: 3880, x: 342, y: 115, img: null, img_h: null }, //4: mabye a lot of
-        { time: 4512, x: 342, y: 152, img: null, img_h: null }, //5: what i do is
-        { time: 5092, x: 342, y: 200, img: null, img_h: null }, //6: a battle against
-        { time: 5922, x: 342, y: 250, img: null, img_h: null }, //7: emptiness
+        { time: 0, x: 45, y: 108, img: null, img_h: null }, //0: Maybe im always
+        { time: 797, x: 45, y: 136, img: null, img_h: null }, //1: doing so much
+        { time: 1624, x: 45, y: 164, img: null, img_h: null }, //2: to find something
+        { time: 2353, x: 45, y: 192, img: null, img_h: null }, //3: to hold onto
+        { time: 3880, x: 450, y: 170, img: null, img_h: null }, //4: mabye a lot of
+        { time: 4512, x: 474, y: 198, img: null, img_h: null }, //5: what i do is
+        { time: 5092, x: 443, y: 225, img: null, img_h: null }, //6: a battle against
+        { time: 5922, x: 494, y: 256, img: null, img_h: null }, //7: emptiness
       ],
       flipAnimation: [],
     },
@@ -219,12 +219,12 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6591,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: the older i get
-        { time: 970, x: 67, y: 152, img: null, img_h: null }, //1: the more i feel like
-        { time: 1750, x: 67, y: 179, img: null, img_h: null }, //2: people and memories
-        { time: 3143, x: 342, y: 107, img: null, img_h: null }, //3: just fade away
-        { time: 4992, x: 342, y: 300, img: null, img_h: null }, //4: whats left
-        { time: 5565, x: 342, y: 330, img: null, img_h: null }, //5: when they do
+        { time: 0, x: 58, y: 168, img: null, img_h: null }, //0: the older i get
+        { time: 970, x: 58, y: 196, img: null, img_h: null }, //1: the more i feel like
+        { time: 1750, x: 58, y: 224, img: null, img_h: null }, //2: people and memories
+        { time: 3143, x: 58, y: 252, img: null, img_h: null }, //3: just fade away
+        { time: 4992, x: 490, y: 292, img: null, img_h: null }, //4: whats left
+        { time: 5565, x: 467, y: 321, img: null, img_h: null }, //5: when they do
       ],
       flipAnimation: [],
     },
@@ -240,10 +240,10 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 4247,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i sometimes wonder
-        { time: 893, x: 67, y: 152, img: null, img_h: null }, //1: what life would be like
-        { time: 1793, x: 342, y: 107, img: null, img_h: null }, //2: if my family grew up
-        { time: 2865, x: 342, y: 150, img: null, img_h: null }, //3: around more people like us
+        { time: 0, x: 36, y: 101, img: null, img_h: null }, //0: i sometimes wonder
+        { time: 893, x: 353, y: 162, img: null, img_h: null }, //1: what life would be like
+        { time: 1793, x: 339, y: 193, img: null, img_h: null }, //2: if my family grew up
+        { time: 2865, x: 353, y: 224, img: null, img_h: null }, //3: around more people like us
       ],
       flipAnimation: [],
     },
@@ -257,14 +257,16 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 9562,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: would i be more used
-        { time: 1005, x: 67, y: 152, img: null, img_h: null }, //1: to belonging
-        { time: 2588, x: 67, y: 179, img: null, img_h: null }, //2: would i not feel like
-        { time: 3406, x: 67, y: 250, img: null, img_h: null }, //3: im just a big weirdo
-        { time: 4720, x: 67, y: 270, img: null, img_h: null }, //4: deep down
-        { time: 6247, x: 342, y: 200, img: null, img_h: null }, //5: would i not  have the belief
-        { time: 7537, x: 342, y: 220, img: null, img_h: null }, //4: that some things
-        { time: 8420, x: 342, y: 240, img: null, img_h: null }, //5: just aren't for me
+        { time: 0, x: 55, y: 110, img: null, img_h: null }, //0: would i be
+        { time: 600, x: 55, y: 139, img: null, img_h: null }, //1: more used to
+        { time: 1005, x: 55, y: 166, img: null, img_h: null }, //2: to belonging
+        { time: 2400, x: 197, y: 208, img: null, img_h: null }, //3: would i not
+        { time: 2830, x: 154, y: 236, img: null, img_h: null }, //4:  feel like i'm just
+        { time: 3706, x: 183, y: 264, img: null, img_h: null }, //5:  a big weirdo
+        { time: 4720, x: 192, y: 292, img: null, img_h: null }, //6: deep down
+        { time: 6247, x: 353, y: 98, img: null, img_h: null }, //7: would i not  have the belief
+        { time: 7537, x: 375, y: 126, img: null, img_h: null }, //8: that some things just
+        { time: 8700, x: 407, y: 330, img: null, img_h: null }, //9:  aren't for me
       ],
       flipAnimation: [],
     },
@@ -280,10 +282,10 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 5643,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i seem to manage
-        { time: 1131, x: 67, y: 152, img: null, img_h: null }, //1: most parts of my life
-        { time: 3298, x: 342, y: 107, img: null, img_h: null }, //2: but i feel so behind
-        { time: 4696, x: 342, y: 150, img: null, img_h: null }, //3: in the world of love.
+        { time: 0, x: 45, y: 93, img: null, img_h: null }, //0: i seem to manage
+        { time: 1131, x: 45, y: 121, img: null, img_h: null }, //1: most parts of my life
+        { time: 3298, x: 344, y: 302, img: null, img_h: null }, //2: but i feel so behind
+        { time: 4696, x: 344, y: 332, img: null, img_h: null }, //3: in the world of love.
       ],
       flipAnimation: [],
     },
@@ -297,13 +299,13 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 7106,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i feel like i can only
-        { time: 1245, x: 67, y: 152, img: null, img_h: null }, //1: spectate it
-        { time: 1893, x: 67, y: 179, img: null, img_h: null }, //2: from a distance
-        { time: 3259, x: 67, y: 250, img: null, img_h: null }, //3: like all the normal people
-        { time: 4425, x: 67, y: 270, img: null, img_h: null }, //4: are behind one wall
-        { time: 5541, x: 342, y: 200, img: null, img_h: null }, //5: and i'm stuck on
-        { time: 6099, x: 342, y: 220, img: null, img_h: null }, //6: the other side
+        { time: 0, x: 40, y: 140, img: null, img_h: null }, //0: i feel like i can
+        { time: 900, x: 40, y: 168, img: null, img_h: null }, //1: only spectate it
+        { time: 1893, x: 40, y: 196, img: null, img_h: null }, //2: from a distance
+        { time: 3259, x: 45, y: 281, img: null, img_h: null }, //3: like all the normal
+        { time: 4080, x: 69, y: 311, img: null, img_h: null }, //4: people are behind one wall
+        { time: 5541, x: 462, y: 293, img: null, img_h: null }, //5: and i'm stuck on
+        { time: 6099, x: 475, y: 322, img: null, img_h: null }, //6: the other side
       ],
       flipAnimation: [],
     },
@@ -313,22 +315,61 @@ let scenes = [
       voiceover: new Tone.Player(
         "assets/sound/game_voiceover/narration-scene7-part3.wav"
       ).toDestination(),
-
+      voiceover_options1: [
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option0.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option1.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option2.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option3.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option4.wav"
+        ).toDestination(),
+      ],
+      voiceover_options2: [
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option5.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option6.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option7.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option8.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option9.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option10.wav"
+        ).toDestination(),
+        new Tone.Player(
+          "assets/sound/game_voiceover/narration-scene7-option11.wav"
+        ).toDestination(),
+      ],
       base_illustration: null,
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 14478,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i'll linger on the stale crumbs
-        { time: 1636, x: 67, y: 152, img: null, img_h: null }, //1: from situations years ago.
-        { time: 3928, x: 67, y: 179, img: null, img_h: null }, //2: i'll replay every single moment
-        { time: 5636, x: 67, y: 250, img: null, img_h: null }, //3:  searching for what
-        { time: 6202, x: 67, y: 270, img: null, img_h: null }, //4: I could've done wrong.
-        { time: 8886, x: 342, y: 200, img: null, img_h: null }, //5: Mabye if i had just been
-        { time: 10125, x: 342, y: 220, img: null, img_h: null }, //6: less
-        { time: 10396, x: 342, y: 220, img: null, img_h: null }, //7: needy
-        { time: 12023, x: 342, y: 200, img: null, img_h: null }, //8: Mabye if i were
-        { time: 13254, x: 342, y: 220, img: null, img_h: null }, //9: more
-        { time: 13483, x: 342, y: 220, img: null, img_h: null }, //10: put together
+        { time: 0, x: 47, y: 94, img: null, img_h: null }, //0: i'll linger on the stale crumbs
+        { time: 1636, x: 47, y: 124, img: null, img_h: null }, //1: from situations years ago.
+        { time: 3928, x: 47, y: 274, img: null, img_h: null }, //2: i'll replay every single
+        { time: 5336, x: 47, y: 301, img: null, img_h: null }, //3:  moment, searching for what
+        { time: 6202, x: 47, y: 330, img: null, img_h: null }, //4: I could've done wrong.
+        { time: 8886, x: 351, y: 134, img: null, img_h: null }, //5: Mabye if i had just been
+        { time: 10125, x: 351, y: 163, img: null, img_h: null }, //6: less
+        { time: 10396, x: 386, y: 163, img: null, img_h: null }, //7: needy
+        { time: 12023, x: 351, y: 249, img: null, img_h: null }, //8: Mabye if i were
+        { time: 13254, x: 351, y: 280, img: null, img_h: null }, //9: more
+        { time: 13483, x: 402, y: 277, img: null, img_h: null }, //10: put together
       ],
       flipAnimation: [],
     },

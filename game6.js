@@ -307,6 +307,16 @@ var game6 = function (p) {
           false
         );
       });
+
+      if (!gameVoiceoverOn) {
+        animateScreen(
+          screenSprite,
+          convoInfo[currentPart][currentConvoIndex].in,
+          convoInfo[currentPart][currentConvoIndex].out,
+          false
+        );
+      }
+
       // start initial animation: in production we trigger this when voiceover ends
 
       gameStarted = true;

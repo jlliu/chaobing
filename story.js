@@ -6,8 +6,8 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-// let currentSceneNum = 1;
-let currentSceneNum = 4;
+let currentSceneNum = 7;
+// let currentSceneNum = 7;
 let currentPartNum = 0;
 
 let storyMode = true;
@@ -61,7 +61,26 @@ var sketch1 = function (p) {
 
   let scene4_options = [];
 
+  let scene5_state = false;
+  let scene5_alpha = 0;
+
+  let scene7_options1 = [];
+  let scene7_options2 = [];
+  let scene7_currentOption1 = 0;
+  let scene7_currentOption2 = 0;
+
+  let startImg;
+
+  let openAnimation = [];
+
+  let titleFlipAnimation = [];
+
+  let gameStarted = false;
+
+  let introEnded = false;
+
   p.preload = function () {
+    plainBg = p.loadImage("assets/UI/storybook-bg.png");
     storyBg = p.loadImage("assets/UI/storybook-bg-case.png");
     base_outline = p.loadImage("assets/UI/base-outline.png");
     bingCursor = p.loadImage("assets/UI/cursors/bing-cursor.png");
@@ -73,6 +92,19 @@ var sketch1 = function (p) {
     button_r_down = p.loadImage("assets/UI/buttons/button-r-down.png");
     button_l_up = p.loadImage("assets/UI/buttons/button-l-up.png");
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
+    button_start = p.loadImage("assets/UI/buttons/button-start.png");
+    button_start_h = p.loadImage("assets/UI/buttons/button-start-h.png");
+
+    // Opening images...
+    startImg = p.loadImage("assets/img/scenes/intro/start.png");
+    for (let i = 0; i < 5; i++) {
+      openAnimation.push(p.loadImage(`assets/img/scenes/intro/open${i}.png`));
+    }
+    for (let i = 0; i < 4; i++) {
+      titleFlipAnimation.push(
+        p.loadImage(`assets/img/scenes/intro/flip${i}.png`)
+      );
+    }
 
     //Preload all of the story info. Iterate through each scene
     scenes.forEach(function (scene, sceneIndex) {
@@ -146,11 +178,27 @@ var sketch1 = function (p) {
         img_h: p.loadImage(`assets/img/scenes/scene4/part2/option${i}-h.png`),
       });
     }
-
-    console.log(scene1_options);
+    for (let i = 0; i < 5; i++) {
+      scene7_options1.push({
+        sound: scenes[6][2].voiceover_options1[i],
+        img: p.loadImage(`assets/img/scenes/scene7/part3/option${i}.png`),
+        img_h: p.loadImage(`assets/img/scenes/scene7/part3/option${i}-h.png`),
+      });
+    }
+    for (let i = 5; i < 12; i++) {
+      scene7_options2.push({
+        sound: scenes[6][2].voiceover_options2[i - 5],
+        img: p.loadImage(`assets/img/scenes/scene7/part3/option${i}.png`),
+        img_h: p.loadImage(`assets/img/scenes/scene7/part3/option${i}-h.png`),
+      });
+    }
   };
 
   p.setup = function () {
+    if (currentSceneNum > 1) {
+      gameStarted = true;
+      introEnded = true;
+    }
     // put setup code here
     p.pixelDensity(3);
     calculateCanvasDimensions(p);
@@ -159,6 +207,7 @@ var sketch1 = function (p) {
     p.noSmooth();
 
     setupNavigation();
+    setupIntro();
 
     cursor = new Cursor();
 
@@ -179,17 +228,22 @@ var sketch1 = function (p) {
     cursorState = "default";
     // p.background("green");
     if (storyMode) {
-      displayScene(currentSceneNum, currentPartNum);
+      if (!introEnded) {
+        displayIntro();
+      } else {
+        displayScene(currentSceneNum, currentPartNum);
+      }
     }
 
-    if (currentSceneNum == 8 && currentPartNum == 3) {
-      rightButton.interactive = false;
-    } else {
-      rightButton.display(p);
-    }
-
-    if (currentSceneNum != 1) {
-      leftButton.display(p);
+    if (introEnded) {
+      if (currentSceneNum == 8 && currentPartNum == 3) {
+        rightButton.interactive = false;
+      } else {
+        rightButton.display(p);
+      }
+      if (currentSceneNum != 1) {
+        leftButton.display(p);
+      }
     }
 
     cursor.display();
@@ -199,8 +253,80 @@ var sketch1 = function (p) {
   // -------------- SCENES --------------- //
   //////////////////////////////////////////
 
-  // Story 1
+  // INTRO
 
+  function setupIntro() {
+    introDisplacement = 0;
+    setInterval(function () {
+      introDisplacement++;
+    }, 500);
+    startButton = new Button(button_start, button_start_h, 241, 401);
+    startButton.addClickEvent(function () {
+      startButton.interactive = false;
+      gameStarted = true;
+      animateIntro();
+    });
+    introAnimationSprite = new Button(openAnimation[0], openAnimation[0], 0, 0);
+    introAnimationSprite.interactive = false;
+    titleFlipAnimationSprite = new Button(
+      titleFlipAnimation[0],
+      titleFlipAnimation[0],
+      0,
+      0
+    );
+    titleFlipAnimationSprite.interactive = false;
+    titleFlipAnimationSprite.visible = false;
+  }
+  function displayIntro() {
+    p.image(plainBg, 0, 0, canvasWidth, canvasHeight);
+    if (!gameStarted) {
+      drawImageToScale(startImg, 0, 0 - 3 - Math.sin(introDisplacement) * 3);
+      startButton.display();
+    } else {
+      introAnimationSprite.display();
+      titleFlipAnimationSprite.display();
+    }
+  }
+
+  function animateIntro() {
+    intervalAnimation(introAnimationSprite, openAnimation, 300, function () {
+      setTimeout(function () {
+        introAnimationSprite.visible = false;
+        titleFlipAnimationSprite.visible = true;
+        pageFlipSound.start();
+        intervalAnimation(
+          titleFlipAnimationSprite,
+          titleFlipAnimation,
+          200,
+          function () {
+            animateScene();
+            introEnded = true;
+          }
+        );
+      }, 2000);
+    });
+  }
+
+  function intervalAnimation(sprite, frames, interval, callback) {
+    currentlyAnimating = true;
+    let original = sprite.buttonDefault;
+    frames.forEach(function (img, index) {
+      setTimeout(function () {
+        timedAnimationIndex = (index + 1) % frames.length;
+        sprite.buttonDefault = img;
+      }, interval * index);
+    });
+    // Another for the last frame
+    setTimeout(function () {
+      currentlyAnimating = false;
+      // sprite.buttonDefault = original;
+      if (callback) {
+        callback();
+      }
+    }, interval * frames.length);
+  }
+
+  //  SCENES
   function displayScene(currentSceneNum, currentPartNum) {
     p.image(storyBg, 0, 0, canvasWidth, canvasHeight);
     if (!animatingFlip) {
@@ -213,14 +339,12 @@ var sketch1 = function (p) {
       phrases.forEach(function (phrase) {
         if (phrase.current) {
           if (phrase.button) {
-            phrase.button.buttonDefault = phrase.button.buttonHover;
-            phrase.button.display();
+            phrase.button.display(true);
           } else {
             drawImageToScale(phrase.img_h, phrase.x, phrase.y);
           }
         } else {
           if (phrase.button) {
-            phrase.button.buttonDefault = phrase.button.originalButtonDefault;
             phrase.button.display();
             if (!phrase.button.dontInteract) {
               phrase.button.interactive = true;
@@ -249,6 +373,11 @@ var sketch1 = function (p) {
         option.button.display();
       }
     });
+    if (scene5_state) {
+      scene5_alpha += 0.03;
+      p.fill(p.color(`rgba(0,0,0,${scene5_alpha})`));
+      p.rect(0, 0, canvasWidth, canvasHeight);
+    }
   }
 
   function setupScenes() {
@@ -284,7 +413,6 @@ var sketch1 = function (p) {
     let scene2_state = false;
 
     scene2_phrase.button.addClickEvent(function () {
-      console.log("click on scene2 button");
       // make sound
       scenes[1][1].voiceover_options[0].start();
       // todo: add popup
@@ -302,6 +430,8 @@ var sketch1 = function (p) {
       console.log("RESET GAME");
       currentSceneNum = 1;
       currentPartNum = 0;
+      gameStarted = false;
+      introEnded = false;
       resetScenes();
     });
     narrativeButtons.push(scene3_phrase.button);
@@ -316,11 +446,7 @@ var sketch1 = function (p) {
       scene4_phrase.x,
       scene4_phrase.y
     );
-    // scene4_options.push(scene4_phrase.button);
-    // create buttons for all the rest
-    // for (var i = 0 ; i < 9; i ++){
-    //   let button =
-    // }
+
     let optionPlacements = [
       { x: 341, y: 128 },
       { x: 341, y: 184 },
@@ -362,6 +488,58 @@ var sketch1 = function (p) {
     });
 
     narrativeButtons.push(scene4_phrase.button);
+
+    //setup scene 5
+
+    let scene5_phrase = scenes[4][1].phrases[4];
+    scene5_phrase.button = new Button(
+      scene5_phrase.img,
+      scene5_phrase.img_h,
+      scene5_phrase.x,
+      scene5_phrase.y
+    );
+    scene5_state = false;
+    scene5_phrase.button.addClickEvent(function () {
+      scene5_state = true;
+      scene5_phrase.button.dontInteract = true;
+    });
+
+    narrativeButtons.push(scene5_phrase.button);
+
+    //setup scene 7 !!
+    let scene7_phrase1 = scenes[6][2].phrases[7];
+    scene7_phrase1.button = new Button(
+      scene7_phrase1.img,
+      scene7_phrase1.img_h,
+      scene7_phrase1.x,
+      scene7_phrase1.y
+    );
+    scene7_phrase1.button.addClickEvent(function () {
+      scene7_currentOption1++;
+      let nextOption =
+        scene7_options1[scene7_currentOption1 % scene7_options1.length];
+
+      scene7_phrase1.button.buttonDefault = nextOption.img;
+      scene7_phrase1.button.buttonHover = nextOption.img_h;
+      nextOption.sound.start();
+    });
+    let scene7_phrase2 = scenes[6][2].phrases[10];
+    scene7_phrase2.button = new Button(
+      scene7_phrase2.img,
+      scene7_phrase2.img_h,
+      scene7_phrase2.x,
+      scene7_phrase2.y
+    );
+    scene7_phrase2.button.addClickEvent(function () {
+      scene7_currentOption2++;
+      let nextOption =
+        scene7_options2[scene7_currentOption2 % scene7_options2.length];
+      scene7_phrase2.button.buttonDefault = nextOption.img;
+      scene7_phrase2.button.buttonHover = nextOption.img_h;
+      nextOption.sound.start();
+    });
+    // keep this at end
+
     resetNarrativeButtons();
   }
 
@@ -371,24 +549,33 @@ var sketch1 = function (p) {
     scenes[0][0].phrases[4].button.buttonHover = scene1_options[0].img_h;
 
     //reset scene 4 stuff
-    scenes[3][1].phrases[3].button.dontInteract = false;
     scene4_options.forEach(function (option) {
       option.button.interactive = false;
       option.button.visible = false;
     });
-  }
+    //reset scene5
+    scene5_state = false;
+    scene5_alpha = 0;
 
-  function setupScene2() {}
+    //reset scene 7 stuff
+    scenes[6][2].phrases[7].button.buttonDefault = scene7_options1[0].img;
+    scenes[6][2].phrases[7].button.buttonHover = scene7_options1[0].img_h;
+    scenes[6][2].phrases[10].button.buttonDefault = scene7_options2[0].img;
+    scenes[6][2].phrases[10].button.buttonHover = scene7_options2[0].img_h;
+    scene7_currentOption1 = 0;
+    scene7_currentOption2 = 0;
+  }
 
   //Animates the story for a given Scene
   function animateScene() {
+    let cumulativeTime = 0;
+    // add a delay for when the game starts
+    if (currentSceneNum == 1) {
+      cumulativeTime = 1500;
+    }
     if (!currentlyAnimating) {
       currentlyAnimating = true;
-
       let parts = scenes[currentSceneNum - 1];
-      let cumulativeTime = 0;
-      console.log(currentSceneNum);
-      console.log(parts);
       let delay = 1000;
       parts.forEach(function (part, partIndex) {
         let phrases = part.phrases;
@@ -465,7 +652,7 @@ var sketch1 = function (p) {
 
     //Navigate forward
     rightButton.addClickEvent(function (e) {
-      if (storyMode) {
+      if (storyMode && introEnded) {
         document.dispatchEvent(navigateFwdEvent);
 
         harpTransitionInSound.start();
@@ -478,14 +665,14 @@ var sketch1 = function (p) {
         window.setTimeout(function () {
           storyCanvas.style.visibility = "hidden";
           storyMode = false;
-          resetScenes();
+          resetNarrativeButtons();
         }, 1000);
       }
     });
 
     //Navigate back
     leftButton.addClickEvent(function (e) {
-      if (storyMode && currentSceneNum !== 1) {
+      if (storyMode && currentSceneNum !== 1 && introEnded) {
         document.dispatchEvent(navigateBackEvent);
         harpTransitionInSound.start();
 
@@ -502,6 +689,7 @@ var sketch1 = function (p) {
           storyMode = false;
           currentSceneNum--;
           currentPartNum = scenes[currentSceneNum - 1].length - 1;
+          resetNarrativeButtons();
         }, 1000);
       }
     });
@@ -517,7 +705,6 @@ var sketch1 = function (p) {
         currentPartNum = 0;
         currentFlipImage = null;
         //make all buttons non interactive
-        resetNarrativeButtons();
         setTimeout(function () {
           currentlyAnimating = false;
           animateScene();
@@ -610,11 +797,15 @@ var sketch1 = function (p) {
       return this.mouseInBounds;
     }
 
-    display() {
+    display(showAsHover) {
       if (this.visible) {
         let imageToDraw = this.isMouseInBounds()
           ? this.buttonHover
           : this.buttonDefault;
+
+        if (showAsHover) {
+          imageToDraw = this.buttonHover;
+        }
 
         drawImageToScale(imageToDraw, this.x, this.y);
         if (this.mouseInBounds && this.interactive) {

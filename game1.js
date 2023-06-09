@@ -91,7 +91,7 @@ var game1 = function (p) {
 
   p.setup = function () {
     // put setup code here
-    p.pixelDensity(3);
+    p.pixelDensity(pixelDensity);
     calculateCanvasDimensions(p);
     game1canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     game1canvas.classList.add("gameCanvas");
@@ -554,6 +554,7 @@ var game1 = function (p) {
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
         document.dispatchEvent(resetNarrativeButtonsEvent);
+        document.dispatchEvent(navigateBackStoryEvent);
         window.setTimeout(function () {
           game1canvas.style.visibility = "hidden";
           storyMode = true;

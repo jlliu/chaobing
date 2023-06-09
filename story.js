@@ -6,9 +6,11 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 let currentlyAnimating = false;
-let currentSceneNum = 7;
+let currentSceneNum = 1;
 // let currentSceneNum = 7;
 let currentPartNum = 0;
+
+let pixelDensity = 2;
 
 let storyMode = true;
 
@@ -21,6 +23,7 @@ const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
 
 const navigateFwdStoryEvent = new Event("navigateFwdStory");
+const navigateBackStoryEvent = new Event("navigateBackStory");
 
 const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
 
@@ -200,7 +203,7 @@ var sketch1 = function (p) {
       introEnded = true;
     }
     // put setup code here
-    p.pixelDensity(3);
+    p.pixelDensity(pixelDensity);
     calculateCanvasDimensions(p);
     storyCanvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     storyCanvas.id = "story";
@@ -654,7 +657,7 @@ var sketch1 = function (p) {
     rightButton.addClickEvent(function (e) {
       if (storyMode && introEnded) {
         document.dispatchEvent(navigateFwdEvent);
-
+        p.noLoop();
         harpTransitionInSound.start();
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
         let canvasToShow = document.querySelectorAll(".game" + currentSceneNum);
@@ -675,7 +678,7 @@ var sketch1 = function (p) {
       if (storyMode && currentSceneNum !== 1 && introEnded) {
         document.dispatchEvent(navigateBackEvent);
         harpTransitionInSound.start();
-
+        p.noLoop();
         //Given the current scene #, fade in the game with the numer, fade out the current canvas
         let canvasToShow = document.querySelectorAll(
           ".game" + (currentSceneNum - 1)
@@ -695,6 +698,7 @@ var sketch1 = function (p) {
     });
 
     document.addEventListener("navigateFwdStory", (e) => {
+      p.loop();
       currentlyAnimating = true;
       let delay = 1000;
       let part = scenes[currentSceneNum - 1][currentPartNum];
@@ -710,6 +714,9 @@ var sketch1 = function (p) {
           animateScene();
         }, 1000);
       });
+    });
+    document.addEventListener("navigateBackStory", (e) => {
+      p.loop();
     });
     document.addEventListener("resetNarrativeButtons", (e) => {
       resetNarrativeButtons();

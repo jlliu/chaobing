@@ -144,7 +144,7 @@ var game3 = function (p) {
 
   p.setup = function () {
     // put setup code here
-    p.pixelDensity(3);
+    p.pixelDensity(pixelDensity);
     calculateCanvasDimensions(p);
     game3canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     game3canvas.classList.add("gameCanvas");
@@ -639,6 +639,7 @@ var game3 = function (p) {
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
+        document.dispatchEvent(navigateBackStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";
           storyMode = true;

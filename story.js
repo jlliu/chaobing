@@ -5,12 +5,12 @@ let storyCanvas;
 let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
-let currentlyAnimating = false;
-let currentSceneNum = 1;
+
+let currentSceneNum = 3;
 // let currentSceneNum = 7;
 let currentPartNum = 0;
 
-let pixelDensity = 2;
+let pixelDensity = 3;
 
 let storyMode = true;
 
@@ -81,6 +81,8 @@ var sketch1 = function (p) {
   let gameStarted = false;
 
   let introEnded = false;
+
+  let currentlyAnimating = false;
 
   p.preload = function () {
     plainBg = p.loadImage("assets/UI/storybook-bg.png");
@@ -656,6 +658,7 @@ var sketch1 = function (p) {
     //Navigate forward
     rightButton.addClickEvent(function (e) {
       if (storyMode && introEnded) {
+        currentlyAnimating = true;
         document.dispatchEvent(navigateFwdEvent);
         p.noLoop();
         harpTransitionInSound.start();
@@ -666,6 +669,7 @@ var sketch1 = function (p) {
         });
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
+          currentlyAnimating = false;
           storyCanvas.style.visibility = "hidden";
           storyMode = false;
           resetNarrativeButtons();
@@ -676,6 +680,7 @@ var sketch1 = function (p) {
     //Navigate back
     leftButton.addClickEvent(function (e) {
       if (storyMode && currentSceneNum !== 1 && introEnded) {
+        currentlyAnimating = true;
         document.dispatchEvent(navigateBackEvent);
         harpTransitionInSound.start();
         p.noLoop();
@@ -688,6 +693,7 @@ var sketch1 = function (p) {
         });
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
+          currentlyAnimating = false;
           storyCanvas.style.visibility = "hidden";
           storyMode = false;
           currentSceneNum--;

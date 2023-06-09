@@ -1,17 +1,14 @@
 const pianoSampler = new Tone.Sampler({
   urls: {
-    C4: "C4.mp3",
-    "D#4": "Ds4.mp3",
-    "F#4": "Fs4.mp3",
-    A4: "A4.mp3",
+    C4: "C4.wav",
+    "D#4": "Ds4.wav",
+    "F#4": "Fs4.wav",
+    A4: "A4.wav",
   },
-  baseUrl: "https://tonejs.github.io/audio/salamander/",
+  baseUrl: "assets/sound/piano/",
   release: 0.9,
 }).toDestination();
-
-// Tone.loaded().then(() => {
-// 	sampler.triggerAttackRelease(["Eb4", "G4", "Bb4"], 0.5);
-// })
+pianoSampler.volume.value = -10;
 
 Tone.context = new AudioContext({ sampleRate: 3000 });
 

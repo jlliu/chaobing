@@ -1,9 +1,9 @@
 const pianoSampler = new Tone.Sampler({
   urls: {
-    C4: "C4.wav",
-    "D#4": "Ds4.wav",
-    "F#4": "Fs4.wav",
-    A4: "A4.wav",
+    C4: "c4.wav",
+    "D#4": "ds4.wav",
+    "F#4": "fs4.wav",
+    A4: "a4.wav",
   },
   baseUrl: "assets/sound/piano/",
   release: 0.9,

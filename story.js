@@ -6,11 +6,11 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 
-let currentSceneNum = 3;
+let currentSceneNum = 1;
 // let currentSceneNum = 7;
 let currentPartNum = 0;
 
-let pixelDensity = 3;
+let pixelDensity = 1;
 
 let storyMode = true;
 

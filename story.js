@@ -27,7 +27,7 @@ const navigateBackStoryEvent = new Event("navigateBackStory");
 
 const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
 
-let gameVoiceoverOn = false;
+let gameVoiceoverOn = true;
 
 let narrativeButtons = [];
 

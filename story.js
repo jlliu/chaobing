@@ -6,8 +6,8 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 
-let currentSceneNum = 1;
-// let currentSceneNum = 7;
+// let currentSceneNum = 1;
+let currentSceneNum = 7;
 let currentPartNum = 0;
 
 let pixelDensity = 1;
@@ -17,7 +17,6 @@ let storyMode = true;
 let currentFlipImage = null;
 
 let pageFlipTime = 900;
-// pageFlipTime = 3000;
 
 const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
@@ -30,13 +29,6 @@ const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
 let gameVoiceoverOn = true;
 
 let narrativeButtons = [];
-
-// window.onload = function () {
-//   window.setInterval(function () {
-//     // window.frames.Displayframe.location.reload();
-//     window.location.assign(window.location.href);
-//   }, 10000);
-// };
 
 var sketch1 = function (p) {
   let canvasRatio = canvasWidth / canvasHeight;

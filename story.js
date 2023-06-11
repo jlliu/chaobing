@@ -6,8 +6,8 @@ let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
 
-// let currentSceneNum = 1;
-let currentSceneNum = 5;
+let currentSceneNum = 1;
+// let currentSceneNum = 5;
 let currentPartNum = 0;
 
 let pixelDensity = 1;

@@ -714,7 +714,6 @@ var game2 = function (p) {
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
-        document.dispatchEvent(resetNarrativeButtonsEvent);
         document.dispatchEvent(navigateBackStoryEvent);
         window.setTimeout(function () {
           thisCanvas.style.visibility = "hidden";

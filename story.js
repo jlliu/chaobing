@@ -7,7 +7,7 @@ let canvasWidth = 640;
 let canvasHeight = 480;
 
 let currentSceneNum = 1;
-// let currentSceneNum = 5;
+// let currentSceneNum = 4;
 let currentPartNum = 0;
 
 let pixelDensity = 1;
@@ -29,6 +29,8 @@ const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
 const restartGameEvent = new Event("restartGame");
 
 let gameVoiceoverOn = true;
+
+let pressSpaceVoiceover = false;
 
 let narrativeButtons = [];
 
@@ -204,6 +206,7 @@ var sketch1 = function (p) {
     if (currentSceneNum > 1) {
       gameStarted = true;
       introEnded = true;
+      hideTitle();
     }
     // put setup code here
     p.pixelDensity(pixelDensity);
@@ -405,12 +408,14 @@ var sketch1 = function (p) {
     let scene1_currentNum = 0;
 
     scene1_phrase.button.addClickEvent(function () {
-      // scene1_button.
-      scene1_currentNum++;
-      let index = scene1_currentNum % scene1_options.length;
-      scene1_phrase.button.buttonDefault = scene1_options[index].img;
-      scene1_phrase.button.buttonHover = scene1_options[index].img_h;
-      scene1_options[index].sound.start();
+      if (currentSceneNum == 1) {
+        // scene1_button.
+        scene1_currentNum++;
+        let index = scene1_currentNum % scene1_options.length;
+        scene1_phrase.button.buttonDefault = scene1_options[index].img;
+        scene1_phrase.button.buttonHover = scene1_options[index].img_h;
+        scene1_options[index].sound.start();
+      }
     });
 
     // Setup scene 2
@@ -425,7 +430,10 @@ var sketch1 = function (p) {
 
     scene2_phrase.button.addClickEvent(function () {
       // make sound
-      scenes[1][1].voiceover_options[0].start();
+      if (currentSceneNum == 2) {
+        scenes[1][1].voiceover_options[0].start();
+      }
+
       // todo: add popup
     });
     narrativeButtons.push(scene2_phrase.button);
@@ -438,8 +446,9 @@ var sketch1 = function (p) {
       scene3_phrase.y
     );
     scene3_phrase.button.addClickEvent(function () {
-      console.log("RESET GAME");
-      resetGame();
+      if (currentSceneNum == 3) {
+        resetGame();
+      }
     });
     narrativeButtons.push(scene3_phrase.button);
 
@@ -488,10 +497,12 @@ var sketch1 = function (p) {
       });
     });
     scene4_phrase.button.addClickEvent(function () {
-      scene4_options[0].sound.start();
-      scene4_options[0].button.visible = true;
-      scene4_options[0].button.interactive = true;
-      scene4_phrase.button.dontInteract = true;
+      if (currentSceneNum == 4) {
+        scene4_options[0].sound.start();
+        scene4_options[0].button.visible = true;
+        scene4_options[0].button.interactive = true;
+        scene4_phrase.button.dontInteract = true;
+      }
     });
 
     narrativeButtons.push(scene4_phrase.button);
@@ -507,8 +518,10 @@ var sketch1 = function (p) {
     );
     scene5_state = false;
     scene5_phrase.button.addClickEvent(function () {
-      scene5_state = true;
-      scene5_phrase.button.dontInteract = true;
+      if (currentSceneNum == 5) {
+        scene5_state = true;
+        scene5_phrase.button.dontInteract = true;
+      }
     });
 
     narrativeButtons.push(scene5_phrase.button);
@@ -522,13 +535,15 @@ var sketch1 = function (p) {
       scene7_phrase1.y
     );
     scene7_phrase1.button.addClickEvent(function () {
-      scene7_currentOption1++;
-      let nextOption =
-        scene7_options1[scene7_currentOption1 % scene7_options1.length];
+      if (currentSceneNum == 7) {
+        scene7_currentOption1++;
+        let nextOption =
+          scene7_options1[scene7_currentOption1 % scene7_options1.length];
 
-      scene7_phrase1.button.buttonDefault = nextOption.img;
-      scene7_phrase1.button.buttonHover = nextOption.img_h;
-      nextOption.sound.start();
+        scene7_phrase1.button.buttonDefault = nextOption.img;
+        scene7_phrase1.button.buttonHover = nextOption.img_h;
+        nextOption.sound.start();
+      }
     });
     let scene7_phrase2 = scenes[6][2].phrases[10];
     scene7_phrase2.button = new Button(
@@ -538,15 +553,15 @@ var sketch1 = function (p) {
       scene7_phrase2.y
     );
     scene7_phrase2.button.addClickEvent(function () {
-      scene7_currentOption2++;
-      let nextOption =
-        scene7_options2[scene7_currentOption2 % scene7_options2.length];
-      scene7_phrase2.button.buttonDefault = nextOption.img;
-      scene7_phrase2.button.buttonHover = nextOption.img_h;
-      nextOption.sound.start();
+      if (currentSceneNum == 7) {
+        scene7_currentOption2++;
+        let nextOption =
+          scene7_options2[scene7_currentOption2 % scene7_options2.length];
+        scene7_phrase2.button.buttonDefault = nextOption.img;
+        scene7_phrase2.button.buttonHover = nextOption.img_h;
+        nextOption.sound.start();
+      }
     });
-    narrativeButtons.push(scene7_phrase1.button);
-    narrativeButtons.push(scene7_phrase2.button);
     // keep this at end
 
     let scene8_phrase = scenes[7][3].phrases[1];
@@ -557,29 +572,31 @@ var sketch1 = function (p) {
       scene8_phrase.y
     );
     scene8_phrase.button.addClickEvent(function () {
-      console.log("transitioning to ending");
-      storyCanvas.style.display = "none";
-      let video = document.querySelector("video");
-      video.style.display = "block";
-      video.play();
-      video.addEventListener("ended", function () {
-        document.dispatchEvent(navigateFwdEvent);
-        let endCanvas = document.querySelector(".endCanvas");
-        endCanvas.style.visibility = "visible";
-      });
+      if (currentSceneNum == 8) {
+        storyCanvas.style.display = "none";
+        let video = document.querySelector("video");
+        video.style.display = "block";
+        video.play();
+        video.addEventListener("ended", function () {
+          document.dispatchEvent(navigateFwdEvent);
+          let endCanvas = document.querySelector(".endCanvas");
+          endCanvas.style.visibility = "visible";
+        });
+      }
     });
-
-    narrativeButtons.push(scene8_phrase.button);
-
-    resetNarrativeButtons();
   }
 
   function resetScenes() {
+    narrativeButtons.forEach(function (button) {
+      button.interactive = false;
+      button.dontInteract = false;
+    });
     //reset scene 1 stuff
     scenes[0][0].phrases[4].button.buttonDefault = scene1_options[0].img;
     scenes[0][0].phrases[4].button.buttonHover = scene1_options[0].img_h;
 
     //reset scene 4 stuff
+
     scene4_options.forEach(function (option) {
       option.button.interactive = false;
       option.button.visible = false;
@@ -696,10 +713,10 @@ var sketch1 = function (p) {
         });
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
+          resetScenes();
           currentlyAnimating = false;
           storyCanvas.style.visibility = "hidden";
           storyMode = false;
-          resetNarrativeButtons();
         }, 1000);
       }
     });
@@ -720,17 +737,18 @@ var sketch1 = function (p) {
         });
         storyCanvas.style.opacity = 0;
         window.setTimeout(function () {
+          resetScenes();
           currentlyAnimating = false;
           storyCanvas.style.visibility = "hidden";
           storyMode = false;
           currentSceneNum--;
           currentPartNum = scenes[currentSceneNum - 1].length - 1;
-          resetNarrativeButtons();
         }, 1000);
       }
     });
 
     document.addEventListener("navigateFwdStory", (e) => {
+      resetScenes();
       p.loop();
       currentlyAnimating = true;
       let delay = 1000;
@@ -749,10 +767,8 @@ var sketch1 = function (p) {
       });
     });
     document.addEventListener("navigateBackStory", (e) => {
+      resetScenes();
       p.loop();
-    });
-    document.addEventListener("resetNarrativeButtons", (e) => {
-      resetNarrativeButtons();
     });
 
     restartButton.addClickEvent(function () {
@@ -763,16 +779,6 @@ var sketch1 = function (p) {
       console.log("restart game from event listener");
       resetGame();
     });
-  }
-
-  function resetNarrativeButtons() {
-    //make all buttons non interactive
-    narrativeButtons.forEach(function (button) {
-      button.interactive = false;
-      button.dontInteract = false;
-    });
-    //reset scenes while we are at it
-    resetScenes();
   }
 
   function resetGame() {
@@ -879,11 +885,11 @@ var sketch1 = function (p) {
   }
 
   p.keyPressed = function () {
-    // if (p.keyCode === 32) {
-    //   console.log("press space");
-    //   // timedAnimation(scene1.timings);
-    //   animateScene();
-    // }
+    if (p.keyCode === 32 && pressSpaceVoiceover) {
+      console.log("press space");
+      // timedAnimation(scene1.timings);
+      animateScene();
+    }
   };
 
   // HELPERS

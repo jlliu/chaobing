@@ -879,11 +879,11 @@ var sketch1 = function (p) {
   }
 
   p.keyPressed = function () {
-    if (p.keyCode === 32) {
-      console.log("press space");
-      // timedAnimation(scene1.timings);
-      animateScene();
-    }
+    // if (p.keyCode === 32) {
+    //   console.log("press space");
+    //   // timedAnimation(scene1.timings);
+    //   animateScene();
+    // }
   };
 
   // HELPERS

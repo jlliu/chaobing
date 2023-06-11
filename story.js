@@ -202,13 +202,6 @@ var sketch1 = function (p) {
 
     cursor = new Cursor();
 
-    storyCanvas.addEventListener("mousemove", function (e) {
-      mouse_x = e.offsetX;
-      mouse_y = e.offsetY;
-    });
-    // setupScene2();
-    // animateScene();
-
     setupScenes();
     hideTitle();
   };
@@ -218,7 +211,7 @@ var sketch1 = function (p) {
     mouse_y = p.mouseY;
     //Cursor is default unless otherwise specified
     cursorState = "default";
-    // p.background("green");
+
     if (storyMode) {
       if (!introEnded) {
         displayIntro();

@@ -12,6 +12,8 @@ let canvasWidth = 640;
 let canvasHeight = 480;
 let scaleRatio = 1;
 
+let pixelDensity = 1;
+
 function calculateDate() {
   let fullDate = new Date();
   let month = fullDate.getMonth();

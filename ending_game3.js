@@ -142,7 +142,7 @@ var game3 = function (p) {
 
   p.setup = function () {
     // put setup code here
-    p.pixelDensity(3);
+    p.pixelDensity(pixelDensity);
     // calculateCanvasDimensions(p);
     game3canvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     game3canvas.classList.add("gameCanvas");

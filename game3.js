@@ -643,7 +643,6 @@ var game3 = function (p) {
     leftButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         harpTransitionOutSound.start();
-        document.dispatchEvent(resetNarrativeButtonsEvent);
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;

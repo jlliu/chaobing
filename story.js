@@ -188,7 +188,6 @@ var sketch1 = function (p) {
     if (currentSceneNum > 1) {
       gameStarted = true;
       introEnded = true;
-      hideTitle();
     }
     // put setup code here
     p.pixelDensity(pixelDensity);
@@ -211,6 +210,7 @@ var sketch1 = function (p) {
     // animateScene();
 
     setupScenes();
+    hideTitle();
   };
 
   p.draw = function () {

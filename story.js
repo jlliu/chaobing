@@ -1,23 +1,19 @@
-// save this file as sketch.js
-// Sketch One
+//Configuration for dev
+let gameVoiceoverOn = true;
+let pressSpaceVoiceover = false;
+let currentSceneNum = 1;
+let currentPartNum = 0;
+// let currentSceneNum = 4;
 
-let storyCanvas;
+//Config Screen
 let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
-
-let currentSceneNum = 1;
-// let currentSceneNum = 4;
-let currentPartNum = 0;
-
 let pixelDensity = 1;
 
 let storyMode = true;
 
-let currentFlipImage = null;
-
-let pageFlipTime = 900;
-
+// Events
 const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
 
@@ -28,11 +24,7 @@ const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
 
 const restartGameEvent = new Event("restartGame");
 
-let gameVoiceoverOn = true;
-
-let pressSpaceVoiceover = false;
-
-let narrativeButtons = [];
+let storyCanvas;
 
 var sketch1 = function (p) {
   let canvasRatio = canvasWidth / canvasHeight;
@@ -40,21 +32,27 @@ var sketch1 = function (p) {
   let mouse_y;
   let rightButton;
   let leftButton;
+  let restartButton;
   let cursorState = "default";
   let sceneState = "story";
   let cursor;
 
   let timedAnimationIndex = 0;
+  let currentlyAnimating = false;
   let currentlyDragging = false;
-
   let animatingFlip = false;
-
   let clickedObjects = [];
+  let pageFlipTime = 900;
+  let currentFlipImage = null;
 
-  // Story text is a list of lists. The entries are image assets for the story things
-  // 0: [[img1, img2]]
-  // 1: [[img1],[img2]]
-  let story_text = [];
+  // Variables for Scenes
+  let startImg;
+  let openAnimation = [];
+  let titleFlipAnimation = [];
+  let gameStarted = false;
+  let introEnded = false;
+  let introDisplacement = 0;
+  let narrativeButtons = [];
 
   let scene1_options = [];
 
@@ -67,22 +65,6 @@ var sketch1 = function (p) {
   let scene7_options2 = [];
   let scene7_currentOption1 = 0;
   let scene7_currentOption2 = 0;
-
-  let startImg;
-
-  let openAnimation = [];
-
-  let titleFlipAnimation = [];
-
-  let gameStarted = false;
-
-  let introEnded = false;
-
-  let introDisplacement = 0;
-
-  let currentlyAnimating = false;
-
-  let restartButton;
 
   p.preload = function () {
     plainBg = p.loadImage("assets/UI/storybook-bg.png");

@@ -680,7 +680,7 @@ var sketch1 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
-    restartButton = new Button(restart, restart_h, 20, 20);
+    restartButton = new Button(restart, restart_h, 22, 20);
 
     //Navigate forward
     rightButton.addClickEvent(function (e) {

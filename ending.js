@@ -62,6 +62,11 @@ dateSpan.innerHTML = calculateDate();
 //   textarea.focus();
 // }
 
+let restartButton = document.querySelector("#restartButton");
+restartButton.addEventListener("click", function () {
+  location.href = "/";
+});
+
 windows.forEach(function (windowEl) {
   windowEl.style.zIndex = windowEl.dataset.zindex;
   let windowbar = windowEl.querySelector(".window-bar");

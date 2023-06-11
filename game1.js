@@ -9,6 +9,7 @@ var game1 = function (p) {
   let mouse_y;
   let rightButton;
   let leftButton;
+  let restartButton;
   let cursor;
   let cursorState = "default";
 
@@ -42,6 +43,9 @@ var game1 = function (p) {
     button_r_down = p.loadImage("assets/UI/buttons/button-r-down.png");
     button_l_up = p.loadImage("assets/UI/buttons/button-l-up.png");
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
+
+    restart = p.loadImage("assets/UI/buttons/restart.png");
+    restart_h = p.loadImage("assets/UI/buttons/restart-h.png");
 
     //game 1 assets
     g1_bg = p.loadImage("assets/img/game1/bg.png");
@@ -291,6 +295,7 @@ var game1 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
+    restartButton.display();
   }
 
   function resetPositions() {
@@ -530,6 +535,15 @@ var game1 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
+
+    restartButton = new Button(restart, restart_h, 20, 20);
+
+    restartButton.addClickEvent(function () {
+      if (!currentlyAnimating) {
+        document.dispatchEvent(restartGameEvent);
+      }
+    });
+
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         // currentSceneNum++;

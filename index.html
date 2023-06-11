@@ -9,7 +9,6 @@
   <script src="lib/p5.min.js"></script>
   <script src="lib/tone.js"></script>
 
-  <!-- <script src="../addons/p5.sound.js"></script> -->
   <script src="scenesInfo.js"></script>
   <script src="audio.js" defer></script>
   <script src="story.js" defer></script>
@@ -23,12 +22,13 @@
   <script src="game5.js" defer></script>
   <script src="game6.js" defer></script>
   <script src="game7.js" defer></script>
-  <!-- <script src="sketch2.js" defer></script> -->
-  <!-- <script src="game1.js"></script> -->
+  <script src="sketch_end.js" defer></script>
+
 </head>
 
 <body>
   <main>
+    <img src="assets/UI/title.png" class="titleImg"/>
     <div id="canvas-story"></div>
     <div id="canvas-game1"></div>
     <div id="canvas-game2"></div>
@@ -38,6 +38,16 @@
     <div id="canvas-game5"></div>
     <div id="canvas-game6"></div>
     <div id="canvas-game7"></div>
+    <video>
+      <source src="/assets/video/ending.mp4" type="video/mp4">
+      <track
+      label="English"
+      kind="captions"
+      srclang="en"
+      src="/assets/video/captions.vtt"
+      default />
+    </video>
+    <div id="canvas-end"></div>
   </main>
   <!-- <audio id="harpTransitionIn" src="assets/sound/harpTransitionIn.wav"></audio>
   <audio id="harpTransitionOut" src="assets/sound/harpTransitionOut.wav"></audio>

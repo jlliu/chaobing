@@ -10,6 +10,7 @@ var game6 = function (p) {
   let mouse_y;
   let rightButton;
   let leftButton;
+  let restartButton;
   let cursor;
   let cursorState = "default";
   let sceneState = "story";
@@ -369,6 +370,7 @@ var game6 = function (p) {
 
     rightButton.display();
     leftButton.display();
+    restartButton.display();
   }
 
   // CLASSES
@@ -597,6 +599,13 @@ var game6 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
+    restartButton = new Button(restart, restart_h, 20, 20);
+
+    restartButton.addClickEvent(function () {
+      if (!currentlyAnimating) {
+        document.dispatchEvent(restartGameEvent);
+      }
+    });
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         harpTransitionOutSound.start();

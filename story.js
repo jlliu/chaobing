@@ -7,7 +7,7 @@ let canvasWidth = 640;
 let canvasHeight = 480;
 
 // let currentSceneNum = 1;
-let currentSceneNum = 7;
+let currentSceneNum = 5;
 let currentPartNum = 0;
 
 let pixelDensity = 1;
@@ -25,6 +25,8 @@ const navigateFwdStoryEvent = new Event("navigateFwdStory");
 const navigateBackStoryEvent = new Event("navigateBackStory");
 
 const resetNarrativeButtonsEvent = new Event("resetNarrativeButtons");
+
+const restartGameEvent = new Event("restartGame");
 
 let gameVoiceoverOn = true;
 
@@ -74,7 +76,11 @@ var sketch1 = function (p) {
 
   let introEnded = false;
 
+  let introDisplacement = 0;
+
   let currentlyAnimating = false;
+
+  let restartButton;
 
   p.preload = function () {
     plainBg = p.loadImage("assets/UI/storybook-bg.png");
@@ -91,6 +97,9 @@ var sketch1 = function (p) {
     button_l_down = p.loadImage("assets/UI/buttons/button-l-down.png");
     button_start = p.loadImage("assets/UI/buttons/button-start.png");
     button_start_h = p.loadImage("assets/UI/buttons/button-start-h.png");
+
+    restart = p.loadImage("assets/UI/buttons/restart.png");
+    restart_h = p.loadImage("assets/UI/buttons/restart-h.png");
 
     // Opening images...
     startImg = p.loadImage("assets/img/scenes/intro/start.png");
@@ -201,6 +210,7 @@ var sketch1 = function (p) {
     calculateCanvasDimensions(p);
     storyCanvas = p.createCanvas(canvasWidth, canvasHeight).elt;
     storyCanvas.id = "story";
+
     p.noSmooth();
 
     setupNavigation();
@@ -236,11 +246,12 @@ var sketch1 = function (p) {
       if (currentSceneNum == 8 && currentPartNum == 3) {
         rightButton.interactive = false;
       } else {
-        rightButton.display(p);
+        rightButton.display();
       }
       if (currentSceneNum != 1) {
-        leftButton.display(p);
+        leftButton.display();
       }
+      restartButton.display();
     }
 
     cursor.display();
@@ -253,7 +264,6 @@ var sketch1 = function (p) {
   // INTRO
 
   function setupIntro() {
-    introDisplacement = 0;
     setInterval(function () {
       introDisplacement++;
     }, 500);
@@ -425,11 +435,7 @@ var sketch1 = function (p) {
     );
     scene3_phrase.button.addClickEvent(function () {
       console.log("RESET GAME");
-      currentSceneNum = 1;
-      currentPartNum = 0;
-      gameStarted = false;
-      introEnded = false;
-      resetScenes();
+      resetGame();
     });
     narrativeButtons.push(scene3_phrase.button);
 
@@ -535,7 +541,31 @@ var sketch1 = function (p) {
       scene7_phrase2.button.buttonHover = nextOption.img_h;
       nextOption.sound.start();
     });
+    narrativeButtons.push(scene7_phrase1.button);
+    narrativeButtons.push(scene7_phrase2.button);
     // keep this at end
+
+    let scene8_phrase = scenes[7][3].phrases[1];
+    scene8_phrase.button = new Button(
+      scene8_phrase.img,
+      scene8_phrase.img_h,
+      scene8_phrase.x,
+      scene8_phrase.y
+    );
+    scene8_phrase.button.addClickEvent(function () {
+      console.log("transitioning to ending");
+      storyCanvas.style.display = "none";
+      let video = document.querySelector("video");
+      video.style.display = "block";
+      video.play();
+      video.addEventListener("ended", function () {
+        document.dispatchEvent(navigateFwdEvent);
+        let endCanvas = document.querySelector(".endCanvas");
+        endCanvas.style.visibility = "visible";
+      });
+    });
+
+    narrativeButtons.push(scene8_phrase.button);
 
     resetNarrativeButtons();
   }
@@ -646,6 +676,7 @@ var sketch1 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
+    restartButton = new Button(restart, restart_h, 20, 20);
 
     //Navigate forward
     rightButton.addClickEvent(function (e) {
@@ -719,6 +750,15 @@ var sketch1 = function (p) {
     document.addEventListener("resetNarrativeButtons", (e) => {
       resetNarrativeButtons();
     });
+
+    restartButton.addClickEvent(function () {
+      resetGame();
+    });
+
+    document.addEventListener("restartGame", (e) => {
+      console.log("restart game from event listener");
+      resetGame();
+    });
   }
 
   function resetNarrativeButtons() {
@@ -729,6 +769,20 @@ var sketch1 = function (p) {
     });
     //reset scenes while we are at it
     resetScenes();
+  }
+
+  function resetGame() {
+    // console.log("reset game function");
+    // introDisplacement = 0;
+    // storyMode = true;
+    // startButton.interactive = true;
+    // currentSceneNum = 1;
+    // currentPartNum = 0;
+    // gameStarted = false;
+    // introEnded = false;
+    // currentlyAnimating = false;
+    // resetScenes();
+    location.href = location.href;
   }
 
   // CLASSES

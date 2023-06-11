@@ -385,11 +385,11 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6024,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: but lately
-        { time: 583, x: 67, y: 152, img: null, img_h: null }, //1: ive been hitting a wall
-        { time: 1488, x: 342, y: 107, img: null, img_h: null }, //2: with proving myself
-        { time: 3091, x: 342, y: 150, img: null, img_h: null }, //3: playing it safe
-        { time: 4478, x: 342, y: 150, img: null, img_h: null }, //4: and doing things correctly
+        { time: 0, x: 50, y: 94, img: null, img_h: null }, //0: but lately
+        { time: 583, x: 50, y: 121, img: null, img_h: null }, //1: ive been hitting a wall
+        { time: 1488, x: 352, y: 269, img: null, img_h: null }, //2: with proving myself
+        { time: 3091, x: 352, y: 296, img: null, img_h: null }, //3: playing it safe
+        { time: 4478, x: 352, y: 323, img: null, img_h: null }, //4: and doing things correctly
       ],
       flipAnimation: [],
     },
@@ -403,11 +403,11 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6575,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i imagine life will
-        { time: 1282, x: 67, y: 152, img: null, img_h: null }, //1: fall into palace
-        { time: 2564, x: 67, y: 179, img: null, img_h: null }, //2: once i do the
-        { time: 3098, x: 67, y: 250, img: null, img_h: null }, //3: next big thing
-        { time: 4823, x: 67, y: 270, img: null, img_h: null }, //4: but ill end up where i started
+        { time: 0, x: 50, y: 91, img: null, img_h: null }, //0: i imagine life will
+        { time: 1282, x: 50, y: 116, img: null, img_h: null }, //1: fall into palace
+        { time: 2564, x: 50, y: 141, img: null, img_h: null }, //2: once i do the
+        { time: 3098, x: 50, y: 166, img: null, img_h: null }, //3: next big thing
+        { time: 4823, x: 364, y: 326, img: null, img_h: null }, //4: but ill end up where i started
       ],
       flipAnimation: [],
     },
@@ -422,11 +422,11 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 6989,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i go through the motions
-        { time: 1382, x: 67, y: 152, img: null, img_h: null }, //1: but it still feels like
-        { time: 2254, x: 67, y: 179, img: null, img_h: null }, //2: i cant really access
-        { time: 3764, x: 67, y: 250, img: null, img_h: null }, //3:  the whole living a life thing
-        { time: 5675, x: 67, y: 270, img: null, img_h: null }, //4: that others seem to do
+        { time: 0, x: 50, y: 103, img: null, img_h: null }, //0: i go through the motions
+        { time: 1382, x: 136, y: 314, img: null, img_h: null }, //1: but it still feels like
+        { time: 2254, x: 347, y: 103, img: null, img_h: null }, //2: i cant really access
+        { time: 3764, x: 347, y: 129, img: null, img_h: null }, //3:  the whole living a life thing
+        { time: 5675, x: 395, y: 328, img: null, img_h: null }, //4: that others seem to do
       ],
       flipAnimation: [],
     },
@@ -439,9 +439,9 @@ let scenes = [
       //populate phrases with objects of time and also images for each phrase, and locations
       length: 2804,
       phrases: [
-        { time: 0, x: 67, y: 115, img: null, img_h: null }, //0: i need to just
-        { time: 719, x: 67, y: 152, img: null, img_h: null }, //1:move forward
-        { time: 1695, x: 67, y: 179, img: null, img_h: null }, //2: but i dont nokw what to do
+        { time: 0, x: 58, y: 100, img: null, img_h: null }, //0: i need to just
+        { time: 719, x: 171, y: 98, img: null, img_h: null }, //1: move forward
+        { time: 1695, x: 347, y: 320, img: null, img_h: null }, //2: but i dont nokw what to do
       ],
       flipAnimation: [],
     },

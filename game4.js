@@ -12,6 +12,7 @@ var game4 = function (p) {
   let mouse_y;
   let rightButton;
   let leftButton;
+  let restartButton;
   let cursor;
   let cursorState = "default";
   let sceneState = "story";
@@ -320,6 +321,7 @@ var game4 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
+    restartButton.display();
   }
 
   // CLASSES
@@ -610,6 +612,13 @@ var game4 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
+    restartButton = new Button(restart, restart_h, 20, 20);
+
+    restartButton.addClickEvent(function () {
+      if (!currentlyAnimating) {
+        document.dispatchEvent(restartGameEvent);
+      }
+    });
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         harpTransitionOutSound.start();
@@ -740,6 +749,8 @@ var game4a = function (p) {
 
   let gameEntered = false;
 
+  let case_base;
+
   p.preload = function () {
     //Preload whatever needs to be preloaded
     case_base = p.loadImage("assets/img/game4/case-base.png");
@@ -865,7 +876,9 @@ var game4a = function (p) {
   p.windowResized = function () {
     calculateCanvasDimensions();
     p.resizeCanvas(canvasWidth, canvasHeight);
-    drawImageToScale(case_base, 0, 0);
+    if (case_base) {
+      drawImageToScale(case_base, 0, 0);
+    }
   };
 
   function drawImageToScale(img, x, y) {

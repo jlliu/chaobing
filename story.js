@@ -295,6 +295,10 @@ var sketch1 = function (p) {
     }
   }
 
+  function hideTitle() {
+    document.querySelector(".titleImg").style.visibility = "hidden";
+  }
+
   function animateIntro() {
     intervalAnimation(introAnimationSprite, openAnimation, 300, function () {
       setTimeout(function () {

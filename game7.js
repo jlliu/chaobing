@@ -111,6 +111,7 @@ var game7 = function (p) {
     });
     keyboardSprite = new Button(keyboard, keyboard_h, 153, 349);
     keyboardSprite.addClickEvent(function () {
+      startTicks = true;
       let currentPrompt = prompts[currentPromptIndex];
       // let increment = Math.floor(Math.random() * 3);
       clickNum++;
@@ -160,14 +161,14 @@ var game7 = function (p) {
       gameStarted = true;
       if (gameVoiceoverOn) {
         playGameVoiceover(game7_voiceover, 17, function () {
-          startTicks = true;
+          // startTicks = true;
         });
         setTimeout(function () {
           displayActualGame = true;
         }, 10900);
       } else {
         displayActualGame = true;
-        startTicks = true;
+        // startTicks = true;
       }
     }
     if (startTicks) {

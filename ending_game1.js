@@ -93,7 +93,6 @@ var game1 = function (p) {
 
     thisCanvas.addEventListener("click", function () {
       if (sliceNum * sliceWidth > currentImage.width - 30) {
-        console.log("slicing done");
         sliceNum = 0;
         totalWidth = currentImage.width;
       } else {
@@ -128,7 +127,6 @@ var game1 = function (p) {
     let remaining = currentImage.width;
     let dy = p.height / 2 - currentImage.height / 2;
     for (var i = 0; i < sliceNum; i++) {
-      // console.log("drawing  a slice");
       let xRange = [i * sliceWidth, (i + 1) * sliceWidth];
 
       let dx = p.width / 2 - totalWidth / 2 + i * (sliceWidth + gap);

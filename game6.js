@@ -299,7 +299,6 @@ var game6 = function (p) {
   // Game 1
   function displayGame() {
     if (gameEntered && !gameStarted) {
-      console.log("GAME ENTERED!");
       playGameVoiceover(game6_voiceover, 11, function () {
         animateScreen(
           screenSprite,

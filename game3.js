@@ -244,7 +244,6 @@ var game3 = function (p) {
   // Game 1
   function displayGame() {
     if (gameEntered && !gameStarted) {
-      console.log("GAME ENTERED!");
       gameStarted = true;
       playGameVoiceover(game3_voiceover, 15, function () {
         playSequence(sequences[0]);
@@ -499,11 +498,10 @@ var game3 = function (p) {
       //Check if this was the correct key for the current sequence
       let correctNote = sequences[currentSequence][sequenceIndex].note;
       if (correctNote == this.note || gameDone) {
-        console.log("CORRECT");
+        //Correct
         //Progress sequence, if applicable
         if (sequenceIndex == sequences[currentSequence].length - 1) {
           if (currentSequence == sequences.length - 1) {
-            console.log("game done!");
             // _this.pressed = false;
             // currentlyAnimating = false;
             setTimeout(function () {
@@ -529,7 +527,7 @@ var game3 = function (p) {
           }, animationDelay);
         }
       } else {
-        console.log("INCORRECT");
+        //Incorrect
         numberWrong++;
         currentlyAnimating = true;
         this.wrong = true;

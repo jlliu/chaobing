@@ -272,7 +272,6 @@ var game1 = function (p) {
   // Game 1
   function displayGame() {
     if (gameEntered && !gameStarted) {
-      console.log("GAME ENTERED!");
       gameStarted = true;
       playGameVoiceover(game1_voiceover, 16);
     }

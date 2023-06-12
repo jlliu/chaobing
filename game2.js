@@ -188,7 +188,6 @@ var game2 = function (p) {
           changeQuestion(corrections);
           flipAnimation();
         } else {
-          console.log("game done!");
           gameFinished();
         }
       }
@@ -196,7 +195,6 @@ var game2 = function (p) {
 
     let progressCorrectionCorrect = function () {
       if (corrections.length == 0) {
-        console.log("game done!");
         gameFinished();
       } else {
         currentQuestionNum = currentQuestionNum % corrections.length;
@@ -344,7 +342,6 @@ var game2 = function (p) {
   // Game 1
   function displayGame() {
     if (gameEntered && !gameStarted) {
-      console.log("GAME ENTERED!");
       gameStarted = true;
       playGameVoiceover(game2_voiceover, 13, function () {
         initializeTimer();

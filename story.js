@@ -9,7 +9,8 @@ let currentPartNum = 0;
 let scaleRatio = 1;
 let canvasWidth = 640;
 let canvasHeight = 480;
-let pixelDensity = 1;
+
+let pixelDensity = 3;
 
 let storyMode = true;
 

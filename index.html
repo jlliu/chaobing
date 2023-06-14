@@ -49,13 +49,32 @@
     </video>
     <div id="canvas-end"></div>
   </main>
-  <!-- <audio id="harpTransitionIn" src="assets/sound/harpTransitionIn.wav"></audio>
-  <audio id="harpTransitionOut" src="assets/sound/harpTransitionOut.wav"></audio>
-  <audio id="pageFlip" src="assets/sound/pageFlip.wav"></audio>
-  <audio id="boing" src="assets/sound/boing.mp3"></audio>
-  <audio id="toySqueak" src="assets/sound/toySqueak.wav"></audio>
-  <audio id="burn" src="assets/sound/burn.wav"></audio>
-  <audio id="running" src="assets/sound/running.wav"></audio> -->
-</body>
+  <!-- <script>
+    let time = 1000;
+    const restartButtonLoading = document.createElement('button');
+    restartButtonLoading.innerText = 'Taking too long to load? Click to Refresh';
+    restartButtonLoading.style.position= 'absolute';
+    restartButtonLoading.style.left= '16px';
+    restartButtonLoading.style.top= '16px';
+    restartButtonLoading.style.pointerEvents = 'all';
+    restartButtonLoading.style.visibility ='hidden';
+    restartButtonLoading.addEventListener('click', function(){
+      location.href = '/';
+    });
+    window.setTimeout(function(){
+      restartButtonLoading.style.visibility ='visible';
+    }, time);
+    document.body.appendChild(restartButtonLoading);
+  </script> -->
+  <script>
+    let maxLoadTime = 15000;
+
+    setTimeout(function () {
+      if (!isGameSetup) {
+        location.href = "/";
+      }
+    }, maxLoadTime);
+  </script>
+ </body>
 
 </html>

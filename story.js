@@ -13,6 +13,8 @@ let pixelDensity = 1;
 
 let storyMode = true;
 
+let isGameSetup = false;
+
 // Events
 const navigateFwdEvent = new Event("navigateFwd");
 const navigateBackEvent = new Event("navigateBack");
@@ -204,9 +206,12 @@ var sketch1 = function (p) {
 
     setupScenes();
     hideTitle();
+    isGameSetup = true;
+
   };
 
   p.draw = function () {
+
     mouse_x = p.mouseX;
     mouse_y = p.mouseY;
     //Cursor is default unless otherwise specified
@@ -275,6 +280,7 @@ var sketch1 = function (p) {
 
   function hideTitle() {
     document.querySelector(".titleImg").style.visibility = "hidden";
+    // restartButtonLoading.style.visibility = "hidden";
   }
 
   function animateIntro() {

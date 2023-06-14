@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ending</title>
+  <!-- <link rel="stylesheet" type="text/css" href="endingStyle.css" /> -->
+  <style>
+    .container {
+      display:flex;
+      flex-direction: row;
+      gap:8px;
+    }
+    .icon-group{
+      display:flex;
+      flex-direction: column;
+      gap: 3px;
+      width: 112px;
+      align-items: center;
+      user-select: none;
+    }
+    .icon {
+      width: 112px;
+      height: 112px;
+      /* background:blue; */
+      color:black;
+      position:relative;
+      border-radius: 5px;
+      pointer-events:none;
+
+    }
+    .icon img{
+      width:102px;
+      height:102px;
+      position:absolute;
+      margin:auto;
+      top:0px; left:0px; right:0px; bottom: 0px;
+      pointer-events:none;
+    }
+    .name {
+      font-family: 'SF Pro';
+      font-size:12px;
+      /* background:yellow; */
+      text-align:center;
+      border-radius:3px;
+      padding:2px 5px;
+      pointer-events:none;
+    }
+
+    .icon-group.selected  .icon{
+      background: #E6E6E6;
+    }
+
+    .icon-group.selected  .name{
+      background: #D93B86;
+      color: white;
+
+    }
+    .icon-group.selected.blur .name{
+      background: #E6E6E6;
+      color:black;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <main>
+    <div class="container" >
+      <div class="icon-group txt" value="ending.txt">
+        <div class="icon"><img src="/assets/img/ending/document-txt.png" /></div>
+        <div class="name">ending.txt</div>
+      </div>
+      <div class="icon-group" value="chop.html">
+        <div class="icon"><img src="/assets/img/ending/document_chop_icon.png" /></div>
+        <div class="name">chop.html</div>
+      </div>
+      <div class="icon-group" value="integrate.html">
+        <div class="icon"><img src="/assets/img/ending/document_integrate_icon.png" /></div>
+        <div class="name">integrate.html</div>
+      </div>
+      <div class="icon-group" value="transform.html">
+        <div class="icon"><img src="/assets/img/ending/document_transform_icon.png" /></div>
+        <div class="name">transform.html</div>
+      </div>
+    </div>
+  </main>
+
+
+  <script>
+
+    let icons = document.querySelectorAll('.icon-group');
+    icons.forEach(function(icon){
+      icon.addEventListener('click', function(e){
+        if (e.target.classList.contains('icon-group')){
+          icons.forEach(function(icon){
+            icon.classList.remove('selected');
+          })
+          icon.classList.add('selected');
+        }
+      })
+
+      icon.addEventListener('dblclick', function(e){
+        let path = e.target.getAttribute('value');
+        // location.href = path;
+        let windowName = `window-${path}`;
+
+        let width = 660;
+        let height = 580;
+        if (e.target.classList.contains('txt')){
+          width = 500;
+          height = 400;
+        }
+        let xPos = Math.random()* (screen.width - width);
+
+        let yPos = Math.random()* (screen.height - height);
+        let options = `left=${xPos},top=${yPos},width=${width},height=${height}`;
+        window.open(
+          path,
+          windowName,
+          options
+        );
+      });
+    });
+
+    document.addEventListener('click', function(e){
+       if (!e.target.classList.contains('icon-group')){
+        icons.forEach(function(icon){
+          icon.classList.remove('selected');
+        })
+      }
+
+    });
+
+    window.addEventListener('blur', function(){
+      let selected = document.querySelector('.selected');
+      selected.classList.add('blur');
+    })
+
+    window.addEventListener('focus', function(){
+      let selected = document.querySelector('.selected');
+      selected.classList.remove('blur');
+    })
+  </script>
+</body>
+
+</html>

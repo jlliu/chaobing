@@ -60,3 +60,8 @@ video {
  cursor: none !important;
  max-height:100%;
 }
+
+#goToEnding {
+  z-index:20;
+  pointer-events:all;
+}

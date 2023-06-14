@@ -26,6 +26,29 @@ const restartGameEvent = new Event("restartGame");
 
 let storyCanvas;
 
+function launchFullScreen(element) {
+  if (element.requestFullScreen) {
+    element.requestFullScreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+
 var sketch1 = function (p) {
   let canvasRatio = canvasWidth / canvasHeight;
   let mouse_x;
@@ -249,6 +272,7 @@ var sketch1 = function (p) {
     startButton.addClickEvent(function () {
       startButton.interactive = false;
       gameStarted = true;
+      launchFullScreen(document.documentElement);
       animateIntro();
     });
     introAnimationSprite = new Button(openAnimation[0], openAnimation[0], 0, 0);
@@ -537,7 +561,6 @@ var sketch1 = function (p) {
         nextOption.sound.start();
       }
     });
-    // keep this at end
 
     let scene8_phrase = scenes[7][3].phrases[1];
     scene8_phrase.button = new Button(

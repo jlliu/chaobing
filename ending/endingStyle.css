@@ -1,0 +1,148 @@
+@font-face {
+  font-family: "SF Pro";
+  src:
+    url("assets/font/SF-Pro.ttf") format("truetype");
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #fefff7;
+}
+
+#restartButton{
+  position:absolute;
+  top:16px;
+  left:16px;
+  z-index:10;
+}
+
+/* canvas {
+  margin: auto;
+  visibility: visible;
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: none !important;
+  transition: opacity 1s;
+} */
+
+body{
+  overflow:hidden;
+}
+main{
+  width:100vw;
+  height:100vh;
+}
+.window{
+  min-width:300px;
+  /* max-width:80%; */
+  width:720px;
+  min-height:300px;
+  height:600px;
+  /* max-height:80px; */
+  border:.5px solid #a5a5a5;
+  border-radius:8px;
+  box-shadow: rgba(0,0,0,.2) 0px 0px 8px 0px;
+  position:absolute;
+  font-family: "SF Pro";
+
+  display:flex;
+  flex-direction:column;
+}
+
+.window.focus{
+  z-index:100;
+}
+
+.window-bar{
+  height:16px;
+  padding:8px;
+  background:rgb(223 225 229);
+  border-top-right-radius:8px;
+  border-top-left-radius:8px;
+  cursor:default;
+  user-select: none;
+  font-size:13px;
+}
+.window-body{
+  height:100%;
+  /* width: calc(100% - 16px); */
+  background: white;
+  flex-grow:1;
+  border-bottom-right-radius:8px;
+  border-bottom-left-radius:8px;
+  /* padding:8px; */
+}
+
+.browser .window-body{
+  background: white;
+}
+
+form .option{
+  display:inline-block;
+}
+#INFO {
+  left:calc(50% - 250px);
+  top:calc(50% - 200px);
+  margin:auto;
+  height:480px;
+
+
+}
+
+#INFO .window-bar{
+  background: #EFEBEB;
+  height:24px;
+}
+#INFO .window-body{
+  overflow-y: scroll;
+}
+
+#date{
+  font-size:12px;
+  color: #999999;
+  width:100%;
+  text-align:center;
+  display:block;
+  margin:10px 0px;
+}
+
+#INFO pre {
+  white-space: pre-wrap;
+  font-family: "SF Pro";
+  font-size: 13px;
+  line-height: 1.4em;
+  margin: 0px;
+  height: 386px;
+  padding: 8px 24px;
+}
+#INFO pre h3 {
+  margin:0px;
+}
+#INFO pre:focus{
+  outline:none;
+}
+#CHOP{
+ left:50px;
+ top:50px;
+ z-index:4;
+
+}
+
+#CHOP .window-body{
+  font-family: auto;
+}
+
+#INTEGRATE{
+  right:100px;
+  top:200px;
+z-index:3;
+}
+
+#TRANSFORM{
+  top:80px;
+  right:300px;
+z-index:2;
+}

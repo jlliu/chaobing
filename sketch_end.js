@@ -58,12 +58,13 @@ var end = function (p) {
     buttonPlaceholder = new Button(
       buttonPlaceholder,
       buttonPlaceholder,
-      264,
-      287
+      297,
+      292
     );
     buttonPlaceholder.visible = false;
     buttonPlaceholder.addClickEvent(function () {
-      window.location.href = "ending.html";
+      window.location.href = "ending";
+      closeFullscreen();
     });
   };
 

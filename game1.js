@@ -22,6 +22,9 @@ var game1 = function (p) {
 
   let clickedObjects = [];
 
+  let discoAnimation = [];
+  let discoAnimationImgs = [];
+
   let drawerSprite,
     lampSprite,
     posterSprite,
@@ -75,22 +78,25 @@ var game1 = function (p) {
     lamp_5 = p.loadImage("assets/img/game1/lamp5.png");
 
     lantern = p.loadImage("assets/img/game1/lantern.png");
-    disco_1 = p.loadImage("assets/img/game1/disco1.png");
-    disco_2 = p.loadImage("assets/img/game1/disco2.png");
-    disco_3 = p.loadImage("assets/img/game1/disco3.png");
-    disco_4 = p.loadImage("assets/img/game1/disco4.png");
-    disco_5 = p.loadImage("assets/img/game1/disco5.png");
-    disco_6 = p.loadImage("assets/img/game1/disco6.png");
-    disco_7 = p.loadImage("assets/img/game1/disco7.png");
-    disco_8 = p.loadImage("assets/img/game1/disco8.png");
-    disco_9 = p.loadImage("assets/img/game1/disco9.png");
-    disco_10 = p.loadImage("assets/img/game1/disco10.png");
-    disco_11 = p.loadImage("assets/img/game1/disco11.png");
-    disco_12 = p.loadImage("assets/img/game1/disco12.png");
-    disco_13 = p.loadImage("assets/img/game1/disco13.png");
-    disco_14 = p.loadImage("assets/img/game1/disco14.png");
-    disco_15 = p.loadImage("assets/img/game1/disco15.png");
-    disco_16 = p.loadImage("assets/img/game1/disco16.png");
+    disco_spritesheet = p.loadImage(
+      "assets/img/game1/discoAnimationSpritesheet.png"
+    );
+    // disco_1 = p.loadImage("assets/img/game1/disco1.png");
+    // disco_2 = p.loadImage("assets/img/game1/disco2.png");
+    // disco_3 = p.loadImage("assets/img/game1/disco3.png");
+    // disco_4 = p.loadImage("assets/img/game1/disco4.png");
+    // disco_5 = p.loadImage("assets/img/game1/disco5.png");
+    // disco_6 = p.loadImage("assets/img/game1/disco6.png");
+    // disco_7 = p.loadImage("assets/img/game1/disco7.png");
+    // disco_8 = p.loadImage("assets/img/game1/disco8.png");
+    // disco_9 = p.loadImage("assets/img/game1/disco9.png");
+    // disco_10 = p.loadImage("assets/img/game1/disco10.png");
+    // disco_11 = p.loadImage("assets/img/game1/disco11.png");
+    // disco_12 = p.loadImage("assets/img/game1/disco12.png");
+    // disco_13 = p.loadImage("assets/img/game1/disco13.png");
+    // disco_14 = p.loadImage("assets/img/game1/disco14.png");
+    // disco_15 = p.loadImage("assets/img/game1/disco15.png");
+    // disco_16 = p.loadImage("assets/img/game1/disco16.png");
   };
 
   p.setup = function () {
@@ -107,6 +113,7 @@ var game1 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game 1 Sprites
+
     drawerSprite = new Button(drawer, drawer_h, 438, 134);
     drawerSprite.addClickEvent(function (e) {
       drawerSprite.buttonDefault = drawer2;
@@ -196,53 +203,67 @@ var game1 = function (p) {
       }
     });
     lanternSprite = new Button(lantern, lantern, 269, 0);
-    discoSprite = new Button(disco_1, disco_1, 0, 0);
+    for (var i = 0; i < 16; i++) {
+      let height = 480;
+      let img = disco_spritesheet.get(0, height * i, 640, 480);
+      discoAnimationImgs.push(img);
+    }
+
+    discoSprite = new Button(
+      discoAnimationImgs[0],
+      discoAnimationImgs[0],
+      0,
+      0
+    );
     discoSprite.visible = false;
+
     discoAnimation = [
-      disco_1, //1
-      disco_2, //2
-      disco_3, //3
-      disco_4, //4
-      disco_5, //5
-      disco_6, //6
-      disco_7, //7
-      disco_8, //8
-      disco_9, //9
-      disco_10, //10
-      disco_11, //11
-      disco_12, //12
-      disco_13, //13
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_14, //14
-      disco_14, //14
-      disco_15, //15
-      disco_15, //15
-      disco_16, //16
-      disco_16, //16
-      disco_13, //1
-      disco_12, //2
-      disco_11, //3
-      disco_10, //4
-      disco_9, //5
-      disco_8, //6
-      disco_7, //7
-      disco_6, //8
-      disco_5, //9
-      disco_4, //10
-      disco_3, //11
-      disco_2, //12
-      disco_1, //13
+      discoAnimationImgs[0], //1
+      discoAnimationImgs[1], //2
+      discoAnimationImgs[2], //3
+      discoAnimationImgs[3], //4
+      discoAnimationImgs[4], //5
+      discoAnimationImgs[5], //6
+      discoAnimationImgs[6], //7
+      discoAnimationImgs[7], //8
+      discoAnimationImgs[8], //9
+      discoAnimationImgs[9], //10
+      discoAnimationImgs[10], //11
+      discoAnimationImgs[11], //12
+      discoAnimationImgs[12], //13
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[15], //16
+      discoAnimationImgs[14], //15
+      discoAnimationImgs[13], //14
+      discoAnimationImgs[12], //13
+      discoAnimationImgs[11], //12
+      discoAnimationImgs[10], //11
+      discoAnimationImgs[9], //10
+      discoAnimationImgs[8], //9
+      discoAnimationImgs[7], //8
+      discoAnimationImgs[6], //7
+      discoAnimationImgs[5], //6
+      discoAnimationImgs[4], //5
+      discoAnimationImgs[3], //4
+      discoAnimationImgs[2], //3
+      discoAnimationImgs[1], //2
+      discoAnimationImgs[0], //1
     ];
     lanternSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {

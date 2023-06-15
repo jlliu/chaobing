@@ -67,11 +67,9 @@ var game5 = function (p) {
       });
     }
     phrases[0].bgImg = p.loadImage("assets/img/game5/base0.png");
-    for (let i = 0; i < 9; i++) {
-      phrases[0].animationImg.push(
-        p.loadImage(`assets/img/game5/animation0-${i}.png`)
-      );
-    }
+    animation0_spritesheet = p.loadImage(
+      "assets/img/game5/animation0-spritesheet.png"
+    );
 
     // Phrase 2
     phrases[1] = JSON.parse(JSON.stringify(initializedInfo));
@@ -83,11 +81,10 @@ var game5 = function (p) {
       });
     }
     phrases[1].bgImg = p.loadImage("assets/img/game5/base1.png");
-    for (let i = 0; i < 14; i++) {
-      phrases[1].animationImg.push(
-        p.loadImage(`assets/img/game5/animation1-${i}.png`)
-      );
-    }
+    animation1_spritesheet = p.loadImage(
+      "assets/img/game5/animation1-spritesheet.png"
+    );
+
     // Phrase 3
     phrases[2] = JSON.parse(JSON.stringify(initializedInfo));
 
@@ -98,11 +95,9 @@ var game5 = function (p) {
       });
     }
     phrases[2].bgImg = p.loadImage("assets/img/game5/base2.png");
-    for (let i = 0; i < 11; i++) {
-      phrases[2].animationImg.push(
-        p.loadImage(`assets/img/game5/animation2-${i}.png`)
-      );
-    }
+    animation2_spritesheet = p.loadImage(
+      "assets/img/game5/animation2-spritesheet.png"
+    );
   };
 
   let locations = [
@@ -154,6 +149,25 @@ var game5 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game N Sprites
+
+    // initialize animation sprites
+    for (let i = 0; i < 9; i++) {
+      let height = 480;
+      let img = animation0_spritesheet.get(0, 480 * i, 640, 480);
+      phrases[0].animationImg.push(img);
+    }
+
+    for (let i = 0; i < 14; i++) {
+      let height = 480;
+      let img = animation1_spritesheet.get(0, 480 * i, 640, 480);
+      phrases[1].animationImg.push(img);
+    }
+
+    for (let i = 0; i < 11; i++) {
+      let height = 480;
+      let img = animation2_spritesheet.get(0, 480 * i, 640, 480);
+      phrases[2].animationImg.push(img);
+    }
 
     for (let i = 0; i < phrases.length; i++) {
       for (let j = 0; j < phrases[i].piecesImg.length; j++) {

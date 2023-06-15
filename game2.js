@@ -104,9 +104,10 @@ var game2 = function (p) {
     for (let i = 0; i < 4; i++) {
       appleAnimation.push(p.loadImage(`assets/img/game2/apple${i}.png`));
     }
-    for (let i = 0; i < 16; i++) {
-      pencilAnimation.push(p.loadImage(`assets/img/game2/pencil${i}.png`));
-    }
+
+    pencilAnimation_spritesheet = p.loadImage(
+      "assets/img/game2/pencil-spritesheet.png"
+    );
 
     for (let i = 0; i < 4; i++) {
       ojFrames.push(p.loadImage(`assets/img/game2/oj${i}.png`));
@@ -258,6 +259,13 @@ var game2 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game 2 Sprites
+
+    for (let i = 0; i < 16; i++) {
+      let width = 166;
+      let img = pencilAnimation_spritesheet.get(i * width, 0, width, 277);
+      pencilAnimation.push(img);
+    }
+
     paperAnimationSprite = new Button(
       paperAnimation[0],
       paperAnimation[0],

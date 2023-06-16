@@ -82,9 +82,8 @@ var game7 = function (p) {
     keyboard = p.loadImage("assets/img/game7/keyboard.png");
     keyboard_h = p.loadImage("assets/img/game7/keyboard-h.png");
 
-    for (let i = 0; i < 8; i++) {
-      keyImages.push(p.loadImage(`assets/img/game7/keys${i}.png`));
-    }
+    keysSpritesheet = p.loadImage("assets/img/game7/keys-spritesheet.png");
+
     keys = p.loadImage(`assets/img/game7/keys.png`);
   };
 
@@ -104,6 +103,12 @@ var game7 = function (p) {
     cursor = new Cursor();
 
     //Initialize Game N Sprites
+    for (let i = 0; i < 8; i++) {
+      let width = 322;
+      let height = 124;
+      let img = keysSpritesheet.get(0, height * i, width, height);
+      keyImages.push(img);
+    }
     prompts.forEach(function (prompt) {
       let wordsSeparated = prompt.answer.split(" ");
       prompt.wordsSeparated = wordsSeparated;

@@ -13,7 +13,15 @@ let pixelDensity = 1;
 
 let storyMode = true;
 
-let isGameSetup = false;
+let numCanvasSetup = 0;
+
+let maxLoadTime = 25000;
+
+setTimeout(function () {
+  if (!(numCanvasSetup == 10)) {
+    location.href = "/";
+  }
+}, maxLoadTime);
 
 // Events
 const navigateFwdEvent = new Event("navigateFwd");
@@ -206,12 +214,10 @@ var sketch1 = function (p) {
 
     setupScenes();
     hideTitle();
-    isGameSetup = true;
-
+    numCanvasSetup++;
   };
 
   p.draw = function () {
-
     mouse_x = p.mouseX;
     mouse_y = p.mouseY;
     //Cursor is default unless otherwise specified

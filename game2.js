@@ -101,9 +101,10 @@ var game2 = function (p) {
     for (let i = 0; i < 8; i++) {
       eraseAnimation.push(p.loadImage(`assets/img/game2/erase${i}.png`));
     }
-    for (let i = 0; i < 4; i++) {
-      appleAnimation.push(p.loadImage(`assets/img/game2/apple${i}.png`));
-    }
+
+    appleAnimationSpritesheet = p.loadImage(
+      `assets/img/game2/apple-spritesheet.png`
+    );
 
     pencilAnimation_spritesheet = p.loadImage(
       "assets/img/game2/pencil-spritesheet.png"
@@ -260,6 +261,13 @@ var game2 = function (p) {
 
     //Initialize Game 2 Sprites
 
+    for (let i = 0; i < 4; i++) {
+      let height = 184;
+      let width = 128;
+      let img = appleAnimationSpritesheet.get(i * width, 0, width, height);
+      appleAnimation.push(img);
+    }
+
     for (let i = 0; i < 16; i++) {
       let width = 166;
       let img = pencilAnimation_spritesheet.get(i * width, 0, width, 277);
@@ -332,6 +340,7 @@ var game2 = function (p) {
     //Sprites related to questions
 
     resetValues();
+    numCanvasSetup++;
   };
 
   p.draw = function () {

@@ -272,6 +272,7 @@ var game6 = function (p) {
     //Create screen
     screenSprite = new Button(screen_new, screen_new, 232, 4);
     screenSprite.interactive = false;
+    numCanvasSetup++;
   };
 
   calculateCorrectSequence = function () {

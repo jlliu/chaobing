@@ -269,6 +269,7 @@ var game4 = function (p) {
       paintCursor = "polish";
       game4_paintColor = "polish";
     });
+    numCanvasSetup++;
   };
 
   p.draw = function () {
@@ -774,6 +775,7 @@ var game4a = function (p) {
     for (let i = 0; i < 10; i++) {
       paintColors.push(p.loadImage(`assets/img/game4/paintblob${i}.png`));
     }
+    numCanvasSetup++;
   };
 
   p.draw = function () {

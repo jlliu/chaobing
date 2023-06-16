@@ -65,6 +65,7 @@ var end = function (p) {
     buttonPlaceholder.addClickEvent(function () {
       window.location.href = "ending.html";
     });
+    numCanvasSetup++;
   };
 
   p.draw = function () {

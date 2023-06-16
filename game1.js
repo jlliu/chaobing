@@ -259,6 +259,7 @@ var game1 = function (p) {
         });
       }
     });
+    numCanvasSetup++;
   };
 
   p.draw = function () {

@@ -17,6 +17,8 @@ var end = function (p) {
   let currentlyAnimating = false;
   let currentlyDragging = false;
 
+  let clickedObjects = [];
+
   let buttonPlaceholder;
 
   let gameEntered = false;
@@ -63,7 +65,7 @@ var end = function (p) {
     );
     buttonPlaceholder.visible = false;
     buttonPlaceholder.addClickEvent(function () {
-      window.location.href = "ending";
+      window.location.href = "ending/index.html";
       closeFullscreen();
     });
   };

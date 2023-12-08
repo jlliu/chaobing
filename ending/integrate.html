@@ -70,36 +70,36 @@ var game2 = function (p) {
 
   p.preload = function () {
     //Preload a background here
-    bg_integrate = p.loadImage("/assets/img/ending/bg-integrate.png");
+    bg_integrate = p.loadImage("../assets/img/ending/bg-integrate.png");
 
-    bingCursor = p.loadImage("/assets/UI/cursors/bing-cursor.png");
-    grabCursor = p.loadImage("/assets/UI/cursors/grab-cursor.png");
-    holdCursor = p.loadImage("/assets/UI/cursors/hold-cursor.png");
-    pointCursor = p.loadImage("/assets/UI/cursors/point-cursor.png");
+    bingCursor = p.loadImage("../assets/UI/cursors/bing-cursor.png");
+    grabCursor = p.loadImage("../assets/UI/cursors/grab-cursor.png");
+    holdCursor = p.loadImage("../assets/UI/cursors/hold-cursor.png");
+    pointCursor = p.loadImage("../assets/UI/cursors/point-cursor.png");
 
-    button_r_up = p.loadImage("/assets/UI/buttons/button-r-up.png");
-    button_r_down = p.loadImage("/assets/UI/buttons/button-r-down.png");
-    button_l_up = p.loadImage("/assets/UI/buttons/button-l-up.png");
-    button_l_down = p.loadImage("/assets/UI/buttons/button-l-down.png");
+    button_r_up = p.loadImage("../assets/UI/buttons/button-r-up.png");
+    button_r_down = p.loadImage("../assets/UI/buttons/button-r-down.png");
+    button_l_up = p.loadImage("../assets/UI/buttons/button-l-up.png");
+    button_l_down = p.loadImage("../assets/UI/buttons/button-l-down.png");
 
     //Preload whatever needs to be preloaded
 
-    bowl = p.loadImage("/assets/img/ending/bowl.png");
-    bowl_h = p.loadImage("/assets/img/ending/bowl-h.png");
-    integrate_pan = p.loadImage("/assets/img/ending/integrate-pan.png");
+    bowl = p.loadImage("../assets/img/ending/bowl.png");
+    bowl_h = p.loadImage("../assets/img/ending/bowl-h.png");
+    integrate_pan = p.loadImage("../assets/img/ending/integrate-pan.png");
 
     for (const ingredient in ingredients) {
       ingredients[ingredient].img = p.loadImage(
-        `/assets/img/ending/ingredient-${ingredient}.png`
+        `../assets/img/ending/ingredient-${ingredient}.png`
       );
       // ingredients[ingredient].titleImg = p.loadImage(
       //   `assets/img/ending/title-${ingredient}.png`
       // );
     }
     sizzleAnimationImgs = [
-      p.loadImage("/assets/img/ending/sizzle1.png"),
-      p.loadImage("/assets/img/ending/sizzle2.png"),
-      p.loadImage("/assets/img/ending/sizzle3.png"),
+      p.loadImage("../assets/img/ending/sizzle1.png"),
+      p.loadImage("../assets/img/ending/sizzle2.png"),
+      p.loadImage("../assets/img/ending/sizzle3.png"),
     ];
   };
 

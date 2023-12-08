@@ -4,6 +4,12 @@ let game4canvas;
 
 let game4_paintColor = "none";
 
+let paintSounds = [squelchSound, squishSound, fart2Sound, fart3Sound];
+
+let chosenPaintSound;
+
+const changeColorEvent = new Event("changeColor");
+
 var game4 = function (p) {
   let thisCanvas;
   let thisSceneNum = 4;
@@ -115,6 +121,7 @@ var game4 = function (p) {
       [-6, 154, 26, 161, 38, 188, 5.5, 194]
     );
     paintSprite_red.color = "pink";
+    paintSprite_red.sound = paintSounds[0];
     paintSprites.push(paintSprite_red);
 
     paintSprite_orange = new Button(
@@ -125,6 +132,8 @@ var game4 = function (p) {
       [31, 160, 62, 158, 71, 185, 42, 188]
     );
     paintSprite_orange.color = "orange";
+    paintSprite_orange.sound = paintSounds[1];
+
     paintSprites.push(paintSprite_orange);
 
     paintSprite_yellow = new Button(
@@ -135,6 +144,8 @@ var game4 = function (p) {
       [67, 157, 95, 155, 107, 181, 75, 184]
     );
     paintSprite_yellow.color = "yellow";
+    paintSprite_yellow.sound = paintSounds[2];
+
     paintSprites.push(paintSprite_yellow);
 
     paintSprite_green = new Button(
@@ -145,6 +156,8 @@ var game4 = function (p) {
       [101, 155, 129, 153, 141, 176, 112, 180]
     );
     paintSprite_green.color = "green";
+    paintSprite_green.sound = paintSounds[3];
+
     paintSprites.push(paintSprite_green);
 
     paintSprite_blue = new Button(
@@ -155,6 +168,8 @@ var game4 = function (p) {
       [5, 199, 37, 194, 48, 222, 14, 225]
     );
     paintSprite_blue.color = "blue";
+    paintSprite_blue.sound = paintSounds[0];
+
     paintSprites.push(paintSprite_blue);
 
     paintSprite_purple = new Button(
@@ -165,6 +180,8 @@ var game4 = function (p) {
       [43, 194, 73, 190, 82, 218, 52, 222]
     );
     paintSprite_purple.color = "purple";
+    paintSprite_purple.sound = paintSounds[1];
+
     paintSprites.push(paintSprite_purple);
 
     paintSprite_black = new Button(
@@ -175,6 +192,8 @@ var game4 = function (p) {
       [78, 190, 108, 187, 122, 214, 87, 217]
     );
     paintSprite_black.color = "black";
+    paintSprite_black.sound = paintSounds[2];
+
     paintSprites.push(paintSprite_black);
 
     paintSprite_white = new Button(
@@ -185,12 +204,16 @@ var game4 = function (p) {
       [114, 185, 143, 183, 156, 210, 125, 214]
     );
     paintSprite_white.color = "white";
+    paintSprite_white.sound = paintSounds[3];
+
     paintSprites.push(paintSprite_white);
 
     paintSprites.forEach(function (sprite) {
       sprite.addClickEvent(function () {
         paintCursor = "brush";
         game4_paintColor = sprite.color;
+        chosenPaintSound = sprite.sound;
+        document.dispatchEvent(changeColorEvent);
       });
     });
 
@@ -262,12 +285,16 @@ var game4 = function (p) {
     srirachaSprite.addClickEvent(function (sprite) {
       paintCursor = "sriracha";
       game4_paintColor = "sriracha";
+      chosenPaintSound = mmmSound;
+      document.dispatchEvent(changeColorEvent);
     });
 
     nailpolishSprite = new Button(nailpolish, nailpolish_h, 139, 17);
     nailpolishSprite.addClickEvent(function (sprite) {
       paintCursor = "polish";
       game4_paintColor = "polish";
+      chosenPaintSound = magicWandSound;
+      document.dispatchEvent(changeColorEvent);
     });
   };
 
@@ -528,7 +555,7 @@ var game4 = function (p) {
             mouse_y < yRange[1] * scaleRatio
           ) {
             _this.interactive = false;
-            pageFlipSound.start();
+            dingSound.start();
             //Snap it into position if we don't make it disappear
             _this.xCurrent = Math.floor(
               (mouse_x - _this.width / 2) / scaleRatio
@@ -655,6 +682,7 @@ var game4 = function (p) {
   }
 
   function hideCanvas() {
+    game4_soundtrack.stop();
     gameStarted = false;
     gameEntered = false;
     paintCursor = "none";
@@ -712,7 +740,10 @@ var game4 = function (p) {
     if (gameVoiceoverOn) {
       currentlyAnimating = true;
       setTimeout(function () {
-        sound.start();
+        game4_soundtrack.start();
+        setTimeout(function () {
+          sound.start();
+        }, 1000);
       }, voiceoverDelay * 1000);
 
       setTimeout(function () {
@@ -728,6 +759,8 @@ var game4 = function (p) {
 new p5(game4, "canvas-game4");
 
 // js for art canvases
+
+// Sounds for painting
 
 var game4a = function (p) {
   let thisCanvas;
@@ -750,6 +783,11 @@ var game4a = function (p) {
 
   let case_base;
 
+  //Have a function that plays the sound at an interval as long as we're holding the mouse down...
+
+  // let getRandomPaintSound = function () {
+  //   return paintSounds[Math.floor(Math.random() * paintSounds.length)];
+  // };
   p.preload = function () {
     //Preload whatever needs to be preloaded
     case_base = p.loadImage("assets/img/game4/case-base.png");
@@ -776,79 +814,102 @@ var game4a = function (p) {
     }
   };
 
+  let soundInterval;
+
+  // Change paint color based on main canvas event
+  document.addEventListener("changeColor", (e) => {
+    switch (game4_paintColor) {
+      case "pink":
+        currentColorImg = paintColors[0];
+        density = 1;
+        break;
+      case "orange":
+        currentColorImg = paintColors[1];
+        density = 1;
+        break;
+      case "yellow":
+        currentColorImg = paintColors[2];
+        density = 1;
+        break;
+      case "green":
+        currentColorImg = paintColors[3];
+        density = 1;
+        break;
+      case "blue":
+        currentColorImg = paintColors[4];
+        density = 1;
+        break;
+      case "purple":
+        currentColorImg = paintColors[5];
+        density = 1;
+        break;
+      case "black":
+        currentColorImg = paintColors[6];
+        density = 1;
+        break;
+      case "white":
+        currentColorImg = paintColors[7];
+        density = 1;
+        break;
+      case "sriracha":
+        currentColorImg = paintColors[8];
+        density = 1;
+
+        break;
+      case "polish":
+        currentColorImg = paintColors[9];
+        density = 0.2;
+        break;
+      default:
+        currentColorImg = paintColors[0];
+        density = 1;
+    }
+  });
+
   p.draw = function () {
+    //Do this once waiting for main canvas to intialize
     if (game4canvas && !game4canvasInitialized) {
-      //Supposed to set actively drawing or not
       game4canvas.addEventListener("mousedown", function () {
-        if (game4_paintColor !== "none" && !drawing) {
+        let simMousePos = {
+          x: Math.floor((p.mouseX - 0.035 * canvasWidth) / scaleRatio),
+          y: Math.floor((p.mouseY - 0.01 * canvasHeight) / scaleRatio),
+        };
+        //check if in bounds of flute case
+        if (
+          simMousePos.x > 214 &&
+          simMousePos.x < 577 &&
+          simMousePos.y > 166 &&
+          simMousePos.y < 318
+        ) {
           drawing = true;
-          switch (game4_paintColor) {
-            case "pink":
-              currentColorImg = paintColors[0];
-              density = 1;
-              break;
-            case "orange":
-              currentColorImg = paintColors[1];
-              density = 1;
-              break;
-            case "yellow":
-              currentColorImg = paintColors[2];
-              density = 1;
-              break;
-            case "green":
-              currentColorImg = paintColors[3];
-              density = 1;
-              break;
-            case "blue":
-              currentColorImg = paintColors[4];
-              density = 1;
-              break;
-            case "purple":
-              currentColorImg = paintColors[5];
-              density = 1;
-              break;
-            case "black":
-              currentColorImg = paintColors[6];
-              density = 1;
-              break;
-            case "white":
-              currentColorImg = paintColors[7];
-              density = 1;
-              break;
-            case "sriracha":
-              currentColorImg = paintColors[8];
-              density = 1;
-              break;
-            case "polish":
-              currentColorImg = paintColors[9];
-              density = 0.2;
-              break;
-            default:
-              currentColorImg = paintColors[0];
-              density = 1;
-          }
+          // Create interval for sound
+          chosenPaintSound.start();
+          soundInterval = setInterval(function () {
+            chosenPaintSound.start();
+          }, 800);
         }
       });
       game4canvas.addEventListener("mouseup", function () {
+        // If a paint color is selected and you mouse up, stop drawing (creating blobs)
         if (game4_paintColor !== "none") {
           drawing = false;
+          clearInterval(soundInterval);
         }
       });
       game4canvasInitialized = true;
     }
 
     // draw whatever needed
-    if (drawing) {
+    if (currentColorImg && drawing) {
+      let simMousePos = {
+        x: Math.floor((p.mouseX - 0.035 * canvasWidth) / scaleRatio),
+        y: Math.floor((p.mouseY - 0.01 * canvasHeight) / scaleRatio),
+      };
       let drawThisFrame = true;
       if (density < 1) {
         drawThisFrame = Math.random() < density ? true : false;
       }
-
       if (drawThisFrame) {
-        let simMousePos = {
-          x: Math.floor((p.mouseX - 0.035 * canvasWidth) / scaleRatio),
-          y: Math.floor((p.mouseY - 0.01 * canvasHeight) / scaleRatio),
-        };
         drawImageToScale(currentColorImg, simMousePos.x, simMousePos.y);
       }
     }

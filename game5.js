@@ -382,13 +382,14 @@ var game5 = function (p) {
             _this.yCurrent < yRange[1]
           ) {
             _this.interactive = false;
-            pageFlipSound.start();
+            puzzleRightSound.start();
             //Figure out if we completed the puzzle
             numCorrect++;
             if (numCorrect == phrases[currentPhraseNum].piecesSprites.length) {
               if (!currentlyAnimating) {
                 playDefinitionVoiceover(
                   game5_definitions[currentPhraseNum].sound,
+                  game5_definitions[currentPhraseNum].soundEffect,
                   game5_definitions[currentPhraseNum].duration.false,
                   1
                 );
@@ -419,6 +420,7 @@ var game5 = function (p) {
               _this.visible = false;
             }
           } else {
+            puzzleWrongSound.start();
             _this.xCurrent = _this.x;
             _this.yCurrent = _this.y;
           }
@@ -492,7 +494,6 @@ var game5 = function (p) {
     });
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
-        harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;
@@ -594,7 +595,8 @@ var game5 = function (p) {
     }
   }
 
-  function playDefinitionVoiceover(sound, time, delay, callback) {
+  function playDefinitionVoiceover(sound, soundEffect, time, delay, callback) {
+    soundEffect.start();
     setTimeout(function () {
       sound.start();
     }, delay * 1000);

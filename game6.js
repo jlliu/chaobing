@@ -68,7 +68,7 @@ var game6 = function (p) {
   let convoInfo = [
     [
       {
-        in: "test lol",
+        in: "hello <3",
         out: "hi!",
       },
       { in: "cant wait til next summer", out: "me too" },
@@ -78,6 +78,14 @@ var game6 = function (p) {
       {
         in: "i love you",
         out: "i love you more",
+      },
+      {
+        in: "i love you times infinity",
+        out: "ily to the power of infinity",
+      },
+      {
+        in: "*kiss*",
+        out: "*blushes*",
       },
     ],
     [
@@ -122,6 +130,8 @@ var game6 = function (p) {
 
   let numTimesFinished = 0;
   // let textSoFar = "";
+
+  let g6_bgs;
 
   p.preload = function () {
     //Preload a background here
@@ -214,10 +224,12 @@ var game6 = function (p) {
       new Button(phoneButtonImg_0, phoneButtonImg_0_h, 298, 420, 0),
       new Button(phoneButtonImg_pound, phoneButtonImg_pound_h, 360, 421, "#"),
     ];
-    phoneButtons.forEach(function (sprite) {
+    phoneButtons.forEach(function (sprite, index) {
+      sprite.sound = cellphoneSounds[index];
       sprite.addClickEvent(function () {
         //case where open/close symbols
         let correctButton = correctSequence[sequenceIndex];
+        sprite.sound.start();
         if (sprite.keyNum == "*") {
           symbolsOpen = !symbolsOpen;
           // check if the button's code is the correct one... or it's the correct one +  -s in the case of the panel open
@@ -227,12 +239,14 @@ var game6 = function (p) {
         ) {
           //At end of sequence. Need to get the next convo within this part
           if (sequenceIndex + 1 >= correctSequence.length) {
+            let seasonChanging = false;
             // We're at the last convo in this part
             if (currentConvoIndex + 1 >= convoInfo[currentPart].length) {
               if (currentPart + 1 >= convoInfo.length) {
                 //Actually just continue to make the screen darker
                 numTimesFinished++;
               } else {
+                seasonChanging = true;
                 currentPart++;
                 currentConvoIndex = 0;
               }
@@ -245,6 +259,7 @@ var game6 = function (p) {
               convoInfo[currentPart][currentConvoIndex].in,
               convoInfo[currentPart][currentConvoIndex].out,
               true,
+              seasonChanging,
               function () {
                 calculateCorrectSequence();
                 sequenceIndex = 0;
@@ -272,6 +287,9 @@ var game6 = function (p) {
     //Create screen
     screenSprite = new Button(screen_new, screen_new, 232, 4);
     screenSprite.interactive = false;
+
+    //initialize backgound
+    g6_bg = g6_bgs[0];
   };
 
   calculateCorrectSequence = function () {
@@ -296,7 +314,25 @@ var game6 = function (p) {
   // -------------- SCENES --------------- //
   //////////////////////////////////////////
 
-  // Game 1
+  // Game 6
+
+  function change_season() {
+    g6_bg = g6_bgs[currentPart];
+    if (currentPart == 1) {
+      g6_songs[0].stop();
+      whooshSound.start();
+      setTimeout(function () {
+        g6_songs[1].start();
+      }, 1000);
+    } else if (currentPart == 2) {
+      g6_songs[1].stop();
+      whooshSound.start();
+      setTimeout(function () {
+        g6_songs[2].start();
+      }, 1000);
+    }
+  }
+
   function displayGame() {
     if (gameEntered && !gameStarted) {
       playGameVoiceover(game6_voiceover, 11, function () {
@@ -304,6 +340,7 @@ var game6 = function (p) {
           screenSprite,
           convoInfo[currentPart][currentConvoIndex].in,
           convoInfo[currentPart][currentConvoIndex].out,
+          false,
           false
         );
       });
@@ -313,6 +350,7 @@ var game6 = function (p) {
           screenSprite,
           convoInfo[currentPart][currentConvoIndex].in,
           convoInfo[currentPart][currentConvoIndex].out,
+          false,
           false
         );
       }
@@ -321,7 +359,8 @@ var game6 = function (p) {
 
       gameStarted = true;
     }
-    p.image(g6_bgs[currentPart], 0, 0, canvasWidth, canvasHeight);
+    //Make sure to change this AFTER the thing stopped animating
+    p.image(g6_bg, 0, 0, canvasWidth, canvasHeight);
 
     // Display Sprites
     phoneButtons.forEach(function (button) {
@@ -472,113 +511,6 @@ var game6 = function (p) {
     }
   }
 
-  class Draggable {
-    constructor(
-      defaultImg,
-      hoverImg,
-      xPos,
-      yPos,
-      xFinal,
-      yFinal,
-      xRange,
-      yRange
-    ) {
-      this.x = xPos;
-      this.y = yPos;
-      this.buttonDefault = defaultImg;
-      this.buttonHover = hoverImg;
-      this.width = this.buttonDefault.width;
-      this.height = this.buttonDefault.height;
-      this.mouseInBounds = false;
-      this.interactive = true;
-      this.visible = true;
-      this.dragging = false;
-      this.xCurrent = this.x;
-      this.yCurrent = this.y;
-      this.xFinal = xFinal;
-      this.yFinal = yFinal;
-      this.xRange = xRange;
-      this.yRange = yRange;
-      let _this = this;
-
-      //once the single mousedown event, this item drags everywhere until we drop it
-      thisCanvas.addEventListener("mousedown", function (e) {
-        if (_this.mouseInBounds) {
-          _this.dragging = true;
-          currentlyDragging = true;
-          clickedObjects.forEach(function (value) {
-            value.intendingToClick = false;
-            clickedObjects = [];
-          });
-        }
-      });
-
-      thisCanvas.addEventListener("mouseup", function (e) {
-        // If dropped in the target area, then it's done
-        if (_this.mouseInBounds) {
-          _this.dragging = false;
-          currentlyDragging = false;
-          if (
-            mouse_x > xRange[0] * scaleRatio &&
-            mouse_x < xRange[1] * scaleRatio &&
-            mouse_y > yRange[0] * scaleRatio &&
-            mouse_y < yRange[1] * scaleRatio
-          ) {
-            _this.interactive = false;
-            pageFlipSound.start();
-            //Snap it into position if we don't make it disappear
-            if (_this.xFinal && _this.yFinal) {
-              _this.xCurrent = _this.xFinal;
-              _this.yCurrent = _this.yFinal;
-            } else {
-              _this.visible = false;
-            }
-          } else {
-            _this.xCurrent = _this.x;
-            _this.yCurrent = _this.y;
-          }
-        }
-      });
-    }
-
-    addClickEvent(clickFunction) {
-      let _this = this;
-      thisCanvas.addEventListener("click", function (e) {
-        if (_this.isMouseInBounds(e.offsetX, e.offsetY)) {
-          clickFunction();
-        }
-      });
-    }
-    isMouseInBounds() {
-      this.mouseInBounds =
-        !currentlyAnimating &&
-        this.interactive &&
-        mouse_x > this.xCurrent * scaleRatio &&
-        mouse_x < this.xCurrent * scaleRatio + this.width * scaleRatio &&
-        mouse_y > this.yCurrent * scaleRatio &&
-        mouse_y < this.yCurrent * scaleRatio + this.height * scaleRatio;
-      return this.mouseInBounds;
-    }
-
-    display() {
-      let imageToDraw = this.isMouseInBounds()
-        ? this.buttonHover
-        : this.buttonDefault;
-
-      if (this.mouseInBounds && this.interactive) {
-        cursorState = "grab";
-      }
-      if (this.dragging) {
-        cursorState = "hold";
-        this.xCurrent = Math.floor((mouse_x - this.width / 2) / scaleRatio);
-        this.yCurrent = Math.floor((mouse_y - this.height / 2) / scaleRatio);
-      }
-      if (this.visible) {
-        drawImageToScale(imageToDraw, this.xCurrent, this.yCurrent);
-      }
-    }
-  }
-
   // HELPERS
 
   function setupNavigation() {
@@ -657,6 +589,9 @@ var game6 = function (p) {
     currentPhrase = convoInfo[currentPart][currentConvoIndex].out;
     outTextShown = currentPhrase;
     screenSprite.buttonDefault = screen_new;
+    g6_songs.forEach(function (song) {
+      song.stop();
+    });
     calculateCorrectSequence();
   }
 
@@ -671,6 +606,7 @@ var game6 = function (p) {
     incomingText,
     outgoingText,
     showSentScreen,
+    seasonChanging,
     callback
   ) {
     currentlyAnimating = true;
@@ -685,6 +621,9 @@ var game6 = function (p) {
       }, 1000);
     }
     setTimeout(function () {
+      if (seasonChanging) {
+        change_season();
+      }
       sprite.buttonDefault = screen_new;
     }, interval * 1);
     setTimeout(function () {
@@ -756,7 +695,10 @@ var game6 = function (p) {
     if (gameVoiceoverOn) {
       currentlyAnimating = true;
       setTimeout(function () {
-        sound.start();
+        g6_songs[0].start();
+        setTimeout(function () {
+          sound.start();
+        }, 1000);
       }, voiceoverDelay * 1000);
 
       setTimeout(function () {

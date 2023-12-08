@@ -81,22 +81,6 @@ var game1 = function (p) {
     disco_spritesheet = p.loadImage(
       "assets/img/game1/discoAnimationSpritesheet.png"
     );
-    // disco_1 = p.loadImage("assets/img/game1/disco1.png");
-    // disco_2 = p.loadImage("assets/img/game1/disco2.png");
-    // disco_3 = p.loadImage("assets/img/game1/disco3.png");
-    // disco_4 = p.loadImage("assets/img/game1/disco4.png");
-    // disco_5 = p.loadImage("assets/img/game1/disco5.png");
-    // disco_6 = p.loadImage("assets/img/game1/disco6.png");
-    // disco_7 = p.loadImage("assets/img/game1/disco7.png");
-    // disco_8 = p.loadImage("assets/img/game1/disco8.png");
-    // disco_9 = p.loadImage("assets/img/game1/disco9.png");
-    // disco_10 = p.loadImage("assets/img/game1/disco10.png");
-    // disco_11 = p.loadImage("assets/img/game1/disco11.png");
-    // disco_12 = p.loadImage("assets/img/game1/disco12.png");
-    // disco_13 = p.loadImage("assets/img/game1/disco13.png");
-    // disco_14 = p.loadImage("assets/img/game1/disco14.png");
-    // disco_15 = p.loadImage("assets/img/game1/disco15.png");
-    // disco_16 = p.loadImage("assets/img/game1/disco16.png");
   };
 
   p.setup = function () {
@@ -119,7 +103,7 @@ var game1 = function (p) {
       drawerSprite.buttonDefault = drawer2;
       drawerSprite.buttonHover = drawer2;
       drawerSprite.interactive = false;
-      pageFlipSound.start();
+      drawerSound.start();
     });
     posterSprite = new Button(poster, poster_h, 66, 29);
     posterSprite.addClickEvent(function (e) {
@@ -133,7 +117,7 @@ var game1 = function (p) {
       blanketSprite.buttonDefault = blanket2;
       blanketSprite.buttonHover = blanket2;
       blanketSprite.interactive = false;
-      pageFlipSound.start();
+      toySqueakSound.start();
     });
     pillowSprite = new Draggable(
       pillow,
@@ -267,11 +251,14 @@ var game1 = function (p) {
     ];
     lanternSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
+        disco_soundtrack.start();
+        game1_soundtrack.stop();
         lanternSprite.visible = false;
         discoSprite.visible = true;
-        intervalAnimation(discoSprite, discoAnimation, 200, function () {
+        intervalAnimation(discoSprite, discoAnimation, 210, function () {
           discoSprite.visible = false;
           lanternSprite.visible = true;
+          game1_soundtrack.start();
         });
       }
     });
@@ -604,6 +591,7 @@ var game1 = function (p) {
     gameEntered = false;
     gameStarted = false;
     resetPositions();
+    game1_soundtrack.stop();
   }
 
   p.windowResized = function () {
@@ -657,7 +645,10 @@ var game1 = function (p) {
     if (gameVoiceoverOn) {
       currentlyAnimating = true;
       setTimeout(function () {
-        sound.start();
+        game1_soundtrack.start();
+        setTimeout(function () {
+          sound.start();
+        }, 1000);
       }, voiceoverDelay * 1000);
 
       setTimeout(function () {

@@ -47,7 +47,7 @@ var game7 = function (p) {
       question:
         "  Tell us about the time you faced adversity, and how you overcame it.",
       answer:
-        "I don't know. Am I allowed to say anything is actually hard? I have everything I needed. Education, a house, food on the table, the ability to have extracurriculars like piano. Sometimes I just feel so fucking lonely. It's fine. I feel so fucking exhausted. It's ok.",
+        "I don't know. Am I allowed to say anything is actually hard? I have everything I needed. Education, a house, food on the table, the ability to have extracurriculars like piano. Sometimes I just feel so fucking lonely. It's fine. I feel so fucking exhausted. It's ok. i kind of want to die. it's ok!!",
     },
     {
       question: "What makes you worthy of being alive?.",
@@ -116,6 +116,9 @@ var game7 = function (p) {
     });
     keyboardSprite = new Button(keyboard, keyboard_h, 153, 349);
     keyboardSprite.addClickEvent(function () {
+      let randomSound =
+        keyboardSounds[Math.floor(Math.random() * keyboardSounds.length)];
+      randomSound.start();
       startTicks = true;
       let currentPrompt = prompts[currentPromptIndex];
       // let increment = Math.floor(Math.random() * 3);
@@ -167,6 +170,7 @@ var game7 = function (p) {
       if (gameVoiceoverOn) {
         playGameVoiceover(game7_voiceover, 17, function () {
           // startTicks = true;
+          game7_soundtrack.start();
         });
         setTimeout(function () {
           displayActualGame = true;
@@ -504,7 +508,11 @@ var game7 = function (p) {
     });
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
+        // setInterval(function () {
         harpTransitionOutSound.start();
+        // }, 30);
+
+        // harpTransitionOutSound.start();
         // We need to hide this.
         storyCanvas.style.visibility = "visible";
         storyCanvas.style.opacity = 1;

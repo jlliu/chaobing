@@ -186,7 +186,13 @@ var game2 = function (p) {
       } else if (currentQuestionNum == questions.length - 1) {
         if (corrections.length) {
           currentQuestionNum = 0;
-          mode = "corrections";
+          if (mode !== "corrections") {
+            mode = "corrections";
+            setTimeout(function () {
+              game2_b_soundtrack.start();
+              game2_a_soundtrack.stop();
+            }, 850);
+          }
           changeQuestion(corrections);
           flipAnimation();
         } else {
@@ -200,6 +206,7 @@ var game2 = function (p) {
         gameFinished();
       } else {
         currentQuestionNum = currentQuestionNum % corrections.length;
+
         changeQuestion(corrections);
         flipAnimation();
       }
@@ -212,9 +219,13 @@ var game2 = function (p) {
 
     let correctQuestion = function () {
       correctQuestionsNum++;
-      ojSprite.buttonDefault = ojFrames[Math.floor(correctQuestionsNum / 4)];
+
       if (correctQuestionsNum % 4 == 0) {
-        boingSound.start();
+        setTimeout(function () {
+          ojSprite.buttonDefault =
+            ojFrames[Math.floor(correctQuestionsNum / 4)];
+          gulpSound.start();
+        }, 1000);
       }
     };
     answer_sprites.forEach(function (sprite) {
@@ -308,7 +319,7 @@ var game2 = function (p) {
             eraseAnimationSprite.visible = false;
           }
         );
-        boingSound.start();
+        eraserSound.start();
       }
     });
     appleAnimationSprite = new Button(
@@ -320,7 +331,7 @@ var game2 = function (p) {
     appleAnimationSprite.addClickEvent(function (e) {
       if (!currentlyAnimating) {
         intervalAnimation(appleAnimationSprite, appleAnimation, 500);
-        boingSound.start();
+        chewingSound.start();
       }
     });
     pencilAnimationSprite = new Button(
@@ -360,6 +371,7 @@ var game2 = function (p) {
     if (gameEntered && !gameStarted) {
       gameStarted = true;
       playGameVoiceover(game2_voiceover, 13, function () {
+        game2_a_soundtrack.start();
         initializeTimer();
       });
     }
@@ -454,6 +466,9 @@ var game2 = function (p) {
 
   function gameFinished() {
     gameDone = true;
+    game2_b_soundtrack.stop();
+    game2_a_soundtrack.start();
+    smallApplauseSound.start();
     stopTimer();
     ans_a_sprite.interactive = false;
     ans_b_sprite.interactive = false;
@@ -599,6 +614,9 @@ var game2 = function (p) {
     animate(correct, callback) {
       let _this = this;
       if (correct) {
+        let sounds = [fanfareSound, crowdWooSound, partyHornSound];
+        let chosenSound = sounds[Math.floor(Math.random() * sounds.length)];
+        chosenSound.start();
         this.interactive = false;
         intervalAnimationAnswer(
           this,
@@ -611,6 +629,9 @@ var game2 = function (p) {
           }
         );
       } else {
+        let sounds = [fartSound, crowdSighSound, booSound];
+        let chosenSound = sounds[Math.floor(Math.random() * sounds.length)];
+        chosenSound.start();
         this.interactive = false;
         intervalAnimationAnswer(
           this,
@@ -742,6 +763,8 @@ var game2 = function (p) {
 
   function hideCanvas() {
     //Add things we want to do when we leave this scene
+    game2_a_soundtrack.stop();
+    game2_b_soundtrack.stop();
     gameEntered = false;
     gameStarted = false;
     timerInitialized = false;

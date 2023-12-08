@@ -51,32 +51,32 @@ var game1 = function (p) {
 
   p.preload = function () {
     //Preload a background here
-    bg_chop = p.loadImage("/assets/img/ending/bg-chop.png");
+    bg_chop = p.loadImage("../assets/img/ending/bg-chop.png");
 
-    bingCursor = p.loadImage("/assets/UI/cursors/bing-cursor.png");
-    grabCursor = p.loadImage("/assets/UI/cursors/grab-cursor.png");
-    holdCursor = p.loadImage("/assets/UI/cursors/hold-cursor.png");
-    pointCursor = p.loadImage("/assets/UI/cursors/point-cursor.png");
+    bingCursor = p.loadImage("../assets/UI/cursors/bing-cursor.png");
+    grabCursor = p.loadImage("../assets/UI/cursors/grab-cursor.png");
+    holdCursor = p.loadImage("../assets/UI/cursors/hold-cursor.png");
+    pointCursor = p.loadImage("../assets/UI/cursors/point-cursor.png");
 
-    button_r_up = p.loadImage("/assets/UI/buttons/button-r-up.png");
-    button_r_down = p.loadImage("/assets/UI/buttons/button-r-down.png");
-    button_l_up = p.loadImage("/assets/UI/buttons/button-l-up.png");
-    button_l_down = p.loadImage("/assets/UI/buttons/button-l-down.png");
+    button_r_up = p.loadImage("../assets/UI/buttons/button-r-up.png");
+    button_r_down = p.loadImage("../assets/UI/buttons/button-r-down.png");
+    button_l_up = p.loadImage("../assets/UI/buttons/button-l-up.png");
+    button_l_down = p.loadImage("../assets/UI/buttons/button-l-down.png");
 
     //Preload whatever needs to be preloaded
 
-    bing = p.loadImage("/assets/img/ending/chop-bing.png");
-    cabbage = p.loadImage("/assets/img/ending/chop-cabbage.png");
-    farrot = p.loadImage("/assets/img/ending/chop-carrot.png");
-    cd = p.loadImage("/assets/img/ending/chop-cd.png");
-    onion = p.loadImage("/assets/img/ending/chop-onion.png");
-    pepper = p.loadImage("/assets/img/ending/chop-pepper.png");
-    sausage = p.loadImage("/assets/img/ending/chop-sausage.png");
+    bing = p.loadImage("../assets/img/ending/chop-bing.png");
+    cabbage = p.loadImage("../assets/img/ending/chop-cabbage.png");
+    farrot = p.loadImage("../assets/img/ending/chop-carrot.png");
+    cd = p.loadImage("../assets/img/ending/chop-cd.png");
+    onion = p.loadImage("../assets/img/ending/chop-onion.png");
+    pepper = p.loadImage("../assets/img/ending/chop-pepper.png");
+    sausage = p.loadImage("../assets/img/ending/chop-sausage.png");
 
-    me = p.loadImage("/assets/img/ending/me-kid.png");
+    me = p.loadImage("../assets/img/ending/me-kid.png");
 
-    knife_up = p.loadImage("/assets/img/ending/knife-up.png");
-    knife_down = p.loadImage("/assets/img/ending/knife-down.png");
+    knife_up = p.loadImage("../assets/img/ending/knife-up.png");
+    knife_down = p.loadImage("../assets/img/ending/knife-down.png");
   };
 
   p.setup = function () {
@@ -104,7 +104,7 @@ var game1 = function (p) {
     var chopForm = document.getElementById("chopForm");
 
     chopForm.addEventListener("input", function (e) {
-      let imagePath = `/assets/img/ending/${e.target.value}`;
+      let imagePath = `../assets/img/ending/${e.target.value}`;
       currentImage = p.loadImage(imagePath, function () {
         totalWidth = currentImage.width;
         sliceNum = 0;

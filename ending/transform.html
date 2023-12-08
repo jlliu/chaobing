@@ -84,82 +84,82 @@ var game3 = function (p) {
 
   p.preload = function () {
     //Preload a background here
-    bg_transform = p.loadImage("/assets/img/ending/bg-transform.png");
+    bg_transform = p.loadImage("../assets/img/ending/bg-transform.png");
 
-    bingCursor = p.loadImage("/assets/UI/cursors/bing-cursor.png");
-    grabCursor = p.loadImage("/assets/UI/cursors/grab-cursor.png");
-    holdCursor = p.loadImage("/assets/UI/cursors/hold-cursor.png");
-    pointCursor = p.loadImage("/assets/UI/cursors/point-cursor.png");
+    bingCursor = p.loadImage("../assets/UI/cursors/bing-cursor.png");
+    grabCursor = p.loadImage("../assets/UI/cursors/grab-cursor.png");
+    holdCursor = p.loadImage("../assets/UI/cursors/hold-cursor.png");
+    pointCursor = p.loadImage("../assets/UI/cursors/point-cursor.png");
 
-    button_r_up = p.loadImage("/assets/UI/buttons/button-r-up.png");
-    button_r_down = p.loadImage("/assets/UI/buttons/button-r-down.png");
-    button_l_up = p.loadImage("/assets/UI/buttons/button-l-up.png");
-    button_l_down = p.loadImage("/assets/UI/buttons/button-l-down.png");
+    button_r_up = p.loadImage("../assets/UI/buttons/button-r-up.png");
+    button_r_down = p.loadImage("../assets/UI/buttons/button-r-down.png");
+    button_l_up = p.loadImage("../assets/UI/buttons/button-l-up.png");
+    button_l_down = p.loadImage("../assets/UI/buttons/button-l-down.png");
 
     //Preload whatever needs to be preloaded
     for (const action in actions) {
       let actionObj = actions[action];
-      actionObj.img = p.loadImage(`/assets/img/ending/action-${action}.png`);
-      actionObj.img_h = p.loadImage(`/assets/img/ending/action-${action}-h.png`);
+      actionObj.img = p.loadImage(`../assets/img/ending/action-${action}.png`);
+      actionObj.img_h = p.loadImage(`../assets/img/ending/action-${action}-h.png`);
     }
 
-    knob = p.loadImage(`/assets/img/ending/knob.png`);
-    knob_h = p.loadImage(`/assets/img/ending/knob-h.png`);
-    line = p.loadImage(`/assets/img/ending/line.png`);
-    incorrect = p.loadImage(`/assets/img/ending/incorrect.png`);
-    correct = p.loadImage(`/assets/img/ending/correct.png`);
+    knob = p.loadImage(`../assets/img/ending/knob.png`);
+    knob_h = p.loadImage(`../assets/img/ending/knob-h.png`);
+    line = p.loadImage(`../assets/img/ending/line.png`);
+    incorrect = p.loadImage(`../assets/img/ending/incorrect.png`);
+    correct = p.loadImage(`../assets/img/ending/correct.png`);
 
     actions["soySauce"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-soySauce.png`
+      `../assets/img/ending/actionbutton-soySauce.png`
     );
     actions["soySauce"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-soySauce-h.png`
+      `../assets/img/ending/actionbutton-soySauce-h.png`
     );
     actions["soySauce"].actionButtonPos = { x: 30, y: 30 };
 
     actions["sob"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-sob.png`
+      `../assets/img/ending/actionbutton-sob.png`
     );
     actions["sob"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-sob-h.png`
+      `../assets/img/ending/actionbutton-sob-h.png`
     );
     actions["sob"].actionButtonPos = { x: 30, y: 30 };
 
     actions["ruminate"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-ruminate.png`
+      `../assets/img/ending/actionbutton-ruminate.png`
     );
     actions["ruminate"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-ruminate-h.png`
+      `../assets/img/ending/actionbutton-ruminate-h.png`
     );
     actions["ruminate"].actionButtonPos = { x: 30, y: 30 };
 
     actions["chiliOil"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-chiliOil.png`
+      `../assets/img/ending/actionbutton-chiliOil.png`
     );
     actions["chiliOil"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-chiliOil-h.png`
+      `../assets/img/ending/actionbutton-chiliOil-h.png`
     );
     actions["chiliOil"].actionButtonPos = { x: 30, y: 30 };
 
     actions["stir"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-stir.png`
+      `../assets/img/ending/actionbutton-stir.png`
     );
     actions["stir"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-stir-h.png`
+      `../assets/img/ending/actionbutton-stir-h.png`
     );
     actions["stir"].actionButtonPos = { x: 349, y: 38 };
 
     actions["high2"].actionButtonImg = p.loadImage(
-      `/assets/img/ending/actionbutton-high2.png`
+      `../assets/img/ending/actionbutton-high2.png`
     );
     actions["high2"].actionButtonImg_h = p.loadImage(
-      `/assets/img/ending/actionbutton-high2-h.png`
+      `../assets/img/ending/actionbutton-high2-h.png`
     );
     actions["high2"].actionButtonPos = { x: 30, y: 30 };
 
     for (let i = 0; i < 4; i++) {
       chaobingAnimationImgs.push(
-        p.loadImage(`/assets/img/ending/chaobing-animation${i}.png`)
+        p.loadImage(`../assets/img/ending/chaobing-animation${i}.png`)
       );
     }
   };

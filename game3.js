@@ -226,6 +226,7 @@ var game3 = function (p) {
         metronomeCount = 0;
       }
     });
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   p.draw = function () {

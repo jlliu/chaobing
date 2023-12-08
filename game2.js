@@ -351,6 +351,7 @@ var game2 = function (p) {
     //Sprites related to questions
 
     resetValues();
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   p.draw = function () {

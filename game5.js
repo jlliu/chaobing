@@ -192,6 +192,7 @@ var game5 = function (p) {
       );
       phrases[i].animationSprite.visible = false;
     }
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   resetPhrases = function () {

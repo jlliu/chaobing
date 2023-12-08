@@ -29,6 +29,14 @@ const restartGameEvent = new Event("restartGame");
 
 let storyCanvas;
 
+const canvasSetupEvent = new Event("canvasSetup");
+let numOfSetupCanvases = 0;
+const totalCanvasesNum = 9;
+
+document.addEventListener("canvasSetup", function () {
+  numOfSetupCanvases++;
+});
+
 function launchFullScreen(element) {
   if (element.requestFullScreen) {
     element.requestFullScreen();
@@ -122,7 +130,11 @@ var sketch1 = function (p) {
     }
   };
   document.addEventListener("click", function () {
-    if (!introStarted && firstTimeStarting) {
+    if (
+      !introStarted &&
+      firstTimeStarting &&
+      numOfSetupCanvases == totalCanvasesNum
+    ) {
       console.log("start intro from click event");
       launchFullScreen(document.documentElement);
       startIntro();
@@ -283,6 +295,7 @@ var sketch1 = function (p) {
     cursor = new Cursor();
 
     setupScenes();
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   p.draw = function () {
@@ -293,7 +306,6 @@ var sketch1 = function (p) {
 
     if (storyMode) {
       if (!introStarted) {
-        console.log("INTRO STARTED IS FALSE");
         // Display black screen with title before playing song
       } else if (!introEnded) {
         hideTitle();

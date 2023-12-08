@@ -145,6 +145,7 @@ var game7 = function (p) {
     });
     keysSprite = new Button(keys, keys, 153, 349);
     keysSprite.interactive = false;
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   p.draw = function () {

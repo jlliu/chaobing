@@ -262,6 +262,7 @@ var game1 = function (p) {
         });
       }
     });
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   p.draw = function () {

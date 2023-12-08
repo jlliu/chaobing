@@ -290,6 +290,7 @@ var game6 = function (p) {
 
     //initialize backgound
     g6_bg = g6_bgs[0];
+    document.dispatchEvent(canvasSetupEvent);
   };
 
   calculateCorrectSequence = function () {

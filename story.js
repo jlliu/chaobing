@@ -1,6 +1,6 @@
 //Configuration for dev
 let gameVoiceoverOn = true;
-gameVoiceoverOn = false;
+// gameVoiceoverOn = false;
 let pressSpaceVoiceover = false;
 let currentSceneNum = 1;
 let currentPartNum = 0;

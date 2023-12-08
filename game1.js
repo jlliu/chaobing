@@ -643,13 +643,14 @@ var game1 = function (p) {
 
   // Play voiceover and disable interactions for time # of seconds
   function playGameVoiceover(sound, time, callback) {
+    let musicDelay = 1000;
     if (gameVoiceoverOn) {
       currentlyAnimating = true;
       setTimeout(function () {
         game1_soundtrack.start();
         setTimeout(function () {
           sound.start();
-        }, 1000);
+        }, musicDelay);
       }, voiceoverDelay * 1000);
 
       setTimeout(function () {
@@ -657,7 +658,7 @@ var game1 = function (p) {
         if (callback) {
           callback();
         }
-      }, (time + voiceoverDelay) * 1000);
+      }, (time + voiceoverDelay) * 1000 + musicDelay);
     }
   }
 };

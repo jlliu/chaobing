@@ -325,7 +325,6 @@ var game1 = function (p) {
             mouse_y < yRange[1] * scaleRatio
           ) {
             _this.interactive = false;
-            pageFlipSound.start();
             //Snap it into position if we don't make it disappear
             if (_this.xFinal && _this.yFinal) {
               _this.xCurrent = _this.xFinal;

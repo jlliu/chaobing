@@ -112,6 +112,7 @@ var game4 = function (p) {
       0,
       [315, -67, 676, 66, 645, 133, 290, 0]
     );
+    fluteSprite.interactive = false;
 
     paintSprite_red = new Button(
       paintImgs[0].default,
@@ -348,7 +349,9 @@ var game4 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
-    restartButton.display();
+    if (displayRestartButton) {
+      restartButton.display();
+    }
   }
 
   // CLASSES
@@ -534,6 +537,7 @@ var game4 = function (p) {
           currentlyDragging = true;
           paintCursor = "none";
           game4_paintColor = "none";
+          chosenPaintSound = null;
           clickedObjects.forEach(function (value) {
             value.intendingToClick = false;
             clickedObjects = [];
@@ -639,13 +643,14 @@ var game4 = function (p) {
     //Navigation stuff
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
-    restartButton = new Button(restart, restart_h, 20, 20);
-
-    restartButton.addClickEvent(function () {
-      if (!currentlyAnimating) {
-        document.dispatchEvent(restartGameEvent);
-      }
-    });
+    if (displayRestartButton) {
+      restartButton = new Button(restart, restart_h, 20, 20);
+      restartButton.addClickEvent(function () {
+        if (!currentlyAnimating) {
+          document.dispatchEvent(restartGameEvent);
+        }
+      });
+    }
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
         harpTransitionOutSound.start();
@@ -882,7 +887,9 @@ var game4a = function (p) {
           simMousePos.x > 214 &&
           simMousePos.x < 577 &&
           simMousePos.y > 166 &&
-          simMousePos.y < 318
+          simMousePos.y < 318 &&
+          game4_paintColor != "none" &&
+          chosenPaintSound != "null"
         ) {
           drawing = true;
           // Create interval for sound

@@ -2,10 +2,22 @@
 let gameVoiceoverOn = true;
 // gameVoiceoverOn = false;
 let pressSpaceVoiceover = false;
+
 let currentSceneNum = 1;
 let currentPartNum = 0;
-//Use to debug specific scenes
-// currentSceneNum = 2;
+
+//Use to debug or jump to specific scenes
+// 1: bedroom, 2: kumon, 3: piano, 4: flute case, 5: chinese school
+// 6: texting, 7: college app
+
+//Uncomment this if I have issues in the performance!!!
+
+// currentSceneNum = 5;
+// pressSpaceVoiceover = true;
+
+let silenceStoryNarration = false;
+
+const displayRestartButton = false;
 
 //Config Screen
 let scaleRatio = 1;
@@ -35,6 +47,9 @@ const totalCanvasesNum = 9;
 
 document.addEventListener("canvasSetup", function () {
   numOfSetupCanvases++;
+  if (numOfSetupCanvases == totalCanvasesNum) {
+    document.querySelector("#clickToStart").style.visibility = "visible";
+  }
 });
 
 function launchFullScreen(element) {
@@ -106,7 +121,7 @@ var sketch1 = function (p) {
   let introTitleAnimationSprite;
   let introTitleAnimationImgs = [];
 
-  let introTitleAnimationSpeed = 300;
+  let introTitleAnimationSpeed = 400;
 
   let firstTimeStarting = true;
 
@@ -129,14 +144,15 @@ var sketch1 = function (p) {
       }, delay);
     }
   };
+
+  //Detect clicking to start game from black screen
   document.addEventListener("click", function () {
     if (
       !introStarted &&
       firstTimeStarting &&
       numOfSetupCanvases == totalCanvasesNum
     ) {
-      console.log("start intro from click event");
-      launchFullScreen(document.documentElement);
+      // launchFullScreen(document.documentElement);
       startIntro();
       firstTimeStarting = false;
     }
@@ -160,22 +176,24 @@ var sketch1 = function (p) {
 
     button_intro_continue = p.loadImage("assets/UI/buttons/intro-continue.png");
     button_intro_continue_h = p.loadImage(
-      "assets/UI/buttons/intro-continue.png"
+      "assets/UI/buttons/intro-continue-h.png"
     );
 
     button_intro_start_over = p.loadImage(
       "assets/UI/buttons/intro-start-over.png"
     );
     button_intro_start_over_h = p.loadImage(
-      "assets/UI/buttons/intro-start-over.png"
+      "assets/UI/buttons/intro-start-over-h.png"
     );
 
     restart = p.loadImage("assets/UI/buttons/restart.png");
     restart_h = p.loadImage("assets/UI/buttons/restart-h.png");
 
-    introTitleAnimationSpritesheet = p.loadImage(
-      `assets/img/scenes/intro/titleAnimationSpritesheet.png`
-    );
+    introTitleAnimationSpritesheet = [
+      p.loadImage(`assets/img/scenes/intro/titleAnimationSpritesheet-1.png`),
+      p.loadImage(`assets/img/scenes/intro/titleAnimationSpritesheet-2.png`),
+      p.loadImage(`assets/img/scenes/intro/titleAnimationSpritesheet-3.png`),
+    ];
 
     // Opening images...
     startImg = p.loadImage("assets/img/scenes/intro/start.png");
@@ -296,6 +314,8 @@ var sketch1 = function (p) {
 
     setupScenes();
     document.dispatchEvent(canvasSetupEvent);
+
+    resetScenes();
   };
 
   p.draw = function () {
@@ -321,25 +341,13 @@ var sketch1 = function (p) {
         if (currentSceneNum != 1) {
           leftButton.display();
         }
-        restartButton.display();
+        if (displayRestartButton) {
+          restartButton.display();
+        }
 
         cursor.display();
       }
     }
-
-    // if (introEnded) {
-    //   if (currentSceneNum == 8 && currentPartNum == 3) {
-    //     rightButton.interactive = false;
-    //   } else {
-    //     rightButton.display();
-    //   }
-    //   if (currentSceneNum != 1) {
-    //     leftButton.display();
-    //   }
-    //   restartButton.display();
-    // }
-
-    // cursor.display();
   };
 
   ////////////////////////////////////////////
@@ -364,8 +372,8 @@ var sketch1 = function (p) {
     introStartOverButton = new Button(
       button_intro_start_over,
       button_intro_start_over_h,
-      111,
-      339
+      211,
+      172
     );
     introStartOverButton.addClickEvent(function () {
       console.log("go to start scene");
@@ -378,8 +386,8 @@ var sketch1 = function (p) {
     introContinueButton = new Button(
       button_intro_continue,
       button_intro_continue_h,
-      382,
-      339
+      211,
+      252
     );
     introContinueButton.addClickEvent(function () {
       console.log("go back to last scene");
@@ -391,6 +399,7 @@ var sketch1 = function (p) {
       intro_soundtrack.stop();
       introStartOverButton.interactive = false;
       introContinueButton.interactive = false;
+      // animateScene();
     });
     introContinueButton.interactive = false;
 
@@ -406,9 +415,33 @@ var sketch1 = function (p) {
     titleFlipAnimationSprite.visible = false;
 
     // initialize animation sprites for extended intro
-    for (let i = 0; i < 21; i++) {
+    for (let i = 0; i < 11; i++) {
       let height = 480;
-      let img = introTitleAnimationSpritesheet.get(0, 480 * i, 640, 480);
+      let img = introTitleAnimationSpritesheet[0].get(0, 480 * i, 640, 480);
+      introTitleAnimationImgs.push(img);
+      if (i == 10) {
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+      }
+    }
+
+    for (let i = 0; i < 10; i++) {
+      let height = 480;
+      let img = introTitleAnimationSpritesheet[1].get(0, 480 * i, 640, 480);
+      introTitleAnimationImgs.push(img);
+      if (i == 9) {
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+        introTitleAnimationImgs.push(img);
+      }
+    }
+
+    for (let i = 0; i < 12; i++) {
+      let height = 480;
+      let img = introTitleAnimationSpritesheet[2].get(0, 480 * i, 640, 480);
       introTitleAnimationImgs.push(img);
     }
 
@@ -449,6 +482,7 @@ var sketch1 = function (p) {
 
   function hideTitle() {
     document.querySelector(".titleImg").style.visibility = "hidden";
+    document.querySelector("#clickToStart").style.visibility = "hidden";
   }
 
   function animateIntro() {
@@ -462,6 +496,7 @@ var sketch1 = function (p) {
           titleFlipAnimation,
           200,
           function () {
+            console.log("ANIMATESCENE FROM INTRO");
             animateScene();
             introEnded = true;
           }
@@ -558,7 +593,6 @@ var sketch1 = function (p) {
 
     scene1_phrase.button.addClickEvent(function () {
       if (currentSceneNum == 1) {
-        // scene1_button.
         scene1_currentNum++;
         let index = scene1_currentNum % scene1_options.length;
         scene1_phrase.button.buttonDefault = scene1_options[index].img;
@@ -764,6 +798,9 @@ var sketch1 = function (p) {
 
   //Animates the story for a given Scene
   function animateScene() {
+    console.log("animateScene Called");
+    console.log("currentSceneNum: " + currentSceneNum);
+    console.log("for currentPartNum: " + currentPartNum);
     let cumulativeTime = 0;
     // add a delay for when the game starts
     if (currentSceneNum == 1) {
@@ -772,7 +809,7 @@ var sketch1 = function (p) {
     if (!currentlyAnimating) {
       currentlyAnimating = true;
       let parts = scenes[currentSceneNum - 1];
-      let delay = 1000;
+      let delay = 1500;
       parts.forEach(function (part, partIndex) {
         let phrases = part.phrases;
         let prevPhrase = null;
@@ -780,7 +817,9 @@ var sketch1 = function (p) {
           setTimeout(function () {
             //Start voiceover
             if (phraseIndex == 0) {
-              part.voiceover.start();
+              if (!silenceStoryNarration) {
+                part.voiceover.start();
+              }
             }
             if (prevPhrase) {
               prevPhrase.current = false;
@@ -795,11 +834,16 @@ var sketch1 = function (p) {
           phrases.forEach(function (phrase) {
             phrase.current = false;
           });
+
+          console.log("partIndex: " + partIndex);
+          console.log("parts.length-1 = " + (parts.length - 1));
           //Are we at last part?
           if (partIndex == parts.length - 1) {
             currentlyAnimating = false;
           } else {
             //Animate flip to next scene
+            //This is where scene 4 transition had issues... it was increasing the currentPartNum by too much
+            console.log("animateFlip from timeout");
             animateFlip(part, 0, function () {
               currentPartNum++;
             });
@@ -812,6 +856,10 @@ var sketch1 = function (p) {
   }
 
   function animateFlip(part, delay, callback) {
+    console.log("Animating Flip");
+    console.log("currentSceneNum: " + currentSceneNum);
+    console.log("currentPartNum: " + currentPartNum);
+    console.log("part: " + part);
     setTimeout(function () {
       //Animate flip 0
       pageFlipSound.start();
@@ -846,6 +894,9 @@ var sketch1 = function (p) {
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
     restartButton = new Button(restart, restart_h, 22, 20);
+    if (!displayRestartButton) {
+      restartButton.interactive = false;
+    }
 
     //Navigate forward
     rightButton.addClickEvent(function (e) {
@@ -897,12 +948,14 @@ var sketch1 = function (p) {
     });
 
     document.addEventListener("navigateFwdStory", (e) => {
+      console.log("Detected Navigate Fwd Story");
       resetScenes();
       p.loop();
       currentlyAnimating = true;
       let delay = 1000;
       let part = scenes[currentSceneNum - 1][currentPartNum];
       //Animate the previous one into the new one and then incremetnt to current scene
+      console.log("navigateFwdStory Flip");
       animateFlip(part, delay, function () {
         //Rest to null
         currentSceneNum++;
@@ -910,6 +963,7 @@ var sketch1 = function (p) {
         currentFlipImage = null;
         //make all buttons non interactive
         setTimeout(function () {
+          console.log("ANIMATE SCENE FROM 959");
           currentlyAnimating = false;
           animateScene();
         }, 1000);
@@ -931,21 +985,6 @@ var sketch1 = function (p) {
   }
 
   function resetGame() {
-    // console.log("reset game function");
-    // introDisplacement = 0;
-    // storyMode = true;
-    // startButton.interactive = true;
-    // currentSceneNum = 1;
-    // currentPartNum = 0;
-    // gameStarted = false;
-    // introEnded = false;
-    // currentlyAnimating = false;
-    // resetScenes();
-    // location.href = location.href;
-
-    // Change to actually reset the game
-
-    console.log("reset game function");
     introDisplacement = 0;
     storyMode = true;
     startButton.interactive = true;
@@ -960,6 +999,7 @@ var sketch1 = function (p) {
     p.clear();
     resetScenes();
     displayContinueChoice = true;
+    document.querySelector(".titleImg").style.visibility = "visible";
     setTimeout(function () {
       startIntro();
     }, 5000);
@@ -1058,6 +1098,7 @@ var sketch1 = function (p) {
     if (p.keyCode === 32 && pressSpaceVoiceover) {
       console.log("press space");
       // timedAnimation(scene1.timings);
+      console.log("ANIMATE SCENE FROM KEY PRESS");
       animateScene();
     }
   };

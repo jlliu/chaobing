@@ -303,7 +303,10 @@ var game1 = function (p) {
     // Navigation
     rightButton.display();
     leftButton.display();
-    restartButton.display();
+
+    if (displayRestartButton) {
+      restartButton.display();
+    }
   }
 
   function resetPositions() {
@@ -544,13 +547,14 @@ var game1 = function (p) {
     rightButton = new Button(button_r_up, button_r_down, 503, 407);
     leftButton = new Button(button_l_up, button_l_down, 37, 407);
 
-    restartButton = new Button(restart, restart_h, 20, 20);
-
-    restartButton.addClickEvent(function () {
-      if (!currentlyAnimating) {
-        document.dispatchEvent(restartGameEvent);
-      }
-    });
+    if (displayRestartButton) {
+      restartButton = new Button(restart, restart_h, 20, 20);
+      restartButton.addClickEvent(function () {
+        if (!currentlyAnimating) {
+          document.dispatchEvent(restartGameEvent);
+        }
+      });
+    }
 
     rightButton.addClickEvent(function (e) {
       if (currentlyAnimating == false) {
